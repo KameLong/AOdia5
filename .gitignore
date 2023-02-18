@@ -1,5 +1,9 @@
 /.vs
+/.idea
 /AOdia5/.vs
 /AOdia5/bin
 /AOdia5/obj
-
+/AOdia5Test/bin
+/AOdia5Test/obj
+/AOdiaData/bin
+/AOdiaData/obj
