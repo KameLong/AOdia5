@@ -10,7 +10,6 @@ public partial class MainPage : ContentPage
 	{
 		InitializeComponent();
 
-        DiaFile aodia = new DiaFile();
 		try
 		{
 			Console.WriteLine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal));

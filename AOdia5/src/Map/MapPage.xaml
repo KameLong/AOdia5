@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AOdia5.MapPage"
+             xmlns:mapsui="clr-namespace:Mapsui.UI.Maui;assembly=Mapsui.UI.Maui"
+             Title="MapPage">
+    <AbsoluteLayout>
+        <Frame
+            x:Name="selectModal"
+            AbsoluteLayout.LayoutFlags="All"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+
+            BackgroundColor="#88888888"
+            ZIndex="-1">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer
+                    Tapped="OnClickCloseSelectModal">
+                    
+                </TapGestureRecognizer>
+            </Frame.GestureRecognizers>
+            <VerticalStackLayout
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                BackgroundColor="White"
+                Padding="10"
+                >
+
+                <Button Text="Create new station here"
+                     Margin="10"
+                     Clicked="CreateNewStation"
+                    >
+                </Button>
+                <Button Text="Set this pos to current station"
+                        Clicked="SetStationPos"
+                    Margin="10">
+                </Button>
+            </VerticalStackLayout>
+        </Frame>
+        <mapsui:MapView x:Name="mapControl"
+                        
+                        ZIndex="0"
+                        AbsoluteLayout.LayoutFlags="All"
+                        AbsoluteLayout.LayoutBounds="0,0,1,1">
+        </mapsui:MapView>
+
+    </AbsoluteLayout>
+</ContentPage>
