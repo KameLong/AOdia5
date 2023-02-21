@@ -7,7 +7,8 @@
              HorizontalOptions="Center"
              VerticalOptions="Center"
              Padding="30"
-            
+                         xmlns:helpers="clr-namespace:AOdia5.Helpers"
+
              
 >
     <ContentView.GestureRecognizers>
@@ -58,6 +59,23 @@
             Margin="60,0,0,0"
             Clicked="ChooseFromMap"
             ></Button>
+
+        <StackLayout   WidthRequest="40"
+                  HeightRequest="40"
+                  HorizontalOptions="End"
+                  Margin="0,15,15,0"
+                 
+                  
+>
+            <Label Text="{x:Static helpers:IconFont.TrashCan}"
+                   FontFamily="MaterialDesignIcons"
+                   FontSize="40"
+                   >
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"/>
+                </Label.GestureRecognizers>
+            </Label>
+        </StackLayout> 
 
     </VerticalStackLayout>
 </ContentView>

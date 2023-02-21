@@ -57,16 +57,13 @@ public class StationSearchHandler : SearchHandler
     //}
 }
 
-public partial class StationList : ContentPage
+public partial class StationList : ContentPage,OpenCloseEditStationView
 {
-
+    private StationListViewModel VM { get { return (StationListViewModel)BindingContext; } }
     public StationList()
 	{
         InitializeComponent();
-    }
-    public void OnClickAddStation(object sender, EventArgs args)
-    {
-        //駅を追加します。
+
     }
 
     private void OnStationEditIconClicked(object sender, TappedEventArgs e)
@@ -81,7 +78,7 @@ public partial class StationList : ContentPage
         Station station = (Station)listView.SelectedItem;
 
         //駅編集がクリックされました
-        editStationView.BindingContext = new EditStationViewModel {editStation=station,stationListViewModel=(StationListViewModel)BindingContext };
+        editStationView.BindingContext = new EditStationViewModel {editStation=station,stationListViewModel=VM };
         editStationFrame.ZIndex = 10;
 
     }
@@ -90,5 +87,28 @@ public partial class StationList : ContentPage
     {
         editStationFrame.ZIndex = -10;
 
+    }
+
+    private void OnClickAddStation(object sender, TappedEventArgs e)
+    {
+        Station station=VM.AddNewStation();
+        station.Name = "New Station";
+        station.Lat = 35;
+        station.Lon = 135;
+
+        editStationView.BindingContext = new EditStationViewModel { editStation = station, stationListViewModel = VM };
+        editStationFrame.ZIndex = 10;
+
+
+    }
+
+    public void CloseEditStationView(EditStationView editStationView)
+    {
+        editStationFrame.ZIndex = -10;
+    }
+
+    public void OpenEditStationView(EditStationView editStationView)
+    {
+        editStationFrame.ZIndex = 10;
     }
 }

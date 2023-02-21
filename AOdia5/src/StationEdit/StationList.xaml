@@ -23,6 +23,8 @@
             AbsoluteLayout.LayoutFlags="All" 
             AbsoluteLayout.LayoutBounds="0,0,1,1"
             BackgroundColor="#F8F8F8"
+                        ZIndex="0"
+
 >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -30,7 +32,9 @@
             </Grid.RowDefinitions>
             <HorizontalStackLayout
                 Grid.Row="0">
-                <Label WidthRequest="250" HorizontalTextAlignment="Center" Text="Name"/>
+                <Label WidthRequest="250" HorizontalTextAlignment="Center" Text="Name">
+
+                </Label>
                 <Label WidthRequest="120" HorizontalTextAlignment="Center" Text="Lat"/>
                 <Label WidthRequest="120" HorizontalTextAlignment="Center" Text="Lon"/>
 
@@ -39,7 +43,6 @@
             Grid.Row="1"
             ItemsSource="{Binding Stations}"
             VerticalOptions="FillAndExpand"
-            ZIndex="0"
             AbsoluteLayout.LayoutBounds="0,0,1,1"
             ItemSelected="ListView_ItemSelected"
 
@@ -58,8 +61,10 @@
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
+                
             </ListView>
         </Grid>
+
         <!--<ScrollView AbsoluteLayout.LayoutFlags="All" 
                     AbsoluteLayout.LayoutBounds="0,0,1,1"
                     ZIndex="0">
@@ -111,7 +116,7 @@
                 </uranium:DataGrid.Columns>
             </uranium:DataGrid>
         </ScrollView>-->
-        <!--<Border 
+        <Border 
             AbsoluteLayout.LayoutFlags="PositionProportional"  
             AbsoluteLayout.LayoutBounds=".95,.95,80,80"
             BackgroundColor="#38C"
@@ -124,11 +129,16 @@
             >
             <Label Text="{x:Static helpers:IconFont.Plus}"
                 FontFamily="MaterialDesignIcons" FontSize="40">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnClickAddStation"/>
+                </Label.GestureRecognizers>
+
+
             </Label>
-            <Border.GestureRecognizers>
+            <!--<Border.GestureRecognizers>
                 <TapGestureRecognizer Tapped="OnClickAddStation" />
-            </Border.GestureRecognizers>
-        </Border>-->
+            </Border.GestureRecognizers>-->
+        </Border>
         <Frame 
             x:Name="editStationFrame"
 
