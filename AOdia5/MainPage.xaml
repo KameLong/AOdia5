@@ -11,7 +11,7 @@
     <FlyoutPage.Detail>
         <NavigationPage>
             <x:Arguments>
-                <local:StationList />
+                <local:StationListPage />
             </x:Arguments>
         </NavigationPage>
     </FlyoutPage.Detail>

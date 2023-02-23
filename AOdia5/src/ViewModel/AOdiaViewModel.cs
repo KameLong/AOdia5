@@ -18,7 +18,7 @@ namespace AOdia5
         public DiaFile diaFile { get; set; }
     }
 
-    internal class MapViewModel
+    public class MapViewModel
     {
         public ICollection<Station> stations { get; set; }
         public EditStationViewModel? editStation { get; set; }
@@ -39,19 +39,23 @@ namespace AOdia5
             {
                 StaticData.staticDia = new DiaFile();
             }
-            _stations = new ObservableCollection<Station>(StaticData.staticDia.Stations);
+            _stations = new ObservableCollection<Station>(StaticData.staticDia.stations);
             _stations.CollectionChanged+=OnPropertyChanged;
         }
         internal Station AddNewStation()
         {
             Station station=new Station();
+            station.Name.Value = "New Station";
+            station.Lat.Value = 35;
+            station.Lon.Value = 135;
+
             _stations.Add(station);
-            StaticData.staticDia.Stations.Add(station);
+            StaticData.staticDia.stations.Add(station);
             return station;
         }
         internal void RemoveStation(Station station)
         {
-            StaticData.staticDia.Stations.Remove(station);
+            StaticData.staticDia.stations.Remove(station);
             _stations.Remove(station);
         }
 

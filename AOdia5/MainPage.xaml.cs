@@ -9,10 +9,6 @@ public partial class MainPage : FlyoutPage
 	public MainPage()
 	{
 		InitializeComponent();
-//        flyoutPage.collectionView.SelectionChanged += OnSelectionChanged;
-
-
-
     }
 
 }

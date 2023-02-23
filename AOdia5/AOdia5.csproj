@@ -82,18 +82,9 @@
 	  <Compile Update="src\StationEdit\EditStationModal.xaml.cs">
 	    <DependentUpon>EditStationModal.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Text.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>Text.resx</DependentUpon>
+	  <Compile Update="src\StationEdit\StationListPage.xaml.cs">
+	    <DependentUpon>StationListPage.xaml</DependentUpon>
 	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <EmbeddedResource Update="Text.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
-	    <LastGenOutput>Text.Designer.cs</LastGenOutput>
-	  </EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -106,7 +97,7 @@
 	  <MauiXaml Update="src\StationEdit\EditStationModal.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="src\StationEdit\StationList.xaml">
+	  <MauiXaml Update="src\StationEdit\StationListPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

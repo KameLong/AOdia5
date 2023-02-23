@@ -60,42 +60,25 @@ public class StationSearchHandler : SearchHandler
     //}
 }
 
-public partial class StationList : ContentPage
+public partial class StationListPage : ContentPage
 {
     private StationListViewModel VM { get { return (StationListViewModel)BindingContext; } }
-    public StationList()
+    public StationListPage()
 	{
         InitializeComponent();
-
     }
 
-    private void OnStationEditIconClicked(object sender, TappedEventArgs e)
+    private void SelectedStation(object sender, SelectedItemChangedEventArgs e)
     {
-        //駅編集がクリックされました
-    }
-
-    private void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
-    {
-                ListView listView = (ListView)sender;
         // リストビューで選択されたアイテムを取得する。
+        ListView listView = (ListView)sender;
         Station station = (Station)listView.SelectedItem;
-
         EditStationViewModel vm = new EditStationViewModel { editStation = station, stationListViewModel = VM };
         this.ShowPopup(new EditStationModal(vm,Navigation));
-
     }
-
-    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
-    {
-
-    }
-
     private void OnClickAddStation(object sender, TappedEventArgs e)
     {
         Station station=VM.AddNewStation();
-        station.Name.Value = "New Station";
-        station.Lat.Value = 35;
-        station.Lon.Value = 135;
         EditStationViewModel vm= new EditStationViewModel { editStation = station, stationListViewModel = VM };
         this.ShowPopup(new EditStationModal(vm,Navigation));
     }

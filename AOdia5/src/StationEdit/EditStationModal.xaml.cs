@@ -28,25 +28,16 @@ public partial class EditStationModal : Popup
 
     }
 
-    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
-    {
-        //•Â‚¶‚é
-    }
-
     private void DeleteStation(object sender, TappedEventArgs e)
     {
         //‚±‚Ì‰w‚ğíœ‚·‚é
         VM.stationListViewModel.RemoveStation(VM.editStation);
         Close();
-
-
     }
-
 
     private void ClearName(object sender, TappedEventArgs e)
     {
         VM.editStation.Name.Value = "";
-
     }
 
     private void ReflectChange(object sender, EventArgs e)

@@ -13,23 +13,14 @@ public partial class App : Application
         MainPage = new MainPage();
 		
 	}
-    protected override Window CreateWindow(IActivationState activationState)//オーバーライドしているので、そのメソッドを呼び出す。
+    protected override Window CreateWindow(IActivationState activationState)
     {
-        Window window = base.CreateWindow(activationState);//Windowクラスのインスタンスを作成する
-        window.Stopped += (s, e) =>   //←window.ライフサイクルイベント名(今回はStopped)でイベントハンドラーを作成
+        Window window = base.CreateWindow(activationState);
+        window.Stopped += (s, e) => 
         {
             StaticData.staticDia.SaveChanges();
         };
-        window.Deactivated += (s, e) =>
-        {
-            StaticData.staticDia.SaveChanges();
-        };
-        window.Destroying += (s, e) =>
-        {
-            StaticData.staticDia.SaveChanges();
-
-        };
-        return window;//windowを返すようにする
+        return window;
     }
 
 }
