@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="AOdia5.EditStationModal"
+                Color="#EEE"              
+             xmlns:helpers="clr-namespace:AOdia5.Helpers"
+               
+>
+    <VerticalStackLayout 
+        
+        WidthRequest="320">
+        <Grid Margin="10" RowSpacing="5" ColumnSpacing="5">
+            <Grid.RowDefinitions>
+                <RowDefinition  Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="30"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" 
+                   Grid.Column="0" 
+                   VerticalTextAlignment="Center"  
+                   Text="Station Name"/>
+            <Editor Grid.Row="0" 
+                    Grid.Column="1" 
+                    VerticalTextAlignment="Center" 
+                    WidthRequest="150" 
+                    BackgroundColor="White" 
+                    Text="{Binding editStation.Name.Value}"/>
+            <Label Grid.Row="0" 
+                   Grid.Column="2" 
+                   VerticalTextAlignment="Center"
+                   FontFamily="MaterialDesignIcons"
+                   Text="{x:Static helpers:IconFont.CloseCircleOutline}"
+                   FontSize="30"
+                   TextColor="Gray"
+                   >
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="ClearName"/>
+                </Label.GestureRecognizers>
+            </Label>
+
+            <Label Grid.Row="1" 
+                   Grid.Column="0" 
+                   VerticalTextAlignment="Center"  
+                   Text="Latitude"/>
+            <Editor Grid.Row="1"
+                    Grid.Column="1"
+                    WidthRequest="150"
+                    BackgroundColor="White"
+                    Text="{Binding editStation.Lat.Value}"
+                    VerticalTextAlignment="Center"
+/>
+            <Label Grid.Row="1" 
+                   Grid.Column="2" 
+                   VerticalTextAlignment="Center"
+                   FontFamily="MaterialDesignIcons"
+                   Text="{x:Static helpers:IconFont.CloseCircleOutline}"
+                   TextColor="Gray"
+
+                   FontSize="30"
+                   ></Label>
+            <Label Grid.Row="2" 
+                   Grid.Column="0" 
+                  
+                   VerticalTextAlignment="Center"  
+                   Text="Longitude"/>
+
+            <Editor Grid.Row="2" 
+                    Grid.Column="1" 
+                    WidthRequest="150" 
+                    BackgroundColor="White" 
+                    Text="{Binding editStation.Lon.Value}"
+                    VerticalTextAlignment="Center"
+                    />
+            <Label Grid.Row="2" 
+                   Grid.Column="2" 
+                   VerticalTextAlignment="Center"
+                   FontFamily="MaterialDesignIcons"
+                   Text="{x:Static helpers:IconFont.CloseCircleOutline}"
+                   FontSize="30"
+                   TextColor="Gray"
+
+                   ></Label>
+        </Grid>
+        <Button 
+            Text="Choose Lat/Long from MAP" 
+            BackgroundColor="LightPink" 
+            TextColor="Black" 
+            Margin="20,10,50,10"
+            Clicked="ChooseFromMap"
+            ></Button>
+
+        <HorizontalStackLayout 
+            Margin="0,15,20,10"
+            HorizontalOptions="End"
+                       >
+            <Label Text="{x:Static helpers:IconFont.TrashCan}"
+                   FontFamily="MaterialDesignIcons"
+                   FontSize="40"
+                   >
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="DeleteStation"/>
+                </Label.GestureRecognizers>
+            </Label>
+
+            <!--<Button Text="Cancel"
+                    Margin="60,0,0,0"
+                   FontSize="16"
+                    BackgroundColor="Transparent"
+                    BorderWidth="2"
+                    TextColor="Black"
+                    Padding="10,5,10,5"
+                    Clicked="Cancel"
+                   >
+            </Button>
+            <Button Text="Reflect"
+                    Margin="30,0,0,0"
+                   FontSize="16"
+                    BackgroundColor="Transparent"
+                    BorderWidth="2"
+                    TextColor="Black"
+                    Padding="10,5,10,5"
+                    Clicked="ReflectChange"
+                    
+                   >
+            </Button>-->
+
+        </HorizontalStackLayout> 
+
+    </VerticalStackLayout>
+</toolkit:Popup>

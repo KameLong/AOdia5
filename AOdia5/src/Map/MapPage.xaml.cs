@@ -8,27 +8,6 @@ public partial class MapPage : ContentPage
    
 {
     private Position[] pos = new Position[0];
-    /*
-    private Position[] pos = new[]{ new Position(35.20338500073202, 136.929724876968),
-                new Position(35.19620247763443, 136.92982101441822),
-                new Position(35.188931972323104, 136.92914853019147),
-                new Position(35.182424119409234, 136.92314303394488),
-                new Position(35.17883669438328, 136.91739460606436),
-
-                new Position(35.17535924977982, 136.91421751789377),
-                new Position(35.16976463558611, 136.91452062871312),
-                new Position(35.161589574926516, 136.91561694612017),
-
-
-                new Position(35.15658449014186, 136.91619976679564),
-                new Position(35.14971795634483, 136.91732408567094),
-                new Position(35.14002959443394, 136.91827961802716),
-                new Position(35.130517984169835, 136.91944691561633),
-                new Position(35.12100209198829, 136.9210374684769),
-                new Position(35.11632946023994, 136.92171988978788),
-                new Position(35.108159002977146, 136.9229553580547),
-                new Position(35.09577855318187, 136.92657026145088) };
-    */
 
 
     private Position? selectedpos = null;
@@ -39,7 +18,7 @@ public partial class MapPage : ContentPage
         pos= new Position[viewModel.stations.Count];
         int i = 0;
         foreach(var station in viewModel.stations){
-            pos[i]= new Position(station.Lat,station.Lon);
+            pos[i]= new Position(station.Lat.Value,station.Lon.Value);
             i++;
         }
         Init();
@@ -120,13 +99,22 @@ public partial class MapPage : ContentPage
     {
         if (((MapViewModel)BindingContext).editStation != null)
         {
-            ((MapViewModel)BindingContext).editStation.editStation.Lat = (float)selectedpos.Value.Latitude;
-            ((MapViewModel)BindingContext).editStation.editStation.Lon = (float)selectedpos.Value.Longitude;
-            StaticData.staticDia.Stations.Update(((MapViewModel)BindingContext).editStation.editStation);
-            StaticData.staticDia.SaveChanges();
+            //StaticData.staticDia.ChangeTracker.DetectChanges();
+            //Debug.WriteLine("Ç®Ç®Ç®Ç®Ç®Ç©");
+            Debug.WriteLine(StaticData.staticDia.ChangeTracker.DebugView.LongView);
+
+            ((MapViewModel)BindingContext).editStation.editStation.Lat.Value = (float)selectedpos.Value.Latitude;
+            ((MapViewModel)BindingContext).editStation.editStation.Lon.Value = (float)selectedpos.Value.Longitude;
+
+//            StaticData.staticDia.Stations.Update(((MapViewModel)BindingContext).editStation.editStation);
+
+            StaticData.staticDia.ChangeTracker.DetectChanges();
+            Debug.WriteLine("Ç®Ç®Ç®Ç®Ç®Çê");
+            Debug.WriteLine(StaticData.staticDia.ChangeTracker.DebugView.LongView);
+
         }
         CloseSeletModal();
-        Application.Current.MainPage = new StationList();
+        ClosePage();
 
     }
 
@@ -139,5 +127,11 @@ public partial class MapPage : ContentPage
     private void CloseSeletModal() {
         mapControl.Pins.Remove(mapControl.Pins.Last());
         selectModal.ZIndex = -10;
+    }
+    private void ClosePage()
+    {
+        StaticData.staticDia.SaveChanges();
+        Navigation.PopAsync();
+
     }
 }

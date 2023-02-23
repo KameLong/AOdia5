@@ -54,9 +54,9 @@
                             <HorizontalStackLayout Margin="0,10,0,0">
                                 <Label  
                                         WidthRequest="150" 
-                                        Text="{Binding Name}"/>
-                                <Label  WidthRequest="70" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Text="{Binding Lat}"/>
-                                <Label  WidthRequest="70" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Text="{Binding Lon}"/>
+                                        Text="{Binding Name.Value}"/>
+                                <Label  WidthRequest="70" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Text="{Binding Lat.Value}"/>
+                                <Label  WidthRequest="70" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Text="{Binding Lon.Value}"/>
                             </HorizontalStackLayout>
                         </ViewCell>
                     </DataTemplate>
@@ -139,24 +139,22 @@
                 <TapGestureRecognizer Tapped="OnClickAddStation" />
             </Border.GestureRecognizers>-->
         </Border>
+        <!--ZIndex="{Binding Source={x:Reference editStationView}, Path=ZIndex}"-->
         <Frame 
             x:Name="editStationFrame"
 
-            ZIndex="-10" Padding="10"
+            Padding="10"
             AbsoluteLayout.LayoutFlags="All"
             AbsoluteLayout.LayoutBounds="0,0,1,1"
-            
+            ZIndex="-10"
 
             BackgroundColor="#88888888">
             <Frame.GestureRecognizers>
                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
             </Frame.GestureRecognizers>
-            <controls:EditStationView
-            x:Name="editStationView"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"
-            />
+
         </Frame>
+
 
     </AbsoluteLayout>
 </ContentPage>

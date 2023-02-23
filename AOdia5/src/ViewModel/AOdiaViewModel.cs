@@ -1,5 +1,6 @@
 ﻿using AOdiaData;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Reactive.Bindings;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -46,14 +47,12 @@ namespace AOdia5
             Station station=new Station();
             _stations.Add(station);
             StaticData.staticDia.Stations.Add(station);
-            StaticData.staticDia.SaveChanges();
             return station;
         }
         internal void RemoveStation(Station station)
         {
             StaticData.staticDia.Stations.Remove(station);
             _stations.Remove(station);
-            StaticData.staticDia.SaveChanges();
         }
 
         private void OnPropertyChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -69,10 +68,13 @@ namespace AOdia5
         }
 
     }
-    internal class EditStationViewModel
+    public class EditStationViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+          => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        public Station editStation { get; set; } = new Station();
+        public Station editStation { get; set; }
         public StationListViewModel stationListViewModel { get; set; }
 
     }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,7 +15,8 @@ namespace AOdiaData
         public DbSet<Station>? Stations { get; set; }
 
         public string DbPath { get; }
-        public DiaFile() {
+        public DiaFile()
+        {
             var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             Debug.WriteLine(path);
             DbPath = $"{path}{Path.DirectorySeparatorChar}aodia.db";

@@ -1,4 +1,7 @@
 using AOdiaData;
+using CommunityToolkit.Maui.Views;
+using Reactive.Bindings;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
@@ -20,7 +23,7 @@ public class StationSearchHandler : SearchHandler
      ); // BindableProperty.CoerceValueDelegate Xamarin 公式にも説明なしなので用途不明
 
 
-    public List<Station> Stations { get { return (List<Station>)this.GetValue(StationsProperty); } set{} }
+    public ObservableCollection<Station> Stations { get { return (ObservableCollection<Station>)this.GetValue(StationsProperty); } set{} }
     public Type SelectedItemNavigationTarget { get; set; }
 
     protected override void OnQueryChanged(string oldValue, string newValue)
@@ -34,7 +37,7 @@ public class StationSearchHandler : SearchHandler
         else
         {
             ItemsSource = Stations
-                .Where(station => station.Name.ToLower().Contains(newValue.ToLower()))
+                .Where(station => station.Name.Value.ToLower().Contains(newValue.ToLower()))
                 .ToList<Station>();
         }
     }
@@ -57,7 +60,7 @@ public class StationSearchHandler : SearchHandler
     //}
 }
 
-public partial class StationList : ContentPage,OpenCloseEditStationView
+public partial class StationList : ContentPage
 {
     private StationListViewModel VM { get { return (StationListViewModel)BindingContext; } }
     public StationList()
@@ -77,38 +80,24 @@ public partial class StationList : ContentPage,OpenCloseEditStationView
         // リストビューで選択されたアイテムを取得する。
         Station station = (Station)listView.SelectedItem;
 
-        //駅編集がクリックされました
-        editStationView.BindingContext = new EditStationViewModel {editStation=station,stationListViewModel=VM };
-        editStationFrame.ZIndex = 10;
+        EditStationViewModel vm = new EditStationViewModel { editStation = station, stationListViewModel = VM };
+        this.ShowPopup(new EditStationModal(vm,Navigation));
 
     }
 
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
-        editStationFrame.ZIndex = -10;
 
     }
 
     private void OnClickAddStation(object sender, TappedEventArgs e)
     {
         Station station=VM.AddNewStation();
-        station.Name = "New Station";
-        station.Lat = 35;
-        station.Lon = 135;
-
-        editStationView.BindingContext = new EditStationViewModel { editStation = station, stationListViewModel = VM };
-        editStationFrame.ZIndex = 10;
-
-
+        station.Name.Value = "New Station";
+        station.Lat.Value = 35;
+        station.Lon.Value = 135;
+        EditStationViewModel vm= new EditStationViewModel { editStation = station, stationListViewModel = VM };
+        this.ShowPopup(new EditStationModal(vm,Navigation));
     }
 
-    public void CloseEditStationView(EditStationView editStationView)
-    {
-        editStationFrame.ZIndex = -10;
-    }
-
-    public void OpenEditStationView(EditStationView editStationView)
-    {
-        editStationFrame.ZIndex = 10;
-    }
 }

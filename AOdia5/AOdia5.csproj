@@ -30,6 +30,11 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(TargetFramework)'=='net7.0-ios'">
+	  <ProvisioningType>manual</ProvisioningType>
+	  <CodesignKey>iPhone Developer</CodesignKey>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
@@ -49,6 +54,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui" Version="4.0.0" />
 		<PackageReference Include="Mapsui.Maui" Version="4.0.0-beta.8" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.3">
 		  <PrivateAssets>all</PrivateAssets>
@@ -60,6 +66,7 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+		<PackageReference Include="ReactiveProperty" Version="9.0.0" />
 		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.3" />
 		<PackageReference Include="UraniumUI.Material" Version="2.3.1" />
 	</ItemGroup>
@@ -69,10 +76,34 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="src\Menu\MenuPage.xaml.cs">
+	    <DependentUpon>MenuPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="src\StationEdit\EditStationModal.xaml.cs">
+	    <DependentUpon>EditStationModal.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Text.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Text.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Text.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Text.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="src\Map\MapPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="src\StationEdit\EditStationView.xaml">
+	  <MauiXaml Update="src\Menu\MenuPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="src\StationEdit\EditStationModal.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="src\StationEdit\StationList.xaml">
