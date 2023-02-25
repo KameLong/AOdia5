@@ -35,10 +35,6 @@ namespace AOdia5
 
         public StationListViewModel()
         {
-            if (StaticData.staticDia == null)
-            {
-                StaticData.staticDia = new DiaFile();
-            }
             _stations = new ObservableCollection<Station>(StaticData.staticDia.stations);
             _stations.CollectionChanged+=OnPropertyChanged;
         }

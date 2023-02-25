@@ -8,6 +8,17 @@ namespace AOdiaData
 {
     public static class StaticData
     {
-        public static DiaFile staticDia;
+        public static DiaFile staticDia
+        {
+            get
+            {
+                if (_dia == null)
+                {
+                    _dia = new DiaFile();
+                }
+                return _dia;
+            }
+        }
+        private static DiaFile? _dia = null;
     }
 }

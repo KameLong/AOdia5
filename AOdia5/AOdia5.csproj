@@ -79,6 +79,9 @@
 	  <Compile Update="src\Menu\MenuPage.xaml.cs">
 	    <DependentUpon>MenuPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="src\RouteEdit\RouteListPage.xaml.cs">
+	    <DependentUpon>RouteListPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="src\StationEdit\EditStationModal.xaml.cs">
 	    <DependentUpon>EditStationModal.xaml</DependentUpon>
 	  </Compile>
@@ -92,6 +95,18 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="src\Menu\MenuPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="src\RouteEdit\RouteEditFromMapPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="src\RouteEdit\RouteEditFromStationPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="src\RouteEdit\RouteEditPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="src\RouteEdit\RouteListPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="src\StationEdit\EditStationModal.xaml">

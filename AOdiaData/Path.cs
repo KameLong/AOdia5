@@ -1,17 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AOdiaData
 {
+//    [Index(nameof(routeID))]
     public class Path
     {
+        [Key]
+        [Required]
         public long pathID { get; set; }
 
-        public long routeID { get; set; }
-        public Route route { get; set; }
+//        [NotMapped]
+        public long routeId { get; set; }
+        //        [NotMapped]
+        public  Route route { get; set; }
         public int seq { get; set; }
 
         public long startStationID { get; set; }

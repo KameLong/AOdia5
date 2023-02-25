@@ -1,27 +1,52 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AOdiaData
 {
+    /*
+    public partial class DbSet<TEntry>: INotifyCollectionChanged, INotifyPropertyChanged where TEntry : class
+    {
+        public ObservableCollection<int> a;
+
+
+        public event NotifyCollectionChangedEventHandler? CollectionChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, e);
+            }
+        }
+        protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
+        {
+            if (CollectionChanged != null)
+            {
+                    CollectionChanged(this, e);
+            }
+        }
+        private void OnCollectionChanged(NotifyCollectionChangedAction action, object item, int index)
+        {
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(action, item, index));
+        }
+
+
+    }
+    */
     public  class DiaFile : DbContext
     {
-        public DbSet<Station>? stations { get; set; }
-        public DbSet<Route>? routes { get; set; }
+        public DbSet<Station> stations { get; set; }
+        public DbSet<Route> routes { get; set; }
 
-        public DbSet<Path>? paths { get; set; }
+        public DbSet<Path> paths2 { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Path>()
-                .HasOne(p => p.route)
-                .WithMany(b => b.paths);
+            modelBuilder.Entity<Route>()
+                .HasMany(r => r.Paths)
+                .WithOne(p => p.route)
+               .HasForeignKey(p =>p.routeId);   
         }
 
         public string DbPath { get; }
