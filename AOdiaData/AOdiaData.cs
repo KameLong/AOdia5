@@ -1,67 +1,39 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace AOdiaData
 {
-    /*
-    public partial class DbSet<TEntry>: INotifyCollectionChanged, INotifyPropertyChanged where TEntry : class
+    public static class AOdiaData
     {
-        public ObservableCollection<int> a;
-
-
-        public event NotifyCollectionChangedEventHandler? CollectionChanged;
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
+        public static DiaFile staticDia
         {
-            if (PropertyChanged != null)
+            get
             {
-                PropertyChanged(this, e);
+                if (_dia == null)
+                {
+                    DateTime now= DateTime.Now;
+                    var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+                    Debug.WriteLine(path);
+                    var DbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}aodia.db";
+                    System.Net.WebClient wc = new System.Net.WebClient();
+                    wc.DownloadFile("https://kamelong.com/aodia_test.db", DbPath);
+                    Debug.WriteLine($"{(DateTime.Now-now).TotalMilliseconds}  DL終了");
+                    wc.Dispose();
+
+                    _dia = new DiaFile();
+                    Debug.WriteLine($"{(DateTime.Now - now).TotalMilliseconds}  ロード完了");
+                }
+                return _dia;
             }
         }
-        protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
-        {
-            if (CollectionChanged != null)
-            {
-                    CollectionChanged(this, e);
-            }
-        }
-        private void OnCollectionChanged(NotifyCollectionChangedAction action, object item, int index)
-        {
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(action, item, index));
-        }
+        private static DiaFile? _dia = null;
 
-
-    }
-    */
-    public  class DiaFile : DbContext
-    {
-        public DbSet<Station> stations { get; set; }
-        public DbSet<Route> routes { get; set; }
-
-        public DbSet<Path> paths2 { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Route>()
-                .HasMany(r => r.Paths)
-                .WithOne(p => p.route)
-               .HasForeignKey(p =>p.routeId);   
-        }
-
-        public string DbPath { get; }
-        public DiaFile()
-        {
-            var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
-            Debug.WriteLine(path);
-            DbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}aodia.db";
-                SQLitePCL.Batteries_V2.Init();
-                this.Database.EnsureCreated();
-
-
-        }
-        // デスクトップ上にSQLiteのDBファイルが作成される
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite($"Data Source={DbPath}");
+        public static DbSet<Station> stations { get { return staticDia.stations; } }
+        public static DbSet<Route> routes { get { return staticDia.routes; } }
     }
 }

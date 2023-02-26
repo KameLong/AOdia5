@@ -11,6 +11,6 @@ public partial class MenuPage : ContentPage
 
     private void Save(object sender, EventArgs e)
     {
-		StaticData.staticDia.SaveChanges();
+        AOdiaData.AOdiaData.staticDia.SaveChanges();
     }
 }

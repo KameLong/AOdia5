@@ -35,7 +35,7 @@ namespace AOdia5
 
         public StationListViewModel()
         {
-            _stations = new ObservableCollection<Station>(StaticData.staticDia.stations);
+            _stations = new ObservableCollection<Station>(AOdiaData.AOdiaData.staticDia.stations);
             _stations.CollectionChanged+=OnPropertyChanged;
         }
         internal Station AddNewStation()
@@ -46,12 +46,12 @@ namespace AOdia5
             station.Lon.Value = 135;
 
             _stations.Add(station);
-            StaticData.staticDia.stations.Add(station);
+            AOdiaData.AOdiaData.staticDia.stations.Add(station);
             return station;
         }
         internal void RemoveStation(Station station)
         {
-            StaticData.staticDia.stations.Remove(station);
+            AOdiaData.AOdiaData.staticDia.stations.Remove(station);
             _stations.Remove(station);
         }
 

@@ -1,3 +1,4 @@
+
 using AOdiaData;
 using Mapsui.UI.Maui;
 using System.Diagnostics;
@@ -13,16 +14,22 @@ public partial class MapPage : ContentPage
     internal MapPage(MapViewModel viewModel):this()
     {
         VM = viewModel;
+        pos = new Position[VM.stations.Count];
 
-        pos= new Position[VM.stations.Count];
-        int i = 0;
-        foreach(var station in VM.stations){
-            pos[i]= new Position(station.Lat.Value,station.Lon.Value);
-            i++;
-        }
-        Init();
+        new Thread(new ThreadStart(() => {
+            int i = 0;
+            foreach (var station in VM.stations)
+            {
+                pos[i] = new Position(station.Lat.Value, station.Lon.Value);
+                i++;
+            }
+            Thread.Sleep(1000);
+            Init();
 
+        })).Start();
+        int a = 0;
     }
+
 	public MapPage()
 	{
 		InitializeComponent();
@@ -34,8 +41,14 @@ public partial class MapPage : ContentPage
     private void Init()
     {
         mapControl.Pins.Clear();
+        int count = 0;
         foreach (var po in pos)
         {
+            count++;
+            if (count % 1000 == 0)
+            {
+                Thread.Sleep(100);
+            }
             mapControl.Pins.Add(new Pin(mapControl)
             {
                 Position = po,
@@ -65,7 +78,7 @@ public partial class MapPage : ContentPage
             p.Positions.Add(po);
             w.Positions.Add(po);
         }
-        (mapControl).Drawables.Add(p);
+//        (mapControl).Drawables.Add(p);
     }
 
     private void MapClicked(object sender, MapClickedEventArgs e)
@@ -103,7 +116,7 @@ public partial class MapPage : ContentPage
     }
     private void ClosePage()
     {
-        StaticData.staticDia.SaveChanges();
+        AOdiaData.AOdiaData.staticDia.SaveChanges();
         Navigation.PopAsync();
     }
 }

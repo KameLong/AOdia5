@@ -65,7 +65,9 @@ public partial class StationListPage : ContentPage
     private StationListViewModel VM { get { return (StationListViewModel)BindingContext; } }
     public StationListPage()
 	{
+        
         InitializeComponent();
+        BindingContext = new StationListViewModel();
     }
 
     private void SelectedStation(object sender, SelectedItemChangedEventArgs e)

@@ -7,9 +7,9 @@
     xmlns:helpers="clr-namespace:AOdia5.Helpers"
     xmlns:uranium="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
     Title="StationList">
-    <ContentPage.BindingContext>
+    <!--<ContentPage.BindingContext>
         <controls:StationListViewModel />
-    </ContentPage.BindingContext>
+    </ContentPage.BindingContext>-->
     <Shell.SearchHandler>
         <controls:StationSearchHandler
             x:Name="sh"

@@ -18,7 +18,7 @@ public partial class App : Application
         Window window = base.CreateWindow(activationState);
         window.Stopped += (s, e) => 
         {
-            StaticData.staticDia.SaveChanges();
+            AOdiaData.AOdiaData.staticDia.SaveChanges();
         };
         return window;
     }

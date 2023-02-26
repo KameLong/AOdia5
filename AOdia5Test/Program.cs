@@ -1,6 +1,52 @@
 ﻿using AOdiaData;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing;
 using Path = AOdiaData.Path;
+
+void LoadStationCSV(DiaFile db)
+{
+    string routeCsv = @"C:\Users\kamelong\Downloads\line20230105free.csv";
+    var colors = new Color[] {Color.Red, Color.Green, Color.Blue,Color.Orange,Color.DarkViolet,Color.DarkCyan };
+
+    Dictionary<int, Route> routes = new Dictionary<int, Route>();
+    foreach (var line in File.ReadAllLines(routeCsv))
+    {
+        var lines = line.Split(',');
+        Route route = new Route();
+        route.Name.Value = lines[2];
+        route.color.Value = colors[route.RouteId % colors.Count()];
+        routes.Add(int.Parse(lines[0]), route);
+        db.routes.Add(route);
+    }
+
+
+    string stationCsv = @"C:\Users\kamelong\Downloads\station20230105free.csv";
+    Station? prevStation = null;
+    int prevRouteIndex = -1;
+    foreach(var line in File.ReadAllLines(stationCsv))
+    {
+        var lines=line.Split(',');
+        Station station= new Station();
+        station.Name.Value = lines[2];
+        station.Lat.Value = float.Parse(lines[10]);
+        station.Lon.Value = float.Parse(lines[9]);
+        Console.WriteLine($"{lines[2]}\t{lines[10]}\t{lines[9]}");
+        db.stations.Add(station);
+
+        int routeIndex = int.Parse(lines[0]) / 100;
+        if (prevStation != null&&prevRouteIndex==routeIndex)
+        {
+            var path = new Path();
+            path.route =routes[routeIndex];
+            path.startStationID = prevStation.StationId;
+            path.endStationID = station.StationId;
+            path.seq = path.route.Paths.Count();
+            path.route.Paths.Add(path);
+        }
+        prevRouteIndex= routeIndex;
+        prevStation= station;
+    }
+}
 
 DateTime now = DateTime.Now;
 
@@ -11,8 +57,12 @@ using (var db = new DiaFile())
 
     db.stations.RemoveRange(db.stations);
     db.routes.RemoveRange(db.routes);
-    db.paths2.RemoveRange(db.paths2);
     db.SaveChanges();
+    LoadStationCSV(db);
+    db.SaveChanges();
+    return;
+
+
 
     Console.WriteLine((DateTime.Now - now).TotalMilliseconds);
 

@@ -61,7 +61,7 @@ public class RouteListPageModel : INotifyPropertyChanged
 
    public RouteListPageModel()
     {
-        _routes = new ObservableCollection<Route>(StaticData.staticDia.routes.Include(r=>r.Paths));
+        _routes = new ObservableCollection<Route>(AOdiaData.AOdiaData.staticDia.routes.Include(r => r.Paths));
         _routes.CollectionChanged += OnPropertyChanged;
     }
     private void OnPropertyChanged(object sender, NotifyCollectionChangedEventArgs e)
