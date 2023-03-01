@@ -116,7 +116,7 @@ public partial class MapPage : ContentPage
     }
     private void ClosePage()
     {
-        AOdiaData.AOdiaData.staticDia.SaveChanges();
+//        AOdiaData.DiaFile.staticDia.SaveChanges();
         Navigation.PopAsync();
     }
 }

@@ -12,7 +12,7 @@
     <FlyoutPage.Detail>
         <NavigationPage>
             <x:Arguments>
-                <local:TestPage />
+                <local:RouteListPage />
             </x:Arguments>
         </NavigationPage>
     </FlyoutPage.Detail>

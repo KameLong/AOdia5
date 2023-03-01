@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 
 namespace AOdia5;
@@ -19,8 +20,11 @@ public partial class RouteEditFromMapPage : ContentPage
         DateTime now=DateTime.Now;
 		InitializeComponent();
         mapControl.Map?.Layers.Add(Mapsui.Tiling.OpenStreetMap.CreateTileLayer());
+        mapControl.MapClicked += MapClicked;
+
+
         Debug.WriteLine($"{(DateTime.Now-now).TotalMilliseconds}  ì«Ç›çûÇ›äJén");
-        VM = new RouteEditFromMapPageModel(AOdiaData.AOdiaData.routes.Include(r=>r.Paths).ToList(), AOdiaData.AOdiaData.staticDia.stations.Take(0).ToList());
+        VM = new RouteEditFromMapPageModel(AOdiaData.DiaFile.staticDia.routes.ToList(), AOdiaData.DiaFile.staticDia.stations.ToList());
         Debug.WriteLine($"{(DateTime.Now - now).TotalMilliseconds}  ì«Ç›çûÇ›èIóπ");
 
 
@@ -76,6 +80,12 @@ public partial class RouteEditFromMapPage : ContentPage
 
 
     }
+    private void MapClicked(object sender, MapClickedEventArgs e)
+    {
+        Navigation.PopAsync();
+
+    }
+
 }
 
 public class RouteEditFromMapPageModel : INotifyPropertyChanged

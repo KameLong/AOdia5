@@ -22,17 +22,17 @@ namespace AOdiaData
         public long StationId { get;set; }
 
         [NotMapped]
-        public ReactiveProperty <string> Name{ get; } = new ReactiveProperty<string>();
+        public ReactivePropertySlim <string> Name{ get; } = new ReactivePropertySlim<string>();
         [Column("name")]
         public string DbName { get { return Name.Value;} set { Name.Value = value; } }
 
         [NotMapped]
-        public ReactiveProperty<float> Lat { get; } = new ReactiveProperty<float>();
+        public ReactivePropertySlim<float> Lat { get; } = new ReactivePropertySlim<float>();
         [Column("lat")]
         public float DbLat { get { return Lat.Value; } set { Lat.Value = value; } }
 
         [NotMapped]
-        public ReactiveProperty<float> Lon { get; } = new ReactiveProperty<float>();
+        public ReactivePropertySlim<float> Lon { get; } = new ReactivePropertySlim<float>();
         [Column("lon")]
         public float DbLon { get { return Lon.Value; } set { Lon.Value = value; } }
 

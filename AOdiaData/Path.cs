@@ -13,18 +13,18 @@ namespace AOdiaData
 
 //        [NotMapped]
         public long routeId { get; set; }
-        //        [NotMapped]
+                [NotMapped]
 
-        private Route _route;
-        public  Route route { get { return _route; } set { _route = value;routeId = _route.RouteId; } }
+        public  Route route { get { return DiaFile.staticDia.routes.Where(r => r.RouteId == routeId).First(); } set { routeId = value.RouteId; } }
         public int seq { get; set; }
 
         public long startStationID { get; set; }
-
-        public Station startStation { get { return AOdiaData.stations.Where(s => s.StationId == startStationID).First(); }set { startStationID = value.StationId; } }
+        [NotMapped]
+        public Station startStation { get { return DiaFile.staticDia.stations.Where(s=>s.StationId==startStationID).First(); }set { startStationID = value.StationId; } }
 
         public long endStationID { get; set; }
-        public Station endStation { get { return AOdiaData.stations.Where(s => s.StationId == endStationID).First(); } set { endStationID = value.StationId; } }
+        [NotMapped]
+        public Station endStation { get { return DiaFile.staticDia.stations.Where(s=>s.StationId==endStationID).First(); } set { endStationID = value.StationId; } }
         public Path()
         {
             Random random = new Random();

@@ -3,8 +3,33 @@ using System.Diagnostics;
 
 namespace AOdiaData
 {
+
+
     public  class DiaFile : DbContext
     {
+        public static DiaFile staticDia
+        {
+            get
+            {
+                if (_dia == null)
+                {
+                    DateTime now = DateTime.Now;
+                    var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+                    Debug.WriteLine(path);
+                    var DbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}aodia.db";
+
+                    _dia = new DiaFile();
+                    Debug.WriteLine($"{(DateTime.Now - now).TotalMilliseconds}  ロード完了");
+                }
+                return _dia;
+            }
+        }
+        private static DiaFile? _dia = null;
+
+
+
+
+
         public DbSet<Station> stations { get; set; }
         public DbSet<Route> routes { get; set; }
 

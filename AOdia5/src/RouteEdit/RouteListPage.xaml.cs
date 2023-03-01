@@ -1,15 +1,9 @@
+
 using AOdiaData;
-using CommunityToolkit.Maui.Core.Extensions;
-using CommunityToolkit.Maui.Views;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Reactive.Bindings;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
 
 namespace AOdia5;
 
@@ -36,8 +30,9 @@ public partial class RouteListPage : ContentPage
 
 
         RouteEditPageModel vm = new RouteEditPageModel(route,VM);
-        
-        Navigation.PushAsync(new RouteEditPage(vm));
+        Navigation.PushAsync(new RouteEditFromMapPage());
+
+//        Navigation.PushAsync(new RouteEditPage(vm));
 
 
     }
@@ -61,7 +56,7 @@ public class RouteListPageModel : INotifyPropertyChanged
 
    public RouteListPageModel()
     {
-        _routes = new ObservableCollection<Route>(AOdiaData.AOdiaData.staticDia.routes.Include(r => r.Paths));
+        _routes = new ObservableCollection<Route>(DiaFile.staticDia.routes);
         _routes.CollectionChanged += OnPropertyChanged;
     }
     private void OnPropertyChanged(object sender, NotifyCollectionChangedEventArgs e)
