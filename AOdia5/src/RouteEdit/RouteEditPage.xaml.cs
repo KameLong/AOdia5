@@ -1,6 +1,7 @@
 using AOdiaData;
 using CommunityToolkit.Maui.Core.Extensions;
 using Reactive.Bindings;
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -40,7 +41,15 @@ public class RouteEditPageModel : INotifyPropertyChanged
     private readonly ObservableCollection<Path> _paths;
     public ObservableCollection<Path> paths {get{return _paths;}}
 
-    private RouteListPageModel routeListPageModel { get; set; }
+    private RouteListPageModel? routeListPageModel { get; set; }
+
+    public ReactiveProperty<string> routeColorHtml {
+        get {
+            string s = String.Format("{0:X4}", _route.color.Value.ToArgb());
+
+            return new ReactiveProperty<string>($"#{s.Substring(2)}{s.Substring(0,2)}");
+        }set { } }
+
 
 	public RouteEditPageModel(Route route, RouteListPageModel routeListPageModel)
     {

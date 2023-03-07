@@ -13,9 +13,19 @@ namespace AOdiaData
 
 //        [NotMapped]
         public long routeId { get; set; }
-                [NotMapped]
+        [NotMapped]
+        private Route _route { get; set; }
 
-        public  Route route { get { return DiaFile.staticDia.routes.Where(r => r.RouteId == routeId).First(); } set { routeId = value.RouteId; } }
+        public Route route { get {
+                if (_route == null)
+                {
+                    _route = DiaFile.staticDia.routes.Where(r => r.RouteId == routeId).First();
+                }
+                return _route;
+            } set {
+                _route= value;
+                routeId = value.RouteId;
+                } }
         public int seq { get; set; }
 
         public long startStationID { get; set; }

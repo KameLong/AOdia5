@@ -14,9 +14,6 @@ namespace AOdiaData
                 if (_dia == null)
                 {
                     DateTime now = DateTime.Now;
-                    var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
-                    Debug.WriteLine(path);
-                    var DbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}aodia.db";
 
                     _dia = new DiaFile();
                     Debug.WriteLine($"{(DateTime.Now - now).TotalMilliseconds}  ロード完了");
@@ -32,6 +29,7 @@ namespace AOdiaData
 
         public DbSet<Station> stations { get; set; }
         public DbSet<Route> routes { get; set; }
+        public DbSet<Path> paths { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

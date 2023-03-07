@@ -3,21 +3,29 @@
     x:Class="AOdia5.RouteEditPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:colorPicker="clr-namespace:Maui.ColorPicker;assembly=Maui.ColorPicker"
     xmlns:controls="clr-namespace:AOdia5"
+    xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
     Title="RouteEditPage">
     <ContentPage.BindingContext>
         <controls:RouteEditPageModel />
     </ContentPage.BindingContext>
 
     <VerticalStackLayout>
-        <HorizontalStackLayout>
-            <Label Text="Route Name" />
-            <Editor Text="{Binding route.Value.Name.Value}" />
-        </HorizontalStackLayout>
-        <HorizontalStackLayout>
-            <Label Text="Route Color" />
-            <Editor Text="{Binding route.Value.color.Value}" />
-        </HorizontalStackLayout>
+        <inputLayout:SfTextInputLayout
+            Margin="30,10,30,10"
+            ContainerType="Outlined"
+            Hint="Route name">
+            <Entry Text="{Binding route.Value.Name.Value}" />
+        </inputLayout:SfTextInputLayout>
+
+        <inputLayout:SfTextInputLayout
+            Margin="30,10,30,10"
+            ContainerType="Outlined"
+            Hint="Route color">
+            <Entry Text="{Binding routeColorHtml.Value}" />
+        </inputLayout:SfTextInputLayout>
+
         <ListView Margin="20,5,20,5" ItemsSource="{Binding paths}">
             <ListView.ItemTemplate>
                 <DataTemplate>

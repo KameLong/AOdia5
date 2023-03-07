@@ -19,6 +19,7 @@ void LoadStationCSV(DiaFile db)
         routes.Add(int.Parse(lines[0]), route);
         db.routes.Add(route);
     }
+   db.SaveChanges();
 
 
     string stationCsv = @"C:\Users\kamelong\Downloads\station20230105free.csv";
@@ -43,27 +44,35 @@ void LoadStationCSV(DiaFile db)
             path.endStationID = station.StationId;
             path.seq = path.route.Paths.Count();
             path.route.Paths.Add(path);
+            db.paths.Add(path);
         }
+        
         prevRouteIndex= routeIndex;
         prevStation= station;
     }
+    db.SaveChanges();
+
 }
 
 DateTime now = DateTime.Now;
 
-//using (var db = new DiaFile())
-//{
-//    Random rand = new Random();
-//    var paths = db.routes.Include(r => r.Paths);
+using (var db = new DiaFile())
+{
 
-//    db.stations.RemoveRange(db.stations);
-//    db.routes.RemoveRange(db.routes);
-//    db.SaveChanges();
+    var a = db.routes.Include(x => x.Paths).First();
+    int b=0;
+    //    Random rand = new Random();
+    //    var paths = db.routes.Include(r => r.Paths);
+
+    //    db.stations.RemoveRange(db.stations);
+    //    db.routes.RemoveRange(db.routes);
+    //    db.SaveChanges();
+    //    LoadStationCSV(db);
+    //    db.SaveChanges();
+    //    return;
+
 //    LoadStationCSV(db);
-//    db.SaveChanges();
-//    return;
-
-
+}
 
 //    Console.WriteLine((DateTime.Now - now).TotalMilliseconds);
 

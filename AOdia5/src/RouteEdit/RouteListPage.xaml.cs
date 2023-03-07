@@ -17,7 +17,6 @@ public partial class RouteListPage : ContentPage
 	public RouteListPage()
 	{
 		VM= new RouteListPageModel();
-//		VM.routes = StaticData.staticDia.routes.ToObservableCollection();
 		InitializeComponent();
         
 	}
@@ -27,18 +26,17 @@ public partial class RouteListPage : ContentPage
         // リストビューで選択されたアイテムを取得する。
         ListView listView = (ListView)sender;
         Route route = (Route)listView.SelectedItem;
-
-
         RouteEditPageModel vm = new RouteEditPageModel(route,VM);
-        Navigation.PushAsync(new RouteEditFromMapPage());
+        Navigation.PushAsync(new RouteEditPage(vm));
 
-//        Navigation.PushAsync(new RouteEditPage(vm));
+
 
 
     }
 
     private void Button_Clicked(object sender, EventArgs e)
     {
+        //        Navigation.PushAsync(new RouteEditFromMapPage());
     }
 }
 
@@ -51,8 +49,6 @@ public class RouteListPageModel : INotifyPropertyChanged
 
 	private  readonly ObservableCollection<Route> _routes;
     public ObservableCollection<Route> routes { get { return _routes; } }
-
-
 
    public RouteListPageModel()
     {
