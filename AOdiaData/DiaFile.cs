@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Net;
 
 namespace AOdiaData
 {
@@ -47,7 +48,11 @@ namespace AOdiaData
             var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             Debug.WriteLine(path);
             DbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}aodia.db";
-                SQLitePCL.Batteries_V2.Init();
+            using (var client = new WebClient())
+            {
+//                client.DownloadFile("https://kamelong.com/aodia.db", DbPath);
+            }
+            SQLitePCL.Batteries_V2.Init();
                 this.Database.EnsureCreated();
 
 

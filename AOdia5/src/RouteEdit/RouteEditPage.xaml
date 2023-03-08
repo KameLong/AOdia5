@@ -6,37 +6,44 @@
     xmlns:colorPicker="clr-namespace:Maui.ColorPicker;assembly=Maui.ColorPicker"
     xmlns:controls="clr-namespace:AOdia5"
     xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+    x:Name="page"
     Title="RouteEditPage">
     <ContentPage.BindingContext>
         <controls:RouteEditPageModel />
     </ContentPage.BindingContext>
+    <ScrollView>
+        <VerticalStackLayout>
+            <inputLayout:SfTextInputLayout
+                Margin="30,5,30,0"
+                ContainerType="Outlined"
+                Hint="Route name">
+                <Entry Text="{Binding route.Value.Name.Value}" />
+            </inputLayout:SfTextInputLayout>
 
-    <VerticalStackLayout>
-        <inputLayout:SfTextInputLayout
-            Margin="30,10,30,10"
-            ContainerType="Outlined"
-            Hint="Route name">
-            <Entry Text="{Binding route.Value.Name.Value}" />
-        </inputLayout:SfTextInputLayout>
+            <inputLayout:SfTextInputLayout
+                Margin="30,0,30,0"
+                ContainerType="Outlined"
+                Hint="Route color">
+                <Entry Text="{Binding routeColorHtml.Value}" />
+            </inputLayout:SfTextInputLayout>
 
-        <inputLayout:SfTextInputLayout
-            Margin="30,10,30,10"
-            ContainerType="Outlined"
-            Hint="Route color">
-            <Entry Text="{Binding routeColorHtml.Value}" />
-        </inputLayout:SfTextInputLayout>
+            <ListView
+                x:Name="stationList"
+                Margin="20,5,20,5"
+                ItemsSource="{Binding stations}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <HorizontalStackLayout Margin="0,10,0,0">
+                                <Label Text="{Binding Name.Value}" WidthRequest="150" />
+                                <Button Margin="20,0,0,0" Text="Add Station" />
 
-        <ListView Margin="20,5,20,5" ItemsSource="{Binding paths}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <HorizontalStackLayout Margin="0,10,0,0">
-                            <Label Text="{Binding pathID}" WidthRequest="150" />
-                        </HorizontalStackLayout>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                            </HorizontalStackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
-    </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

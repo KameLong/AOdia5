@@ -1,5 +1,6 @@
 
 using AOdiaData;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -52,7 +53,7 @@ public class RouteListPageModel : INotifyPropertyChanged
 
    public RouteListPageModel()
     {
-        _routes = new ObservableCollection<Route>(DiaFile.staticDia.routes);
+        _routes = new ObservableCollection<Route>(DiaFile.staticDia.routes.Include(r=>r.Paths));
         _routes.CollectionChanged += OnPropertyChanged;
     }
     private void OnPropertyChanged(object sender, NotifyCollectionChangedEventArgs e)

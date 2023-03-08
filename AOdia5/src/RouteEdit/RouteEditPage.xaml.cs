@@ -5,7 +5,10 @@ using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using Path = AOdiaData.Path;
 
 namespace AOdia5;
@@ -23,6 +26,11 @@ public partial class RouteEditPage : ContentPage
 	{
 		InitializeComponent();
 	}
+
+    private void Button_Clicked(object sender, EventArgs e)
+    {
+        Debug.WriteLine("test");
+    }
 }
 
 
@@ -38,8 +46,10 @@ public class RouteEditPageModel : INotifyPropertyChanged
 
     public ReactiveProperty<Route> route { get { return new ReactiveProperty<Route>(_route); } }
 
-    private readonly ObservableCollection<Path> _paths;
-    public ObservableCollection<Path> paths {get{return _paths;}}
+    private  ObservableCollection<Path> _paths;
+
+    private readonly ObservableCollection<Station> _stations;
+    public  ObservableCollection<Station> stations { get { return _stations; } }
 
     private RouteListPageModel? routeListPageModel { get; set; }
 
@@ -48,7 +58,32 @@ public class RouteEditPageModel : INotifyPropertyChanged
             string s = String.Format("{0:X4}", _route.color.Value.ToArgb());
 
             return new ReactiveProperty<string>($"#{s.Substring(2)}{s.Substring(0,2)}");
-        }set { } }
+        }set {
+            if (value.Value.Length > 1) {
+                var color="";
+                switch(value.Value.Length)
+                {
+                    case 4:
+                        color = $"#{value.Value[1]}{value.Value[1]}{value.Value[2]}{value.Value[2]}{value.Value[3]}{value.Value[3]}FF";
+                        break;
+                    case 5:
+                        color = $"#{value.Value[1]}{value.Value[1]}{value.Value[2]}{value.Value[2]}{value.Value[3]}{value.Value[3]}{value.Value[4]}{value.Value[4]}";
+                        break;
+                    case 7:
+                        color = value.Value + "FF";
+                        break;
+                    case 9:
+                        color = value.Value;
+                        break;
+                    default:
+                        color ="#000000FF";
+                        break;
+                }
+
+                _route.color.Value = System.Drawing.Color.FromArgb(Convert.ToInt32(color.Substring(7, 2), 16), Convert.ToInt32(color.Substring(1, 2), 16), Convert.ToInt32(color.Substring(3, 2), 16), Convert.ToInt32(color.Substring(5, 2), 16));
+            }
+        
+        } }
 
 
 	public RouteEditPageModel(Route route, RouteListPageModel routeListPageModel)
@@ -56,7 +91,9 @@ public class RouteEditPageModel : INotifyPropertyChanged
         _route = route;
         this.routeListPageModel = routeListPageModel;
         _paths = route.Paths.ToObservableCollection();
-        _paths.CollectionChanged += OnPropertyChanged;
+        _stations=_paths.OrderBy(p=>p.seq).Select(p=>p.startStation).ToObservableCollection();
+        _stations.Add(_paths.OrderBy(p => -p.seq).First().endStation);
+
     }
     public RouteEditPageModel()
     {
@@ -71,6 +108,7 @@ public class RouteEditPageModel : INotifyPropertyChanged
     {
         PropertyChanged(this, new PropertyChangedEventArgs("paths"));
     }
+
 
 
 
