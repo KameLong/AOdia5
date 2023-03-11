@@ -1,5 +1,6 @@
 using AOdiaData;
 using CommunityToolkit.Maui.Core.Extensions;
+using CommunityToolkit.Maui.Views;
 using Reactive.Bindings;
 using System;
 using System.Collections.ObjectModel;
@@ -27,9 +28,17 @@ public partial class RouteEditPage : ContentPage
 		InitializeComponent();
 	}
 
-    private void Button_Clicked(object sender, EventArgs e)
+
+    private void AddStation(object sender, EventArgs e)
     {
-        Debug.WriteLine("test");
+        if (sender is Button button && button.BindingContext is Path path)
+        {
+            //station‚ÌŒã‚É—ñŽÔ‚ð’Ç‰Á‚·‚é   
+            Debug.WriteLine(path);
+            this.ShowPopup(new RouteEditAddStationTypeModal(VM.route,path, Navigation));
+
+        }
+
     }
 }
 
@@ -47,6 +56,9 @@ public class RouteEditPageModel : INotifyPropertyChanged
     public ReactiveProperty<Route> route { get { return new ReactiveProperty<Route>(_route); } }
 
     private  ObservableCollection<Path> _paths;
+
+    public ObservableCollection<Path> Paths { get { return _paths; } }
+
 
     private readonly ObservableCollection<Station> _stations;
     public  ObservableCollection<Station> stations { get { return _stations; } }
@@ -85,14 +97,14 @@ public class RouteEditPageModel : INotifyPropertyChanged
         
         } }
 
-
-	public RouteEditPageModel(Route route, RouteListPageModel routeListPageModel)
+    public RouteEditPageModel(Route route, RouteListPageModel routeListPageModel)
     {
         _route = route;
         this.routeListPageModel = routeListPageModel;
-        _paths = route.Paths.ToObservableCollection();
+        _paths = route.Paths.OrderBy(p=>p.seq).ToObservableCollection();
         _stations=_paths.OrderBy(p=>p.seq).Select(p=>p.startStation).ToObservableCollection();
         _stations.Add(_paths.OrderBy(p => -p.seq).First().endStation);
+
 
     }
     public RouteEditPageModel()
@@ -108,6 +120,8 @@ public class RouteEditPageModel : INotifyPropertyChanged
     {
         PropertyChanged(this, new PropertyChangedEventArgs("paths"));
     }
+
+
 
 
 

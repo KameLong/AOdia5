@@ -17,6 +17,7 @@ namespace AOdiaData
                     DateTime now = DateTime.Now;
 
                     _dia = new DiaFile();
+
                     Debug.WriteLine($"{(DateTime.Now - now).TotalMilliseconds}  ロード完了");
                 }
                 return _dia;
@@ -59,6 +60,10 @@ namespace AOdiaData
         }
         // デスクトップ上にSQLiteのDBファイルが作成される
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite($"Data Source={DbPath}");
+        {
+            options.UseSqlite($"Data Source={DbPath}");
+            // 出力ウィンドウに EF Core ログを表示
+            options.LogTo(msg =>Debug.WriteLine(msg));
+        }
     }
 }
