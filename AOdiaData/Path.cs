@@ -7,6 +7,14 @@ namespace AOdiaData
     [Index(nameof(routeId))]
     public class Path
     {
+        public static Path CreateNewPath()
+        {
+            var p=new Path();
+            DiaFile.staticDia.paths.Add(p);
+            return p;
+        }
+
+
         [Key]
         [Required]
         public long pathID { get; set; }
@@ -19,7 +27,7 @@ namespace AOdiaData
         public Route route { get {
                 if (_route == null)
                 {
-                    _route = DiaFile.staticDia.routes.Where(r => r.RouteId == routeId).First();
+                    _route = DiaFile.staticDia.routes.Where(r => r.RouteId == routeId).FirstOrDefault();
                 }
                 return _route;
             } set {

@@ -8,6 +8,7 @@ namespace AOdiaData
 
     public  class DiaFile : DbContext
     {
+        public static string dbName = "aodia.db";
         public static DiaFile staticDia
         {
             get
@@ -47,12 +48,7 @@ namespace AOdiaData
         public DiaFile()
         {
             var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
-            Debug.WriteLine(path);
-            DbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}aodia.db";
-            using (var client = new WebClient())
-            {
-//                client.DownloadFile("https://kamelong.com/aodia.db", DbPath);
-            }
+            DbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}{dbName}";
             SQLitePCL.Batteries_V2.Init();
                 this.Database.EnsureCreated();
 
@@ -63,7 +59,7 @@ namespace AOdiaData
         {
             options.UseSqlite($"Data Source={DbPath}");
             // 出力ウィンドウに EF Core ログを表示
-            options.LogTo(msg =>Debug.WriteLine(msg));
+//            options.LogTo(msg =>Debug.WriteLine(msg));
         }
     }
 }

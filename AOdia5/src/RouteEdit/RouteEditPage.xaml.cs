@@ -26,7 +26,12 @@ public partial class RouteEditPage : ContentPage
     public RouteEditPage()
 	{
 		InitializeComponent();
-	}
+    }
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        VM.onLoad();
+    }
+
 
 
     private void AddStation(object sender, EventArgs e)
@@ -38,7 +43,20 @@ public partial class RouteEditPage : ContentPage
             this.ShowPopup(new RouteEditAddStationTypeModal(VM.route,path, Navigation));
 
         }
+        else if(sender is Button )
+        {
+            //Å‰‚Ì‰w‚ð’Ç‰Á‚·‚é
+            this.ShowPopup(new RouteEditAddStationTypeModal(VM.route, null, Navigation));
 
+            Debug.WriteLine("a");
+        }
+
+    }
+
+    private void Button_Clicked(object sender, EventArgs e)
+    {
+        var vm = new RouteEditAddStationTypeModal(VM.route, null, Navigation,VM.route.Value.Paths.OrderBy(p=>p.seq).Last().endStation);
+        this.ShowPopup(vm);
     }
 }
 
@@ -55,37 +73,35 @@ public class RouteEditPageModel : INotifyPropertyChanged
 
     public ReactiveProperty<Route> route { get { return new ReactiveProperty<Route>(_route); } }
 
-    private  ObservableCollection<Path> _paths;
 
-    public ObservableCollection<Path> Paths { get { return _paths; } }
+    public ObservableCollection<Path> Paths { get { return _route.Paths.OrderBy(p => p.seq).ToObservableCollection();  } }
 
-
-    private readonly ObservableCollection<Station> _stations;
-    public  ObservableCollection<Station> stations { get { return _stations; } }
+    public Station? endStation { get { if (Paths.Count() > 0) { return Paths.Last().endStation; } else { return null; } } }
+    public bool EndStationIsNotNull { get { return endStation != null; } }
 
     private RouteListPageModel? routeListPageModel { get; set; }
 
-    public ReactiveProperty<string> routeColorHtml {
+    public string routeColorHtml {
         get {
             string s = String.Format("{0:X4}", _route.color.Value.ToArgb());
 
-            return new ReactiveProperty<string>($"#{s.Substring(2)}{s.Substring(0,2)}");
+            return new ($"#{s.Substring(2)}{s.Substring(0,2)}");
         }set {
-            if (value.Value.Length > 1) {
+            if (value.Length > 1) {
                 var color="";
-                switch(value.Value.Length)
+                switch(value.Length)
                 {
                     case 4:
-                        color = $"#{value.Value[1]}{value.Value[1]}{value.Value[2]}{value.Value[2]}{value.Value[3]}{value.Value[3]}FF";
+                        color = $"#{value[1]}{value[1]}{value[2]}{value[2]}{value[3]}{value[3]}FF";
                         break;
                     case 5:
-                        color = $"#{value.Value[1]}{value.Value[1]}{value.Value[2]}{value.Value[2]}{value.Value[3]}{value.Value[3]}{value.Value[4]}{value.Value[4]}";
+                        color = $"#{value[1]}{value[1]}{value[2]}{value[2]}{value[3]}{value[3]}{value[4]}{value[4]}";
                         break;
                     case 7:
-                        color = value.Value + "FF";
+                        color = value + "FF";
                         break;
                     case 9:
-                        color = value.Value;
+                        color = value;
                         break;
                     default:
                         color ="#000000FF";
@@ -101,24 +117,22 @@ public class RouteEditPageModel : INotifyPropertyChanged
     {
         _route = route;
         this.routeListPageModel = routeListPageModel;
-        _paths = route.Paths.OrderBy(p=>p.seq).ToObservableCollection();
-        _stations=_paths.OrderBy(p=>p.seq).Select(p=>p.startStation).ToObservableCollection();
-        _stations.Add(_paths.OrderBy(p => -p.seq).First().endStation);
 
 
     }
     public RouteEditPageModel()
     {
         _route = new Route();
-        _paths = new ObservableCollection<Path>();
-        _paths.CollectionChanged += OnPropertyChanged;
     }
 
 
 
-    private void OnPropertyChanged(object sender, NotifyCollectionChangedEventArgs e)
+
+    public void onLoad()
     {
-        PropertyChanged(this, new PropertyChangedEventArgs("paths"));
+        PropertyChanged(this, new PropertyChangedEventArgs("Paths"));
+        PropertyChanged(this, new PropertyChangedEventArgs("endStation"));
+        PropertyChanged(this, new PropertyChangedEventArgs("EndStationIsNotNull"));
     }
 
 

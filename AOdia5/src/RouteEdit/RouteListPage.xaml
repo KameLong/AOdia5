@@ -6,7 +6,7 @@
     Title="RouteList">
 
     <VerticalStackLayout>
-        <Button Clicked="Button_Clicked" Text="test" />
+        <Button Clicked="AddNewRoute" Text="NewRoute" />
         <HorizontalStackLayout />
         <ListView
             Margin="20,5,20,5"

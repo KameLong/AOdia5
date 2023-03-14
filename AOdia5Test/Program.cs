@@ -2,10 +2,34 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Net;
+using System.Xml.Linq;
 using Path = AOdiaData.Path;
+DiaFile.dbName = "test.db";
+
+var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+var DbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}{DiaFile.dbName}";
+if (File.Exists(DbPath))
+{
+    File.Delete(DbPath);
+}
+using (var client = new WebClient())
+{
+    client.DownloadFile("https://kamelong.com/aodia.db",DbPath);
+}
+
+
+
+
+
+
+
 
 void LoadStationCSV(DiaFile db)
 {
+    return;
+
+
     string routeCsv = @"C:\Users\kamelong\Downloads\line20230105free.csv";
     var colors = new Color[] {Color.Red, Color.Green, Color.Blue,Color.Orange,Color.DarkViolet,Color.DarkCyan };
 
@@ -54,62 +78,19 @@ void LoadStationCSV(DiaFile db)
 
 }
 
-DateTime now = DateTime.Now;
-
-using (var db = new DiaFile())
+bool AddStationTest()
 {
+    var route = DiaFile.staticDia.routes.Include(r=>r.Paths).Where(r => r.dbName == "阪急京都本線").First();
+    var newStation = Station.CreateNewStation();
+    newStation.Name.Value = "test";
+    newStation.Lat.Value = 35;
+    newStation.Lon.Value = 135;
+    Path path = route.Paths.OrderBy(path => path.seq).First();
+    var newPath = route.AddStation(path, newStation);
 
-    var a = db.routes.Include(x => x.Paths).First();
-    int b=0;
-    //    Random rand = new Random();
-    //    var paths = db.routes.Include(r => r.Paths);
+    DiaFile.staticDia.SaveChanges();
+    var stationList=route.Paths.OrderBy(path => path.seq).Select(p => p.startStation.DbName);
 
-    //    db.stations.RemoveRange(db.stations);
-    //    db.routes.RemoveRange(db.routes);
-    //    db.SaveChanges();
-    //    LoadStationCSV(db);
-    //    db.SaveChanges();
-    //    return;
-
-//    LoadStationCSV(db);
+        return true;
 }
-
-//    Console.WriteLine((DateTime.Now - now).TotalMilliseconds);
-
-//    // 駅の初期化
-//    Station s = new Station();
-//    //// 新規登録
-//    for (int i = 0; i < 1000; i++)
-//    {
-//        s = new Station();
-//        s.Name.Value = i.ToString();
-//        db.stations.Add(s);
-//    }
-//    db.SaveChanges();
-//    Console.WriteLine((DateTime.Now - now).TotalMilliseconds);
-//    db.SaveChanges();
-//    Console.WriteLine((DateTime.Now - now).TotalMilliseconds);
-//    var stations = db.stations.ToList();
-//    for (int i = 0; i < 10; i++)
-//    {
-//        Route route = new Route();
-//        route.Name.Value = i.ToString();
-//        for (int j = 0; j < 10; j++)
-//        {
-//            Path p = new Path();
-//                        p.route = route;
-////            p.routeId = route.RouteId;
-//            p.startStationID = stations[(rand.Next()) % 100].StationId;
-//            p.endStationID = stations[(rand.Next()) % 100].StationId;
-//            p.seq = route.Paths.Count();
-//            route.Paths.Add(p);
-//        }
-//        db.routes.Add(route);
-//    }
-//    Console.WriteLine((DateTime.Now - now).TotalMilliseconds);
-//    db.SaveChanges();
-
-//    // 読み込み
-//    Console.WriteLine((DateTime.Now - now).TotalMilliseconds);
-
-//}
+AddStationTest();

@@ -14,6 +14,14 @@ namespace AOdiaData
 {
     public class Station
     {
+        public static Station CreateNewStation()
+        {
+            var s=new Station();
+            DiaFile.staticDia.stations.Add(s);
+            return s;
+        }
+
+
         public event PropertyChangedEventHandler PropertyChanged;
         public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
           => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

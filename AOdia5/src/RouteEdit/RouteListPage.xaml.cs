@@ -22,22 +22,26 @@ public partial class RouteListPage : ContentPage
         
 	}
 
+    /*
+     * ListViewで選択した路線の編集に遷移する
+     */
     private void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
-        // リストビューで選択されたアイテムを取得する。
         ListView listView = (ListView)sender;
         Route route = (Route)listView.SelectedItem;
         RouteEditPageModel vm = new RouteEditPageModel(route,VM);
         Navigation.PushAsync(new RouteEditPage(vm));
-
-
-
-
     }
 
-    private void Button_Clicked(object sender, EventArgs e)
+    /*
+     * 新路線を追加する
+     * RouteEditに移動する
+     */
+    private void AddNewRoute(object sender, EventArgs e)
     {
-        //        Navigation.PushAsync(new RouteEditFromMapPage());
+        Route route = VM.CreateNewRoute();
+        RouteEditPageModel vm = new RouteEditPageModel(route, VM);
+        Navigation.PushAsync(new RouteEditPage(vm));
     }
 }
 
@@ -59,6 +63,13 @@ public class RouteListPageModel : INotifyPropertyChanged
     private void OnPropertyChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
         PropertyChanged(this, new PropertyChangedEventArgs("routes"));
+    }
+    public Route CreateNewRoute()
+    {
+       var res=Route.CreateNewRoute();
+        DiaFile.staticDia.SaveChanges();
+        return res;
+        
     }
 
 

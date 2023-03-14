@@ -24,8 +24,15 @@
                 Margin="30,0,30,0"
                 ContainerType="Outlined"
                 Hint="Route color">
-                <Entry Text="{Binding routeColorHtml.Value}" />
+                <Entry Text="{Binding routeColorHtml}" />
             </inputLayout:SfTextInputLayout>
+
+            <VerticalStackLayout Margin="20,5,20,5" WidthRequest="200">
+                <Button
+                    Clicked="AddStation"
+                    HorizontalOptions="Center"
+                    Text="+" />
+            </VerticalStackLayout>
 
             <ListView
                 x:Name="stationList"
@@ -39,8 +46,6 @@
                             <VerticalStackLayout WidthRequest="200">
                                 <HorizontalStackLayout Margin="0,10,0,0">
                                     <Label Text="{Binding startStation.Name.Value}" WidthRequest="150" />
-                                    <!--<Button Margin="20,0,0,0" Text="Add Station" />-->
-
                                 </HorizontalStackLayout>
                                 <Button
                                     Clicked="AddStation"
@@ -51,6 +56,23 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
+            <VerticalStackLayout
+                Margin="20,5,20,5"
+                IsVisible="{Binding EndStationIsNotNull}"
+                WidthRequest="200">
+                <HorizontalStackLayout Margin="0,10,0,0">
+                    <Label Text="{Binding endStation.Name.Value}" WidthRequest="150" />
+                    <!--<Button Margin="20,0,0,0" Text="Add Station" />-->
+
+                </HorizontalStackLayout>
+                <Button
+                    Clicked="Button_Clicked"
+                    HorizontalOptions="Center"
+                    Text="+" />
+            </VerticalStackLayout>
+
+
 
         </VerticalStackLayout>
     </ScrollView>

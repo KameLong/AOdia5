@@ -42,14 +42,20 @@ public partial class RouteEditFromMapPage : ContentPage
             {
                 Thread.Sleep(100);
             }
-            mapControl.Pins.Add(new Pin(mapControl)
-            {
-                Position = new Position(station.Lat.Value, station.Lon.Value),
-                Type = PinType.Svg,
-                Svg = @"<svg width=""20"" height=""80"" class=""bg""><circle cx=""10"" cy=""70"" r=""7"" stroke=""Black"" stroke-width=""2"" fill=""White""></circle></svg>",
-                Label = "‰w–¼"
-            });
+            addStation(station);
         }
+    }
+    public void addStation(in Station station)
+    {
+        mapControl.Pins.Add(new Pin(mapControl)
+        {
+
+        Position = new Position(station.Lat.Value, station.Lon.Value),
+            Type = PinType.Svg,
+            Svg = @"<svg width=""20"" height=""80"" class=""bg""><circle cx=""10"" cy=""70"" r=""7"" stroke=""Black"" stroke-width=""2"" fill=""White""></circle></svg>",
+            Label = "‰w–¼"
+        });
+
     }
     private void drawRoute()
     {
@@ -79,6 +85,7 @@ public partial class RouteEditFromMapPage : ContentPage
     }
     private void drawRoute(Route route)
     {
+        (mapControl).Drawables.Clear();
         var paths = route.Paths.OrderBy(r => r.seq).ToList();
         if (paths.Count == 0)
         {
@@ -100,37 +107,14 @@ public partial class RouteEditFromMapPage : ContentPage
         (mapControl).Drawables.Add(p);
 
     }
-    private void MapClicked(object sender, MapClickedEventArgs e)
+    private async void MapClicked(object sender, MapClickedEventArgs e)
     {
+        string? name = await DisplayPromptAsync("StationName", "Write name of the station.");
         selectedpos = e.Point;
-        var station = new Station {DbName="test",DbLat=(float)selectedpos.Value.Latitude,DbLon=(float) selectedpos.Value.Longitude };
-        DiaFile.staticDia.stations.Add(station);
-        VM.stations.Add(station);
-        DiaFile.staticDia.SaveChanges();
-        mapControl.Pins.Add(new Pin(mapControl)
-        {
-            Position = new Position(station.Lat.Value, station.Lon.Value),
-            Type = PinType.Svg,
-            Svg = @"<svg width=""20"" height=""80"" class=""bg""><circle cx=""10"" cy=""70"" r=""7"" stroke=""Black"" stroke-width=""2"" fill=""White""></circle></svg>",
-            Label = "‰w–¼"
-        });
-        var newPath = new Path();
-        newPath.route = VM.route;
-        newPath.startStation = station;
-        newPath.endStation = VM.editPath.endStation;
-        newPath.seq = VM.editPath.seq + 1;
-        VM.route.Paths.Where(p => p.seq > VM.editPath.seq).Select(p => { p.seq++;return true; });
-        VM.editPath.endStation = station;
-        
-        VM.route.Paths.Add(newPath);
-        DiaFile.staticDia.paths.Add(newPath);
-        VM.editPath = newPath;
-
-        DiaFile.staticDia.SaveChanges();
+        var station=VM.AddNewStation((float)selectedpos.Value.Latitude, (float)selectedpos.Value.Longitude);
+        station.Name.Value = name ?? "ƒfƒtƒHƒ‹ƒg‰w–¼";
+        addStation(station);
         drawRoute(VM.route);
-
-
-        //        Navigation.PopAsync();
 
     }
 
@@ -139,7 +123,7 @@ public partial class RouteEditFromMapPage : ContentPage
 public class RouteEditFromMapPageModel : INotifyPropertyChanged
 {
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
     public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
       => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
@@ -152,21 +136,58 @@ public class RouteEditFromMapPageModel : INotifyPropertyChanged
     public ObservableCollection<Station> stations { get { return _stations; } }
 
     public Route route;
-    public Path editPath;
+    public Path? editPath;
+    public Station? lastStation;
 
 
 
-    public RouteEditFromMapPageModel(ICollection<Route> routes, ICollection<Station>stations,Route r,Path p)
+
+    public RouteEditFromMapPageModel(ICollection<Route> routes, ICollection<Station>stations,Route r,Path? p)
     {
         route = r;
         editPath = p;
         _routes = routes.ToObservableCollection();
         _stations = stations.ToObservableCollection();
+    }
 
-        //_routes.CollectionChanged += 
-        //    (object sender, NotifyCollectionChangedEventArgs e)=> { PropertyChanged(this, new PropertyChangedEventArgs("routes")); };
-        //_stations.CollectionChanged +=
-        //    (object sender, NotifyCollectionChangedEventArgs e) => { PropertyChanged(this, new PropertyChangedEventArgs("stations")); };
+    public Station AddNewStation(float lat,float lon)
+    {
+        var station = Station.CreateNewStation();
+        station.DbName = "test";
+        station.DbLat = lat;
+        station.DbLon = lon;
+        stations.Add(station);
+        if (editPath != null)
+        {
+            editPath = route.AddStation(editPath, station);
+        }
+        else
+        {
+            if(lastStation != null)
+            {
+                //––”ö’Ç‰Á
+                route.AddPath(lastStation,station);
+                lastStation = station;
+
+            }
+            else
+            {
+                //æ“ª’Ç‰Á
+                if(route.Paths.Count > 0)
+                {
+                    editPath = route.AddPathTop(station);
+                }
+                else
+                {
+                    lastStation = station;
+
+                }
+            }
+        }
+
+        DiaFile.staticDia.SaveChanges();
+        return station;
+
     }
 
 

@@ -4,7 +4,6 @@ using SkiaSharp.Views.Maui.Controls.Hosting;
 using Syncfusion.Maui.Core.Hosting;
 
 namespace AOdia5;
-
 public static class MauiProgram
 {
 	public static MauiApp CreateMauiApp()
