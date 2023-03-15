@@ -71,7 +71,6 @@
 		<PackageReference Include="ReactiveProperty" Version="9.0.0" />
 		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.3" />
 		<PackageReference Include="Syncfusion.Maui.Core" Version="20.4.52" />
-		<PackageReference Include="UraniumUI.Material" Version="2.3.1" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -79,6 +78,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Resources\l18n\l18n.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>L18N.resx</DependentUpon>
+	  </Compile>
 	  <Compile Update="src\Menu\MenuPage.xaml.cs">
 	    <DependentUpon>MenuPage.xaml</DependentUpon>
 	  </Compile>
@@ -100,9 +104,6 @@
 	  <MauiXaml Update="src\Menu\MenuPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="src\RouteEdit\RouteEditAddStationTypeModal.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="src\RouteEdit\RouteEditFromMapPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -121,6 +122,13 @@
 	  <MauiXaml Update="src\StationEdit\StationListPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Resources\l18n\L18N.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>l18n.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
 	</ItemGroup>
 
 </Project>

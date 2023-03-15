@@ -110,11 +110,18 @@ public partial class RouteEditFromMapPage : ContentPage
     private async void MapClicked(object sender, MapClickedEventArgs e)
     {
         string? name = await DisplayPromptAsync("StationName", "Write name of the station.");
+        if(name == null)
+        {
+            //キャンセル
+            return;
+        }
         selectedpos = e.Point;
         var station=VM.AddNewStation((float)selectedpos.Value.Latitude, (float)selectedpos.Value.Longitude);
         station.Name.Value = name ?? "デフォルト駅名";
         addStation(station);
         drawRoute(VM.route);
+
+
 
     }
 

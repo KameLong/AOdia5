@@ -1,15 +1,10 @@
+using AOdia5.Resources.l18n;
 using AOdiaData;
 using CommunityToolkit.Maui.Core.Extensions;
-using CommunityToolkit.Maui.Views;
 using Reactive.Bindings;
-using System;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
 using Path = AOdiaData.Path;
 
 namespace AOdia5;
@@ -34,30 +29,61 @@ public partial class RouteEditPage : ContentPage
 
 
 
-    private void AddStation(object sender, EventArgs e)
+    private async void  AddStation(object sender, EventArgs e)
     {
         if (sender is Button button && button.BindingContext is Path path)
         {
             //station‚ÌŒã‚É—ñŽÔ‚ð’Ç‰Á‚·‚é   
-            Debug.WriteLine(path);
-            this.ShowPopup(new RouteEditAddStationTypeModal(VM.route,path, Navigation));
+            string action = await DisplayActionSheet("", "Cancel", null, L18N.ADD_STATION_FROM_LIST, L18N.ADD_STATION_FROM_MAP);
+            if(action== L18N.ADD_STATION_FROM_LIST)
+            {
 
+            }
+            if(action== L18N.ADD_STATION_FROM_MAP)
+            {
+                RouteEditFromMapPageModel vm = new RouteEditFromMapPageModel(DiaFile.staticDia.routes.ToList(), DiaFile.staticDia.stations.ToList(), VM.route.Value, path);
+                await Navigation.PushAsync(new RouteEditFromMapPage(vm));
+
+            }
+ 
         }
         else if(sender is Button )
         {
             //Å‰‚Ì‰w‚ð’Ç‰Á‚·‚é
-            this.ShowPopup(new RouteEditAddStationTypeModal(VM.route, null, Navigation));
+            string action = await DisplayActionSheet("", "Cancel", null, L18N.ADD_STATION_FROM_LIST, L18N.ADD_STATION_FROM_MAP);
+            if (action == L18N.ADD_STATION_FROM_LIST)
+            {
 
-            Debug.WriteLine("a");
+            }
+            if (action == L18N.ADD_STATION_FROM_MAP)
+            {
+                RouteEditFromMapPageModel vm = new RouteEditFromMapPageModel(DiaFile.staticDia.routes.ToList(), DiaFile.staticDia.stations.ToList(), VM.route.Value,null);
+                await Navigation.PushAsync(new RouteEditFromMapPage(vm));
+            }
         }
 
     }
 
-    private void Button_Clicked(object sender, EventArgs e)
+    private async void Button_Clicked(object sender, EventArgs e)
     {
-        var vm = new RouteEditAddStationTypeModal(VM.route, null, Navigation,VM.route.Value.Paths.OrderBy(p=>p.seq).Last().endStation);
-        this.ShowPopup(vm);
+
+        string action = await DisplayActionSheet(L18N.ADD_STATION_MODAL_TITLE, "Cancel", null, L18N.ADD_STATION_FROM_LIST, L18N.ADD_STATION_FROM_MAP);
+        if (action == L18N.ADD_STATION_FROM_LIST)
+        {
+
+        }
+        if (action == L18N.ADD_STATION_FROM_MAP)
+        {
+            RouteEditFromMapPageModel vm = new RouteEditFromMapPageModel(DiaFile.staticDia.routes.ToList(), DiaFile.staticDia.stations.ToList(), VM.route.Value, null);
+            vm.lastStation= VM.route.Value.Paths.OrderBy(p => p.seq).Last().endStation;
+            await Navigation.PushAsync(new RouteEditFromMapPage(vm));
+        }
+
+
     }
+
+
+
 }
 
 
@@ -76,7 +102,7 @@ public class RouteEditPageModel : INotifyPropertyChanged
 
     public ObservableCollection<Path> Paths { get { return _route.Paths.OrderBy(p => p.seq).ToObservableCollection();  } }
 
-    public Station? endStation { get { if (Paths.Count() > 0) { return Paths.Last().endStation; } else { return null; } } }
+    public Station? endStation { get { if (Paths.Count > 0) { return Paths.Last().endStation; } else { return null; } } }
     public bool EndStationIsNotNull { get { return endStation != null; } }
 
     private RouteListPageModel? routeListPageModel { get; set; }

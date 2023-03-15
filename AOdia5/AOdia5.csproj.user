@@ -24,9 +24,6 @@
     <MauiXaml Update="src\Menu\MenuPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="src\RouteEdit\RouteEditAddStationTypeModal.xaml">
-      <SubType>Designer</SubType>
-    </MauiXaml>
     <MauiXaml Update="src\RouteEdit\RouteEditFromMapPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
