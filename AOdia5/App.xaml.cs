@@ -10,7 +10,7 @@ public partial class App : Application
     public App()
 	{
 		InitializeComponent();
-        MainPage = new HelloSkia();
+        MainPage = new MainPage();
 		
 	}
     protected override Window CreateWindow(IActivationState activationState)

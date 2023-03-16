@@ -3,11 +3,85 @@
     x:Class="AOdia5.MenuPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="Menu">
+    xmlns:helpers="clr-namespace:AOdia5.Helpers"
+    xmlns:sf="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+    Title="Menu"
+    BackgroundColor="ivory">
     <VerticalStackLayout>
-        <Button
-            Margin="20,10,20,10"
-            Clicked="Save"
-            Text="SAVE" />
+        <Label
+            Margin="50,30,20,10"
+            BackgroundColor="Transparent"
+            FontAttributes="Bold"
+            FontSize="24"
+            Text="AOdia"
+            TextColor="DarkBlue" />
+        <Line
+            Stroke="Gray"
+            X1="20"
+            X2="310"
+            Y1="0"
+            Y2="0" />
+        <HorizontalStackLayout Margin="30,10,20,10">
+            <Label
+                FontFamily="MaterialDesignIcons"
+                FontSize="30"
+                Text="{x:Static helpers:IconFont.ContentSave}"
+                TextColor="SlateGray"
+                VerticalTextAlignment="Center" />
+
+            <Button
+                Margin="20,0,0,0"
+                BackgroundColor="Transparent"
+                Clicked="Save"
+                FontSize="20"
+                Text="SAVE"
+                TextColor="Black" />
+
+        </HorizontalStackLayout>
+        <Line
+            Stroke="Gray"
+            X1="20"
+            X2="310"
+            Y1="0"
+            Y2="0" />
+        <HorizontalStackLayout
+            x:Name="RoutesButton"
+            Padding="30,10,20,10"
+            BackgroundColor="Yellow">
+            <HorizontalStackLayout.GestureRecognizers>
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+            </HorizontalStackLayout.GestureRecognizers>
+            <Label
+                FontFamily="MaterialDesignIcons"
+                FontSize="30"
+                Text="{x:Static helpers:IconFont.Map}"
+                TextColor="SlateGray"
+                VerticalTextAlignment="Center" />
+
+            <Label
+                Margin="20,0,0,0"
+                BackgroundColor="Transparent"
+                FontSize="20"
+                HorizontalOptions="StartAndExpand"
+                Text="Routes"
+                TextColor="Black" />
+
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Padding="30,10,20,10">
+            <Label
+                FontFamily="MaterialDesignIcons"
+                FontSize="30"
+                Text="{x:Static helpers:IconFont.BusStop}"
+                TextColor="SlateGray"
+                VerticalTextAlignment="Center" />
+
+            <Label
+                Margin="20,0,0,0"
+                BackgroundColor="Transparent"
+                FontSize="20"
+                Text="Stations"
+                TextColor="Black" />
+
+        </HorizontalStackLayout>
     </VerticalStackLayout>
 </ContentPage>

@@ -7,7 +7,7 @@ using System.Net.Sockets;
 namespace AOdia5;
 public partial class MapPage : ContentPage
 {
-    private Position[] pos = new Position[0];
+    private Position[] pos = Array.Empty<Position>();
     private Position? selectedpos = null;
     public MapViewModel VM { get { return BindingContext as MapViewModel; } set { BindingContext = value; } }
 
@@ -81,7 +81,7 @@ public partial class MapPage : ContentPage
 //        (mapControl).Drawables.Add(p);
     }
 
-    private void MapClicked(object sender, MapClickedEventArgs e)
+    private void MapClicked(object? sender, MapClickedEventArgs e)
     {
         selectedpos = e.Point;
         mapControl.Pins.Add(new Pin(mapControl){ Position= (Position)selectedpos,Label="station"});
@@ -97,7 +97,7 @@ public partial class MapPage : ContentPage
     //ä˘ë∂âwÇ…èÍèäÇê›íËÇµÇ‹Ç∑ÅB
     private void SetStationPos(object sender, EventArgs e)
     {
-        if (VM.editStation != null)
+        if (VM.editStation?.editStation != null&& selectedpos!=null)
         {
             VM.editStation.editStation.Lat.Value = (float)selectedpos.Value.Latitude;
             VM.editStation.editStation.Lon.Value = (float)selectedpos.Value.Longitude;

@@ -13,15 +13,12 @@ public partial class RouteEditPage : ContentPage
 {
 
     private RouteEditPageModel VM { get { return BindingContext as RouteEditPageModel; } set { BindingContext = value; } }
-    public RouteEditPage(RouteEditPageModel vm) : this()
+    public RouteEditPage(RouteEditPageModel vm)
     {
         VM = vm;
+        InitializeComponent();
     }
 
-    public RouteEditPage()
-	{
-		InitializeComponent();
-    }
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
         VM.onLoad();
@@ -90,7 +87,7 @@ public partial class RouteEditPage : ContentPage
 public class RouteEditPageModel : INotifyPropertyChanged
 {
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
     public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
       => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
@@ -156,9 +153,12 @@ public class RouteEditPageModel : INotifyPropertyChanged
 
     public void onLoad()
     {
-        PropertyChanged(this, new PropertyChangedEventArgs("Paths"));
-        PropertyChanged(this, new PropertyChangedEventArgs("endStation"));
-        PropertyChanged(this, new PropertyChangedEventArgs("EndStationIsNotNull"));
+        if(PropertyChanged != null)
+        {
+            PropertyChanged(this, new PropertyChangedEventArgs(nameof(Paths)));
+            PropertyChanged(this, new PropertyChangedEventArgs(nameof(endStation)));
+            PropertyChanged(this, new PropertyChangedEventArgs(nameof(EndStationIsNotNull)));
+        }
     }
 
 

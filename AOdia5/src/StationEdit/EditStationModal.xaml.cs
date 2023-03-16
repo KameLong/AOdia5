@@ -20,9 +20,11 @@ public partial class EditStationModal : Popup
         set { BindingContext = value; } }
     private void ChooseFromMap(object sender, EventArgs e)
     {
-        MapViewModel viewModel= new MapViewModel();
-        viewModel.editStation = VM;
-        viewModel.stations = VM.stationListViewModel.Stations;
+        MapViewModel viewModel = new MapViewModel
+        {
+            editStation = VM,
+            stations = VM.stationListViewModel.Stations
+        };
         Close();
         Navigation.PushAsync(new MapPage(viewModel));
 

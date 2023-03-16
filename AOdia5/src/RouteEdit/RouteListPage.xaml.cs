@@ -27,10 +27,16 @@ public partial class RouteListPage : ContentPage
      */
     private void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
-        ListView listView = (ListView)sender;
-        Route route = (Route)listView.SelectedItem;
-        RouteEditPageModel vm = new RouteEditPageModel(route,VM);
-        Navigation.PushAsync(new RouteEditPage(vm));
+        if (e.SelectedItem != null)
+        {
+            ListView listView = (ListView)sender;
+            Route route = (Route)listView.SelectedItem;
+
+            RouteEditPageModel vm = new RouteEditPageModel(route, VM);
+            Navigation.PushAsync(new RouteEditPage(vm));
+            listView.SelectedItem = null;
+
+        }
     }
 
     /*
@@ -47,7 +53,7 @@ public partial class RouteListPage : ContentPage
 
 public class RouteListPageModel : INotifyPropertyChanged
 {
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
     public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
       => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
@@ -58,11 +64,15 @@ public class RouteListPageModel : INotifyPropertyChanged
    public RouteListPageModel()
     {
         _routes = new ObservableCollection<Route>(DiaFile.staticDia.routes.Include(r=>r.Paths));
-        _routes.CollectionChanged += OnPropertyChanged;
+            _routes.CollectionChanged += OnPropertyChanged;
     }
-    private void OnPropertyChanged(object sender, NotifyCollectionChangedEventArgs e)
+    private void OnPropertyChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        PropertyChanged(this, new PropertyChangedEventArgs("routes"));
+        if(PropertyChanged != null)
+        {
+            PropertyChanged(this, new PropertyChangedEventArgs(nameof(routes)));
+
+        }
     }
     public Route CreateNewRoute()
     {

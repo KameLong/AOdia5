@@ -5,7 +5,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:l18n="clr-namespace:AOdia5.Resources.l18n"
     Title="RouteList">
-
     <VerticalStackLayout>
         <Button Clicked="AddNewRoute" Text="{x:Static l18n:L18N.NEW_ROUTE}" />
         <HorizontalStackLayout />

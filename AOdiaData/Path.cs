@@ -22,16 +22,17 @@ namespace AOdiaData
 //        [NotMapped]
         public long routeId { get; set; }
         [NotMapped]
-        private Route _route { get; set; }
+        private Route? _route { get; set; }
 
-        public Route route { get {
-                if (_route == null)
-                {
-                    _route = DiaFile.staticDia.routes.Where(r => r.RouteId == routeId).FirstOrDefault();
-                }
+        public Route? route { get {
+                _route ??= DiaFile.staticDia.routes.FirstOrDefault(r => r.RouteId == routeId);
                 return _route;
             } set {
-                _route= value;
+                _route = value;
+                if (value== null)
+                {
+                    return;
+                }
                 routeId = value.RouteId;
                 } }
         public int seq { get; set; }

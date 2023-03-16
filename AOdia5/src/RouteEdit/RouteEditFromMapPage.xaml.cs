@@ -29,7 +29,7 @@ public partial class RouteEditFromMapPage : ContentPage
 
 
         drawStation();
-        drawRoute();
+        DrawRoute();
     }
     private void drawStation()
     {
@@ -42,10 +42,10 @@ public partial class RouteEditFromMapPage : ContentPage
             {
                 Thread.Sleep(100);
             }
-            addStation(station);
+            AddStation(station);
         }
     }
-    public void addStation(in Station station)
+    public void AddStation(in Station station)
     {
         mapControl.Pins.Add(new Pin(mapControl)
         {
@@ -57,7 +57,7 @@ public partial class RouteEditFromMapPage : ContentPage
         });
 
     }
-    private void drawRoute()
+    private void DrawRoute()
     {
         foreach(var route in VM.routes)
         {
@@ -83,7 +83,7 @@ public partial class RouteEditFromMapPage : ContentPage
 
         }
     }
-    private void drawRoute(Route route)
+    private void DrawRoute(Route route)
     {
         (mapControl).Drawables.Clear();
         var paths = route.Paths.OrderBy(r => r.seq).ToList();
@@ -107,7 +107,7 @@ public partial class RouteEditFromMapPage : ContentPage
         (mapControl).Drawables.Add(p);
 
     }
-    private async void MapClicked(object sender, MapClickedEventArgs e)
+    private async void MapClicked(object? sender, MapClickedEventArgs e)
     {
         string? name = await DisplayPromptAsync("StationName", "Write name of the station.");
         if(name == null)
@@ -118,8 +118,8 @@ public partial class RouteEditFromMapPage : ContentPage
         selectedpos = e.Point;
         var station=VM.AddNewStation((float)selectedpos.Value.Latitude, (float)selectedpos.Value.Longitude);
         station.Name.Value = name ?? "デフォルト駅名";
-        addStation(station);
-        drawRoute(VM.route);
+        AddStation(station);
+        DrawRoute(VM.route);
 
 
 

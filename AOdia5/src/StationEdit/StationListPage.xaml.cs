@@ -24,7 +24,6 @@ public class StationSearchHandler : SearchHandler
 
 
     public ObservableCollection<Station> Stations { get { return (ObservableCollection<Station>)this.GetValue(StationsProperty); } set{} }
-    public Type SelectedItemNavigationTarget { get; set; }
 
     protected override void OnQueryChanged(string oldValue, string newValue)
     {
@@ -42,16 +41,10 @@ public class StationSearchHandler : SearchHandler
         }
     }
 
-    protected override async void OnItemSelected(object item)
+    protected override  void OnItemSelected(object item)
     {
         base.OnItemSelected(item);
 
-        // Let the animation complete
-        await Task.Delay(1000);
-
-        ShellNavigationState state = (App.Current.MainPage as Shell).CurrentState;
-        // The following route works because route names are unique in this app.
-//        await Shell.Current.GoToAsync($"{GetNavigationTarget()}?name={((Station)item).Name}");
     }
 
     //string GetNavigationTarget()

@@ -25,7 +25,7 @@ namespace AOdia5
     }
     public class StationListViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
           => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
@@ -36,7 +36,7 @@ namespace AOdia5
         public StationListViewModel()
         {
             _stations = new ObservableCollection<Station>(DiaFile.staticDia.stations);
-            _stations.CollectionChanged+=OnPropertyChanged;
+                _stations.CollectionChanged += OnPropertyChanged;
         }
         internal Station AddNewStation()
         {
@@ -55,7 +55,7 @@ namespace AOdia5
             _stations.Remove(station);
         }
 
-        private void OnPropertyChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void OnPropertyChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             Notify("Stations");
         }
@@ -70,12 +70,12 @@ namespace AOdia5
     }
     public class EditStationViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
           => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        public Station editStation { get; set; }
-        public StationListViewModel stationListViewModel { get; set; }
+        public Station? editStation { get; set; }
+        public StationListViewModel? stationListViewModel { get; set; }
 
     }
 }
