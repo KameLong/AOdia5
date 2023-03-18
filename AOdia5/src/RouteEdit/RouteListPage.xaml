@@ -21,7 +21,12 @@
                     <DataTemplate>
                         <ViewCell>
                             <HorizontalStackLayout Margin="0,10,0,0">
-                                <Label Text="{Binding Name.Value}" WidthRequest="150" />
+                                <Label Text="{Binding Name.Value}" WidthRequest="150">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer CommandParameter="{Binding}" Tapped="EditRoute" />
+                                    </Label.GestureRecognizers>
+
+                                </Label>
                                 <Label
                                     FontFamily="MaterialDesignIcons"
                                     FontSize="30"

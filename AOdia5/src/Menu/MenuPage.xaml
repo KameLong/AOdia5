@@ -19,19 +19,19 @@
             <aodia:KLButton
                 Margin="5,5,5,5"
                 BackgroundColor="Transparent"
-                Clicked="Undo"
                 FontFamily="MaterialDesignIcons"
                 FontSize="30"
                 Style="{StaticResource OutLineButtonStyle}"
+                Tapped="Undo"
                 Text="{x:Static helpers:IconFont.Undo}"
                 TextColor="{x:StaticResource Primary}" />
             <aodia:KLButton
                 Margin="5,5,5,5"
                 BackgroundColor="Transparent"
-                Clicked="Redo"
                 FontFamily="MaterialDesignIcons"
                 FontSize="30"
                 Style="{StaticResource OutLineButtonStyle}"
+                Tapped="Redo"
                 Text="{x:Static helpers:IconFont.Redo}"
                 TextColor="{x:StaticResource Primary}" />
         </HorizontalStackLayout>

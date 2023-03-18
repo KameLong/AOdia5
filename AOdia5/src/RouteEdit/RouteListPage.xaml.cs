@@ -1,16 +1,9 @@
 
 using AOdiaData;
 using Microsoft.EntityFrameworkCore;
-using Reactive.Bindings.Extensions;
-using Reactive.Bindings;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
-using System.Diagnostics;
-using System.Windows.Input;
-using static System.Net.Mime.MediaTypeNames;
 using CommunityToolkit.Maui.Core.Extensions;
 
 namespace AOdia5;
@@ -32,17 +25,12 @@ public partial class RouteListPage : ContentPage
     /*
      * ListView‚Å‘I‘ð‚µ‚½˜Hü‚Ì•ÒW‚É‘JˆÚ‚·‚é
      */
-    private void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    private void EditRoute(object sender, TappedEventArgs e)
     {
-        if (e.SelectedItem != null)
+        if (e.Parameter is Route route)
         {
-            ListView listView = (ListView)sender;
-            Route route = (Route)listView.SelectedItem;
-
             RouteEditPageModel vm = new RouteEditPageModel(route, VM);
-            Navigation.PushAsync(new RouteEditPage(vm));
-            listView.SelectedItem = null;
-
+            Navigation.PushPage(() => { return new RouteEditPage(vm); });
         }
     }
 
@@ -50,11 +38,31 @@ public partial class RouteListPage : ContentPage
      * V˜Hü‚ð’Ç‰Á‚·‚é
      * RouteEdit‚ÉˆÚ“®‚·‚é
      */
-    private void AddNewRoute(object sender, EventArgs e)
+    private async void AddNewRoute(object sender, EventArgs e)
     {
-        Route route = VM.CreateNewRoute();
-        RouteEditPageModel vm = new RouteEditPageModel(route, VM);
-        Navigation.PushAsync(new RouteEditPage(vm));
+        string? routeName = await DisplayPromptAsync("Route name", "Write name of new route.");
+        if (routeName == null)
+        {
+            return;
+        }
+        RouteEditPageModel vm = VM.AddNewRoute(routeName);
+        UndoCommand command = new UndoCommand();
+        command.commnet = "PushPage";
+        command.Invoke = () =>
+        {
+
+            Navigation.PushAsync(new RouteEditPage(vm));
+        };
+        command.Redo = () =>
+        {
+            Navigation.PushAsync(new RouteEditPage(vm));
+        };
+        command.Undo = () =>
+        {
+            Navigation.PopAsync();
+        };
+        UndoStack.Instance.Push(command);
+
     }
 
     private void DeleteRoute(object sender, TappedEventArgs e)
@@ -84,12 +92,33 @@ public class RouteListPageModel : INotifyPropertyChanged
     public RouteListPageModel()
     {
     }
-    public Route CreateNewRoute()
+    public RouteEditPageModel AddNewRoute(string routeName)
     {
-       var res=Route.CreateNewRoute();
-        DiaFile.staticDia.SaveChanges();
-        return res;
-        
+        var route = Route.CreateNewRoute();
+        route.Name.Value = routeName;
+
+        UndoCommand addNewRouteCmd = new UndoCommand();
+        addNewRouteCmd.Invoke = () =>
+        {
+            DiaFile.staticDia.SaveChanges();
+            OnPropertyChanged(nameof(routes));
+        };
+
+        addNewRouteCmd.Undo = () =>
+        {
+            DiaFile.staticDia.routes.Remove(route);
+            DiaFile.staticDia.SaveChanges();
+            OnPropertyChanged(nameof(routes));
+        };
+
+        addNewRouteCmd.Redo = () =>
+        {
+            DiaFile.staticDia.routes.Add(route);
+            DiaFile.staticDia.SaveChanges();
+            OnPropertyChanged(nameof(routes));
+        };
+        UndoStack.Instance.Push(addNewRouteCmd);
+        return new RouteEditPageModel(route,this);
     }
     public void DeleteRoute(Route route)
     {

@@ -1,9 +1,34 @@
-﻿using CommunityToolkit.Maui;
+﻿using AOdiaData;
+using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using Syncfusion.Maui.Core.Hosting;
+using System.Runtime.CompilerServices;
 
 namespace AOdia5;
+public static class MyExtensions
+{
+    public static void PushPage(this INavigation nav,Func<Page> func)
+    {
+        UndoCommand undoCommand = new UndoCommand();
+        undoCommand.Invoke = () =>
+        {
+            nav.PushAsync(func());
+        };
+        undoCommand.Redo = () =>
+        {
+            nav.PushAsync(func());
+        };
+        undoCommand.Undo = () =>
+        {
+            nav.PopAsync();
+        };
+        UndoStack.Instance.Push(undoCommand);
+
+    }
+}
+
+
 public static class MauiProgram
 {
 	public static MauiApp CreateMauiApp()

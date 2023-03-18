@@ -9,7 +9,7 @@
         <local:MenuPage x:Name="flyoutPage" />
     </FlyoutPage.Flyout>
     <FlyoutPage.Detail>
-        <NavigationPage>
+        <NavigationPage Popped="NavigationPage_Popped" Pushed="NavigationPage_Pushed">
             <x:Arguments>
                 <local:RouteListPage />
             </x:Arguments>

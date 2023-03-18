@@ -22,12 +22,8 @@ public partial class RouteEditFromMapPage : ContentPage
 	{
        this.VM = vm;
 		InitializeComponent();
-       mapControl.Map?.Layers.Add(Mapsui.Tiling.OpenStreetMap.CreateTileLayer());
-       mapControl.MapClicked += MapClicked;
-
-
-
-
+        mapControl.Map?.Layers.Add(Mapsui.Tiling.OpenStreetMap.CreateTileLayer());
+        mapControl.MapClicked += MapClicked;
         drawStation();
         DrawRoute();
     }
