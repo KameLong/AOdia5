@@ -2,7 +2,6 @@
 
 
 namespace AOdia5;
-
 public partial class App : Application
 {
     //https://learn.microsoft.com/ja-jp/dotnet/maui/user-interface/pages/flyoutpage?view=net-maui-7.0
@@ -11,9 +10,8 @@ public partial class App : Application
 	{
 		InitializeComponent();
         MainPage = new MainPage();
-		
 	}
-    protected override Window CreateWindow(IActivationState activationState)
+    protected override Window CreateWindow(IActivationState? activationState)
     {
         Window window = base.CreateWindow(activationState);
         window.Stopped += (s, e) => 

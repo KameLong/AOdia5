@@ -10,10 +10,6 @@ public partial class MenuPage : ContentPage
 		InitializeComponent();
 	}
 
-    private void Save(object sender, EventArgs e)
-    {
-        AOdiaData.DiaFile.staticDia.SaveChanges();
-    }
 
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
@@ -27,6 +23,12 @@ public partial class MenuPage : ContentPage
             (FindByName("RoutesButton") as HorizontalStackLayout).BackgroundColor = Colors.LightGreen;
 
         }
+
+    }
+
+    private void Save(object sender, TappedEventArgs e)
+    {
+        AOdiaData.DiaFile.staticDia.SaveChanges();
 
     }
 }

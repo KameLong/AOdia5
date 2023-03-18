@@ -3,10 +3,15 @@
     x:Class="AOdia5.RouteListPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:aodia="clr-namespace:AOdia5"
     xmlns:l18n="clr-namespace:AOdia5.Resources.l18n"
     Title="RouteList">
     <VerticalStackLayout>
-        <Button Clicked="AddNewRoute" Text="{x:Static l18n:L18N.NEW_ROUTE}" />
+        <aodia:LabelButton
+            Margin="10,10,10,10"
+            HorizontalOptions="Center"
+            Style="{StaticResource OutLineButtonStyle}"
+            Text="{x:Static l18n:L18N.NEW_ROUTE}" />
         <HorizontalStackLayout />
         <ListView
             Margin="20,5,20,5"
