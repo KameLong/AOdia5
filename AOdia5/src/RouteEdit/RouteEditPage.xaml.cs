@@ -9,7 +9,7 @@ using Path = AOdiaData.Path;
 
 namespace AOdia5;
 
-public partial class RouteEditPage : ContentPage
+public partial class RouteEditPage : ContentPage, RecyclePage
 {
 
     private RouteEditPageModel VM { get { return BindingContext as RouteEditPageModel; } set { BindingContext = value; } }
@@ -79,8 +79,15 @@ public partial class RouteEditPage : ContentPage
 
     }
 
+    private void BackToRouteList(object sender, EventArgs e)
+    {
+        Navigation.PopPage();
+    }
 
-
+    public Func<Page> Creater()
+    {
+        return () => { return new RouteEditPage(this.VM); };
+    }
 }
 
 

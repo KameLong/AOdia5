@@ -6,6 +6,11 @@ using Syncfusion.Maui.Core.Hosting;
 using System.Runtime.CompilerServices;
 
 namespace AOdia5;
+
+public interface RecyclePage
+{
+    public Func<Page> Creater();
+}
 public static class MyExtensions
 {
     public static void PushPage(this INavigation nav,Func<Page> func)
@@ -24,6 +29,31 @@ public static class MyExtensions
             nav.PopAsync();
         };
         UndoStack.Instance.Push(undoCommand);
+
+    }
+    public  static async void PopPage(this INavigation nav)
+    {
+
+        var page=await nav.PopAsync();
+        if(page is RecyclePage recyclePage)
+        {
+            UndoCommand undoCommand = new UndoCommand();
+            undoCommand.Invoke = () =>
+            {
+            };
+            undoCommand.Redo = () =>
+            {
+                nav.PopAsync();
+            };
+            undoCommand.Undo = () =>
+            {
+                var a = recyclePage.Creater()();
+                nav.PushAsync(a);
+            };
+            UndoStack.Instance.Push(undoCommand);
+
+        }
+
 
     }
 }

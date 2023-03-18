@@ -4,10 +4,12 @@ using System.Diagnostics;
 
 public partial class MainPage : FlyoutPage
 {
+    public static INavigation navigation;
 
 	public MainPage()
 	{
 		InitializeComponent();
+        navigation = nav.Navigation;
     }
 
     private void NavigationPage_Popped(object sender, NavigationEventArgs e)

@@ -23,16 +23,7 @@ public partial class MenuPage : ContentPage
 
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
-        if((sender as HorizontalStackLayout).BackgroundColor == Colors.LightGreen)
-        {
-            (FindByName("RoutesButton") as HorizontalStackLayout).BackgroundColor = Colors.Transparent;
-
-        }
-        else
-        {
-            (FindByName("RoutesButton") as HorizontalStackLayout).BackgroundColor = Colors.LightGreen;
-
-        }
+        MainPage.navigation.PushAsync(new RouteListPage());
 
     }
 
