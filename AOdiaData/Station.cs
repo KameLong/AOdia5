@@ -24,7 +24,11 @@ namespace AOdiaData
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
-          => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        {
+
+          this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        }
         [Key]
         [Required]
         public long StationId { get;set; }

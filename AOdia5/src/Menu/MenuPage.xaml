@@ -3,18 +3,38 @@
     x:Class="AOdia5.MenuPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:aodia="clr-namespace:AOdia5"
     xmlns:helpers="clr-namespace:AOdia5.Helpers"
     xmlns:sf="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
-    Title="Menu"
-    BackgroundColor="{StaticResource Secondary50}">
+    Title="Menu">
     <VerticalStackLayout>
-        <Label
-            Margin="50,30,20,10"
-            BackgroundColor="Transparent"
-            FontAttributes="Bold"
-            FontSize="24"
-            Text="AOdia"
-            TextColor="DarkBlue" />
+        <HorizontalStackLayout Padding="0,20,0,0" HorizontalOptions="Start">
+            <Label
+                Margin="40,0,50,20"
+                BackgroundColor="Transparent"
+                FontAttributes="Bold"
+                FontSize="24"
+                Text="AOdia"
+                TextColor="DarkBlue" />
+            <aodia:KLButton
+                Margin="5,5,5,5"
+                BackgroundColor="Transparent"
+                Clicked="Undo"
+                FontFamily="MaterialDesignIcons"
+                FontSize="30"
+                Style="{StaticResource OutLineButtonStyle}"
+                Text="{x:Static helpers:IconFont.Undo}"
+                TextColor="{x:StaticResource Primary}" />
+            <aodia:KLButton
+                Margin="5,5,5,5"
+                BackgroundColor="Transparent"
+                Clicked="Redo"
+                FontFamily="MaterialDesignIcons"
+                FontSize="30"
+                Style="{StaticResource OutLineButtonStyle}"
+                Text="{x:Static helpers:IconFont.Redo}"
+                TextColor="{x:StaticResource Primary}" />
+        </HorizontalStackLayout>
         <Line
             Stroke="Gray"
             X1="20"
@@ -47,10 +67,7 @@
             X2="310"
             Y1="0"
             Y2="0" />
-        <HorizontalStackLayout
-            x:Name="RoutesButton"
-            Padding="30,10,20,10"
-            BackgroundColor="Yellow">
+        <HorizontalStackLayout x:Name="RoutesButton" Padding="30,10,20,10">
             <HorizontalStackLayout.GestureRecognizers>
                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
             </HorizontalStackLayout.GestureRecognizers>

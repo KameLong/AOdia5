@@ -1,10 +1,17 @@
 
 using AOdiaData;
 using Microsoft.EntityFrameworkCore;
+using Reactive.Bindings.Extensions;
+using Reactive.Bindings;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
+using System.Diagnostics;
+using System.Windows.Input;
+using static System.Net.Mime.MediaTypeNames;
+using CommunityToolkit.Maui.Core.Extensions;
 
 namespace AOdia5;
 
@@ -49,6 +56,13 @@ public partial class RouteListPage : ContentPage
         RouteEditPageModel vm = new RouteEditPageModel(route, VM);
         Navigation.PushAsync(new RouteEditPage(vm));
     }
+
+    private void DeleteRoute(object sender, TappedEventArgs e)
+    {
+        if(e.Parameter is Route route){
+            VM.DeleteRoute(route);
+        }
+    }
 }
 
 public class RouteListPageModel : INotifyPropertyChanged
@@ -58,21 +72,17 @@ public class RouteListPageModel : INotifyPropertyChanged
       => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
 
-	private  readonly ObservableCollection<Route> _routes;
-    public ObservableCollection<Route> routes { get { return _routes; } }
 
-   public RouteListPageModel()
-    {
-        _routes = new ObservableCollection<Route>(DiaFile.staticDia.routes.Include(r=>r.Paths));
-            _routes.CollectionChanged += OnPropertyChanged;
-    }
-    private void OnPropertyChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if(PropertyChanged != null)
-        {
-            PropertyChanged(this, new PropertyChangedEventArgs(nameof(routes)));
 
-        }
+    public ObservableCollection<Route> routes { get { return DiaFile.staticDia.routes.Include(r => r.Paths).ToObservableCollection(); } }
+
+
+
+
+
+
+    public RouteListPageModel()
+    {
     }
     public Route CreateNewRoute()
     {
@@ -80,6 +90,32 @@ public class RouteListPageModel : INotifyPropertyChanged
         DiaFile.staticDia.SaveChanges();
         return res;
         
+    }
+    public void DeleteRoute(Route route)
+    {
+        UndoCommand deleteRouteCmd = new UndoCommand();
+        deleteRouteCmd.Invoke = () =>
+        {
+            DiaFile.staticDia.routes.Remove(route);
+            DiaFile.staticDia.SaveChanges();
+            OnPropertyChanged(nameof(routes));
+        };
+
+        deleteRouteCmd.Undo = () =>
+        {
+            DiaFile.staticDia.routes.Add(route);
+            DiaFile.staticDia.SaveChanges();
+            OnPropertyChanged(nameof(routes));
+        };
+
+        deleteRouteCmd.Redo = () =>
+        {
+            DiaFile.staticDia.routes.Remove(route);
+            DiaFile.staticDia.SaveChanges();
+            OnPropertyChanged(nameof(routes));
+        };
+        UndoStack.Instance.Push(deleteRouteCmd);
+
     }
 
 

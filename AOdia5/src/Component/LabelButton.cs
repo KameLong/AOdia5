@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui.Extensions;
+using Microsoft.Maui.Controls.Platform.Compatibility;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,28 +9,42 @@ using System.Threading.Tasks;
 
 namespace AOdia5
 {
-    class LabelButton:Button
+    class KLButton:Button
     {
-        public LabelButton()
+        public event EventHandler Tapped;
+        public KLButton()
         {
 
             var g = new PointerGestureRecognizer();
             g.PointerEntered += onPointerEnter;
             g.PointerExited += onPointerExit;
+            var t=new TapGestureRecognizer();
+            t.Tapped += onClick;
+#if WINDOWS
             this.GestureRecognizers.Add(g);
+#endif
+            this.GestureRecognizers.Add(t);
         }
-        private async void onPointerEnter(object? obj,PointerEventArgs args)
+        private void onClick(object? obj,TappedEventArgs args)
         {
-            Debug.WriteLine("onPointerEnter")
-                ;
-//            this.BackgroundColorTo( (Color)Application.Current.Resources.MergedDictionaries.ElementAt(0)["Primary50"]);
-//            await this.BackgroundColorTo(Colors.LightBlue,16,2000);
-//            await this.BackgroundColorTo(Colors.White, 16, 2000);
+            Task.Run(async () =>
+            {
+                await this.BackgroundColorTo(Colors.LightBlue, 16, 300);
+                await this.BackgroundColorTo(Colors.Transparent, 16, 300);
+
+            });
+            Tapped?.Invoke(this, args);
+
+        }
+        private void onPointerEnter(object? obj,PointerEventArgs args)
+        {
+            this.BackgroundColor= (Color)Application.Current.Resources.MergedDictionaries.ElementAt(0)["Primary50"];
+//            this.BackgroundColorTo( (Color)Application.Current.Resources.MergedDictionaries.ElementAt(0)["Primary50"],16,16);
 
         }
         private void onPointerExit(object? obj, PointerEventArgs args)
         {
-            this.BackgroundColor = Colors.Transparent;
+            this.BackgroundColor=Colors.Transparent;
 
         }
     }
