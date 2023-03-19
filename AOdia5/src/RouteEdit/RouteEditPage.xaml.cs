@@ -1,6 +1,7 @@
 using AOdia5.Resources.l18n;
 using AOdiaData;
 using CommunityToolkit.Maui.Core.Extensions;
+using Microsoft.EntityFrameworkCore;
 using Reactive.Bindings;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -8,17 +9,23 @@ using System.Runtime.CompilerServices;
 using Path = AOdiaData.Path;
 
 namespace AOdia5;
-
-public partial class RouteEditPage : ContentPage, RecyclePage
+[QueryProperty(nameof(routeID), "routeID")]
+public partial class RouteEditPage : ContentPage
 {
+    private long _s=0;
+    public long routeID { get { return _s; } set {
+            _s = value;
+            VM.loadRoute(_s);
+        } }
 
     private RouteEditPageModel VM { get { return BindingContext as RouteEditPageModel; } set { BindingContext = value; } }
-    public RouteEditPage(RouteEditPageModel vm)
+
+    public RouteEditPage()
     {
-        VM = vm;
+
+        VM = new RouteEditPageModel();
         InitializeComponent();
     }
-
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
         VM.onLoad();
@@ -81,25 +88,30 @@ public partial class RouteEditPage : ContentPage, RecyclePage
 
     private void BackToRouteList(object sender, EventArgs e)
     {
-        Navigation.PopPage();
+//        Navigation.PopPage();
     }
 
-    public Func<Page> Creater()
+
+    private void Button_Clicked_1(object sender, EventArgs e)
     {
-        return () => { return new RouteEditPage(this.VM); };
+        Shell.Current.Goto($"Route");
+
     }
 }
 
-
 public class RouteEditPageModel : INotifyPropertyChanged
 {
-
+    public void loadRoute(long id)
+    {
+        this._route =DiaFile.staticDia.routes.Include(r=>r.Paths).Where(r=>r.RouteId==id).FirstOrDefault();
+        OnPropertyChanged("route");
+    }
     public event PropertyChangedEventHandler? PropertyChanged;
     public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
       => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
 
-    private readonly Route _route;
+    private  Route _route;
 
     public ReactiveProperty<Route> route { get { return new ReactiveProperty<Route>(_route); } }
 

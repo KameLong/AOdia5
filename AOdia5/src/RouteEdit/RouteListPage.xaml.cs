@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Maui.Core.Extensions;
 
+
 namespace AOdia5;
 
 public partial class RouteListPage : ContentPage
@@ -19,8 +20,12 @@ public partial class RouteListPage : ContentPage
 	{
 		VM= new RouteListPageModel();
 		InitializeComponent();
-        
-	}
+
+
+
+
+
+    }
 
     /*
      * ListView‚Å‘I‘ð‚µ‚½˜Hü‚Ì•ÒW‚É‘JˆÚ‚·‚é
@@ -30,7 +35,8 @@ public partial class RouteListPage : ContentPage
         if (e.Parameter is Route route)
         {
             RouteEditPageModel vm = new RouteEditPageModel(route, VM);
-            Navigation.PushPage(() => { return new RouteEditPage(vm); });
+            Shell.Current.Goto($"Route/edit?routeID={route.RouteId}");
+
         }
     }
 
@@ -46,6 +52,7 @@ public partial class RouteListPage : ContentPage
             return;
         }
         RouteEditPageModel vm = VM.AddNewRoute(routeName);
+        /*
         UndoCommand command = new UndoCommand();
         command.commnet = "PushPage";
         command.Invoke = () =>
@@ -62,6 +69,7 @@ public partial class RouteListPage : ContentPage
             Navigation.PopAsync();
         };
         UndoStack.Instance.Push(command);
+        */
 
     }
 
@@ -79,9 +87,6 @@ public class RouteListPageModel : INotifyPropertyChanged
     public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
       => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-
-
-
     public ObservableCollection<Route> routes { get { return DiaFile.staticDia.routes.Include(r => r.Paths).ToObservableCollection(); } }
 
 
@@ -98,6 +103,7 @@ public class RouteListPageModel : INotifyPropertyChanged
         route.Name.Value = routeName;
 
         UndoCommand addNewRouteCmd = new UndoCommand();
+        addNewRouteCmd.comment = $"AddNewRoute({route.RouteId})";
         addNewRouteCmd.Invoke = () =>
         {
             DiaFile.staticDia.SaveChanges();
@@ -123,6 +129,7 @@ public class RouteListPageModel : INotifyPropertyChanged
     public void DeleteRoute(Route route)
     {
         UndoCommand deleteRouteCmd = new UndoCommand();
+        deleteRouteCmd.comment = $"deleteroute({route.RouteId})";
         deleteRouteCmd.Invoke = () =>
         {
             DiaFile.staticDia.routes.Remove(route);

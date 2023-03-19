@@ -7,6 +7,10 @@
     xmlns:helpers="clr-namespace:AOdia5.Helpers"
     xmlns:l18n="clr-namespace:AOdia5.Resources.l18n"
     Title="RouteList">
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" />
+    </Shell.BackButtonBehavior>
+
     <ScrollView>
         <VerticalStackLayout>
             <aodia:KLButton

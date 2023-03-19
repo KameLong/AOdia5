@@ -6,13 +6,13 @@
     xmlns:controls="clr-namespace:AOdia5"
     xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
     x:Name="page"
-    Title="RouteEditPage"
-    NavigationPage.HasBackButton="False">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Clicked="BackToRouteList" Text="←" />
-    </ContentPage.ToolbarItems>
+    Title="RouteEditPage">
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" />
+    </Shell.BackButtonBehavior>
     <ScrollView>
         <VerticalStackLayout>
+            <Button Clicked="Button_Clicked_1" Text="Back" />
             <inputLayout:SfTextInputLayout
                 Margin="30,5,30,0"
                 ContainerType="Outlined"

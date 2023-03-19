@@ -10,6 +10,7 @@
     <VerticalStackLayout>
         <HorizontalStackLayout Padding="0,20,0,0" HorizontalOptions="Start">
             <Label
+                
                 Margin="40,0,50,20"
                 BackgroundColor="Transparent"
                 FontAttributes="Bold"

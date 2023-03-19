@@ -10,14 +10,6 @@
     <!--<ContentPage.BindingContext>
         <controls:StationListViewModel />
     </ContentPage.BindingContext>-->
-    <Shell.SearchHandler>
-        <controls:StationSearchHandler
-            x:Name="sh"
-            DisplayMemberName="Name"
-            Placeholder="Enter search term"
-            ShowsResults="true"
-            Stations="{Binding Stations}" />
-    </Shell.SearchHandler>
     <AbsoluteLayout VerticalOptions="Fill">
         <Grid
             AbsoluteLayout.LayoutBounds="0,0,1,1"
