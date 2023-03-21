@@ -94,5 +94,64 @@ namespace AOdiaData
             return newPath;
         }
 
+        /**
+         * deletePathを削除します。
+         * return 成功したか？
+         */
+        public bool DeletePath(Path deletePath)
+        {
+            if (!Paths.Contains(deletePath))
+            {
+                return false;
+            }
+            DiaFile.staticDia.paths.Remove(deletePath);
+            if (deletePath.seq == 0)
+            {
+                Paths.Remove(deletePath);
+                foreach (var p in Paths)
+                {
+                    p.seq--;
+                }
+                return true;
+            }
+            Paths.Remove(deletePath);
+            foreach (var p in Paths.Where(p=>p.seq>deletePath.seq))
+            {
+                p.seq--;
+            }
+            Paths.First(p=>p.seq==deletePath.seq-1).endStation= deletePath.endStation;
+
+
+
+
+            return true;
+
+        }
+        public void DeleteEndStation()
+        {
+            DiaFile.staticDia.paths.Remove(Paths.OrderBy(x => x.seq).Last());
+            Paths.Remove(Paths.OrderBy(x => x.seq).Last());
+        }
+        public void InsertPath(Path path)
+        {
+            DiaFile.staticDia.paths.Add(path);
+            if (path.seq == 0)
+            {
+                foreach(var p in Paths)
+                {
+                    p.seq++;
+                }
+                Paths.Add(path);
+                return;
+            }
+            foreach (var p in Paths.Where(p=>p.seq>=path.seq))
+            {
+                p.seq++;
+            }
+            Paths.Add(path);
+            Paths.First(p => p.seq == path.seq - 1).endStation = path.startStation;
+
+
+        }
     }
 }

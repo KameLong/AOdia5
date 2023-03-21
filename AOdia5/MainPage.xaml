@@ -10,12 +10,12 @@
     <Shell.TitleView>
         <HorizontalStackLayout HorizontalOptions="End">
             <Button
+                Clicked="Back"
                 FontSize="30"
                 HeightRequest="40"
                 HorizontalOptions="End"
                 IsEnabled="{Binding BackEble}"
                 Text="←"
-                Clicked="Back"
                 WidthRequest="70" />
 
             <Button

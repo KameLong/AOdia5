@@ -34,9 +34,7 @@ public partial class RouteListPage : ContentPage
     {
         if (e.Parameter is Route route)
         {
-            RouteEditPageModel vm = new RouteEditPageModel(route, VM);
             Shell.Current.Goto($"Route/edit?routeID={route.RouteId}");
-
         }
     }
 
@@ -51,25 +49,12 @@ public partial class RouteListPage : ContentPage
         {
             return;
         }
-        RouteEditPageModel vm = VM.AddNewRoute(routeName);
-        /*
-        UndoCommand command = new UndoCommand();
-        command.commnet = "PushPage";
-        command.Invoke = () =>
-        {
+        Route route=VM.AddNewRoute(routeName);
 
-            Navigation.PushAsync(new RouteEditPage(vm));
-        };
-        command.Redo = () =>
-        {
-            Navigation.PushAsync(new RouteEditPage(vm));
-        };
-        command.Undo = () =>
-        {
-            Navigation.PopAsync();
-        };
-        UndoStack.Instance.Push(command);
-        */
+        Shell.Current.Goto($"Route/edit?routeID={route.RouteId}");
+
+
+
 
     }
 
@@ -81,10 +66,10 @@ public partial class RouteListPage : ContentPage
     }
 }
 
-public class RouteListPageModel : INotifyPropertyChanged
+public class RouteListPageModel : Bindable
 {
     public event PropertyChangedEventHandler? PropertyChanged;
-    public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+    public  void OnPropertyChanged([CallerMemberName] string propertyName = "")
       => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
     public ObservableCollection<Route> routes { get { return DiaFile.staticDia.routes.Include(r => r.Paths).ToObservableCollection(); } }
@@ -97,7 +82,7 @@ public class RouteListPageModel : INotifyPropertyChanged
     public RouteListPageModel()
     {
     }
-    public RouteEditPageModel AddNewRoute(string routeName)
+    public Route AddNewRoute(string routeName)
     {
         var route = Route.CreateNewRoute();
         route.Name.Value = routeName;
@@ -107,24 +92,21 @@ public class RouteListPageModel : INotifyPropertyChanged
         addNewRouteCmd.Invoke = () =>
         {
             DiaFile.staticDia.SaveChanges();
-            OnPropertyChanged(nameof(routes));
         };
 
         addNewRouteCmd.Undo = () =>
         {
             DiaFile.staticDia.routes.Remove(route);
             DiaFile.staticDia.SaveChanges();
-            OnPropertyChanged(nameof(routes));
         };
 
         addNewRouteCmd.Redo = () =>
         {
             DiaFile.staticDia.routes.Add(route);
             DiaFile.staticDia.SaveChanges();
-            OnPropertyChanged(nameof(routes));
         };
         UndoStack.Instance.Push(addNewRouteCmd);
-        return new RouteEditPageModel(route,this);
+        return route;
     }
     public void DeleteRoute(Route route)
     {

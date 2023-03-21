@@ -6,6 +6,11 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
+public interface Bindable : INotifyPropertyChanged
+{
+    public void OnPropertyChanged([CallerMemberName] string propertyName = "");
+
+}
 public partial class MainPage : Shell
 {
     public static INavigation navigation;
@@ -13,6 +18,13 @@ public partial class MainPage : Shell
 	public MainPage()
 	{
         BindingContext = new MainPageModel();
+        DiaFile.staticDia.OnSavedAction = () =>
+        {
+            if (Current.CurrentPage.BindingContext is Bindable notify)
+            {
+                notify.OnPropertyChanged("");
+            }
+        };
         Routing.RegisterRoute("Station", typeof(StationListPage));
         Routing.RegisterRoute("Route", typeof(RouteListPage));
         Routing.RegisterRoute("Route/edit", typeof(RouteEditPage));
