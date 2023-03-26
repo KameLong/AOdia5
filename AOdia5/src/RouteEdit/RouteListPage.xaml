@@ -11,42 +11,39 @@
         <BackButtonBehavior IsVisible="False" />
     </Shell.BackButtonBehavior>
 
-    <ScrollView>
-        <VerticalStackLayout>
-            <aodia:KLButton
+    <!--<ScrollView>-->
+    <!--<VerticalStackLayout>-->
+    <!--<aodia:KLButton
                 Margin="10,10,10,10"
                 HorizontalOptions="Center"
                 Style="{StaticResource OutLineButtonStyle}"
                 Tapped="AddNewRoute"
-                Text="{x:Static l18n:L18N.NEW_ROUTE}" />
-            <HorizontalStackLayout />
-            <ListView Margin="20,5,20,5" ItemsSource="{Binding routes}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <HorizontalStackLayout Margin="0,10,0,0">
-                                <Label Text="{Binding Name.Value}" WidthRequest="150">
-                                    <Label.GestureRecognizers>
-                                        <TapGestureRecognizer CommandParameter="{Binding}" Tapped="EditRoute" />
-                                    </Label.GestureRecognizers>
+                Text="{x:Static l18n:L18N.NEW_ROUTE}" />-->
+    <CollectionView Margin="20,5,20,5" ItemsSource="{Binding routes}">
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+                <HorizontalStackLayout Margin="0,10,0,0">
+                    <Label Text="{Binding name}" WidthRequest="150">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer CommandParameter="{Binding}" Tapped="EditRoute" />
+                        </Label.GestureRecognizers>
 
-                                </Label>
-                                <Label
-                                    FontFamily="MaterialDesignIcons"
-                                    FontSize="30"
-                                    Text="{x:Static helpers:IconFont.TrashCan}"
-                                    TextColor="SlateGray"
-                                    VerticalTextAlignment="Center">
-                                    <Label.GestureRecognizers>
-                                        <TapGestureRecognizer CommandParameter="{Binding}" Tapped="DeleteRoute" />
-                                    </Label.GestureRecognizers>
-                                </Label>
-                            </HorizontalStackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                    </Label>
+                    <Label
+                        FontFamily="MaterialDesignIcons"
+                        FontSize="30"
+                        Text="{x:Static helpers:IconFont.TrashCan}"
+                        TextColor="SlateGray"
+                        VerticalTextAlignment="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer CommandParameter="{Binding}" Tapped="DeleteRoute" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </HorizontalStackLayout>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
 
-        </VerticalStackLayout>
-    </ScrollView>
+    <!--</VerticalStackLayout>-->
+    <!--</ScrollView>-->
 </ContentPage>

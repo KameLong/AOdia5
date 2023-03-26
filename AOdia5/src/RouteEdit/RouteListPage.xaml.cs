@@ -66,13 +66,33 @@ public partial class RouteListPage : ContentPage
     }
 }
 
+
+public class VMRoute
+{
+    private Route route;
+    public VMRoute(Route route) {
+        this.route = route;
+    }
+    public string name { get { return route.dbName; } }
+}
 public class RouteListPageModel : Bindable
 {
+
     public event PropertyChangedEventHandler? PropertyChanged;
     public  void OnPropertyChanged([CallerMemberName] string propertyName = "")
       => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-    public ObservableCollection<Route> routes { get { return DiaFile.staticDia.routes.Include(r => r.Paths).ToObservableCollection(); } }
+    public List<VMRoute> routes {
+        get {
+            try { 
+            var r = DiaFile.staticDia.routes.Include(r => r.Paths).ToList();
+            return r.Select(p => new VMRoute(p)).ToList();
+            }catch(Exception ex)
+            {
+                throw ex;
+            }
+        } 
+    }
 
 
 

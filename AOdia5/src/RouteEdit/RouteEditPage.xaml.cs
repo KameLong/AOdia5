@@ -99,13 +99,26 @@ public partial class RouteEditPage : ContentPage
                     return;
                 }
             }
-            VM.DeletePath(path);
+            VM.DeleteStation(path);
         }
+    }
+
+    private async void DeleteEndStation(object sender, EventArgs e)
+    {
+        if (VM.route.Value.Paths.Count <= 1)
+        {
+            if (!await DisplayAlert("‰w‚Ìíœ", "‰w‚ª1‚Â‚¾‚¯‚Ì˜Hü‚ðì‚é‚±‚Æ‚Í‚Å‚«‚Ü‚¹‚ñBŽc‚è‚Ì‰w‚àíœ‚µ‚ÄŽè—Ç‚¢‚Å‚·‚©H", "YES", "Cancel"))
+            {
+                return;
+            }
+        }
+        VM.DeleteEndStation();
+
     }
 }
 
-    public class RouteEditPageModel : INotifyPropertyChanged
-    {
+public class RouteEditPageModel : Bindable
+{
         public void loadRoute(long id)
         {
             this._route = DiaFile.staticDia.routes.Include(r => r.Paths).Where(r => r.RouteId == id).FirstOrDefault();
@@ -194,37 +207,74 @@ public partial class RouteEditPage : ContentPage
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(EndStationIsNotNull)));
             }
         }
-        public void DeletePath(Path path)
+        /*
+         * path‚ÌstartStation‚ðíœ‚µ‚Ü‚·B
+         */
+        public void DeleteStation(Path path)
         {
-            UndoCommand deletePathCommand = new UndoCommand();
-            deletePathCommand.comment = $"DeletePath({path.pathID})";
-            deletePathCommand.Invoke = () =>
+            UndoCommand deleteStationCommand = new UndoCommand();
+            deleteStationCommand.comment = $"DeletePath({path.pathID})";
+            deleteStationCommand.Invoke = () =>
             {
-                _route.DeletePath(path);
+                _route.DeleteStation(path);
                 DiaFile.staticDia.SaveChanges();
             };
 
-            deletePathCommand.Undo = () =>
+            deleteStationCommand.Undo = () =>
             {
-                _route.InsertPath(path);
+                _route.InsertStation(path);
                 DiaFile.staticDia.SaveChanges();
             };
 
-            deletePathCommand.Redo = () =>
+            deleteStationCommand.Redo = () =>
             {
-                _route.DeletePath(path);
+                _route.DeleteStation(path);
                 DiaFile.staticDia.SaveChanges();
             };
-            UndoStack.Instance.Push(deletePathCommand);
+            UndoStack.Instance.Push(deleteStationCommand);
 
         }
+    /*
+     * path‚ÌstartStation‚ðíœ‚µ‚Ü‚·B
+     */
+    public void DeleteEndStation()
+    {
+        if(_route.Paths.Count == 1)
+        {
+            DeleteStation(_route.Paths.First());
+            return;
+        }
 
+        UndoCommand deleteEndStationCommand = new UndoCommand();
+        Station deleteStation = _route.Paths.OrderBy(p => p.seq).Last().endStation;
+        deleteEndStationCommand.comment = $"DeleteEndPath";
+        deleteEndStationCommand.Invoke = () =>
+        {
+            _route.DeleteEndStation();
+            DiaFile.staticDia.SaveChanges();
+        };
 
+        deleteEndStationCommand.Undo = () =>
+        {
+            _route.AddStationEnd(deleteStation);
+            DiaFile.staticDia.SaveChanges();
+        };
 
-
-
-
-
+        deleteEndStationCommand.Redo = () =>
+        {
+            _route.DeleteEndStation();
+            DiaFile.staticDia.SaveChanges();
+        };
+        UndoStack.Instance.Push(deleteEndStationCommand);
 
     }
+
+
+
+
+
+
+
+
+}
 

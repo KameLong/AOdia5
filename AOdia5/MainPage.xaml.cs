@@ -1,10 +1,15 @@
 ﻿namespace AOdia5;
+
 using AOdiaData;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Windows.Input;
+
+
+
 
 public interface Bindable : INotifyPropertyChanged
 {
@@ -15,8 +20,19 @@ public partial class MainPage : Shell
 {
     public static INavigation navigation;
 
-	public MainPage()
+    public MainPage()
 	{
+
+        if (Device.Idiom == TargetIdiom.Phone)
+        {
+            FlyoutBehavior = FlyoutBehavior.Flyout;
+        }
+        else
+        {
+            FlyoutBehavior = FlyoutBehavior.Locked;
+        }
+
+
         BindingContext = new MainPageModel();
         DiaFile.staticDia.OnSavedAction = () =>
         {
@@ -91,17 +107,5 @@ class MainPageModel:INotifyPropertyChanged
 
 }
 
-class Test : ICommand
-{
-    public event EventHandler? CanExecuteChanged;
 
-    public bool CanExecute(object? parameter)
-    {
-        throw new NotImplementedException();
-    }
 
-    public void Execute(object? parameter)
-    {
-        throw new NotImplementedException();
-    }
-}

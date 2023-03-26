@@ -65,11 +65,22 @@ namespace AOdiaData
         }
         public override int SaveChanges()
         {
+            try { 
+            var start=DateTime.Now;
+            int res=base.SaveChanges();
             if (OnSavedAction != null)
             {
                 OnSavedAction();
             }
-            return base.SaveChanges();
+            Debug.WriteLine($"SaveChanges {(DateTime.Now - start).TotalMilliseconds}ms");
+                return res;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+                
+            }
         }
 
         // デスクトップ上にSQLiteのDBファイルが作成される
@@ -77,7 +88,7 @@ namespace AOdiaData
         {
             options.UseSqlite($"Data Source={DbPath}");
             // 出力ウィンドウに EF Core ログを表示
-           options.LogTo(msg =>Debug.WriteLine(msg));
+//           options.LogTo(msg =>Debug.WriteLine(msg));
         }
     }
 }

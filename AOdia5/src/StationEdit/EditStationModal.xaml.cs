@@ -23,7 +23,7 @@ public partial class EditStationModal : Popup
         MapViewModel viewModel = new MapViewModel
         {
             editStation = VM,
-            stations = VM.stationListViewModel.Stations
+//            stations = VM.stationListViewModel.Stations
         };
         Close();
         Navigation.PushAsync(new MapPage(viewModel));

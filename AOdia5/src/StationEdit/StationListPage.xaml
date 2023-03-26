@@ -5,11 +5,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:AOdia5"
     xmlns:helpers="clr-namespace:AOdia5.Helpers"
-    xmlns:uranium="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
+    xmlns:windows="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.WindowsSpecific;assembly=Microsoft.Maui.Controls"
     Title="StationList">
-    <!--<ContentPage.BindingContext>
-        <controls:StationListViewModel />
-    </ContentPage.BindingContext>-->
+
     <AbsoluteLayout VerticalOptions="Fill">
         <Grid
             AbsoluteLayout.LayoutBounds="0,0,1,1"
@@ -24,7 +22,7 @@
                 <Label
                     HorizontalTextAlignment="Center"
                     Text="Name"
-                    WidthRequest="250" />
+                    WidthRequest="220" />
                 <Label
                     HorizontalTextAlignment="Center"
                     Text="Lat"
@@ -34,33 +32,54 @@
                     Text="Lon"
                     WidthRequest="120" />
             </HorizontalStackLayout>
-            <ListView
+            <CollectionView
                 Grid.Row="1"
                 Margin="20,0,20,0"
                 AbsoluteLayout.LayoutBounds="0,0,1,1"
-                ItemSelected="SelectedStation"
                 ItemsSource="{Binding Stations}"
+                SelectionMode="Single"
+                SelectionChanged="CollectionView_SelectionChanged"
                 VerticalOptions="FillAndExpand">
-                <ListView.ItemTemplate>
+                <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <ViewCell>
-                            <HorizontalStackLayout Margin="0,10,0,0">
-                                <Label Text="{Binding Name.Value}" WidthRequest="150" />
-                                <Label
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding Lat.Value}"
-                                    VerticalTextAlignment="Center"
-                                    WidthRequest="70" />
-                                <Label
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding Lon.Value}"
-                                    VerticalTextAlignment="Center"
-                                    WidthRequest="70" />
-                            </HorizontalStackLayout>
-                        </ViewCell>
+                        <HorizontalStackLayout Padding="10,5,10,5">
+                            <HorizontalStackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnStationClicked" />
+                            </HorizontalStackLayout.GestureRecognizers>
+                            <Label Text="{Binding name}" WidthRequest="220" />
+                                    <Label
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding lat}"
+                                VerticalTextAlignment="Center"
+                                WidthRequest="120" />
+                            <Label
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding lon}"
+                                VerticalTextAlignment="Center"
+                                WidthRequest="120" />
+                            <Label
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding routes}"
+                                VerticalTextAlignment="Center"
+                                WidthRequest="300" />
+
+
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroupList>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Selected">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="LightBlue" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Normal" />
+                                    </VisualStateGroup>
+                                </VisualStateGroupList>
+                            </VisualStateManager.VisualStateGroups>
+                        </HorizontalStackLayout>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </Grid>
         <Border
             Padding="8"
