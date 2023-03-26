@@ -44,6 +44,7 @@ public partial class MainPage : Shell
         Routing.RegisterRoute("Station", typeof(StationListPage));
         Routing.RegisterRoute("Route", typeof(RouteListPage));
         Routing.RegisterRoute("Route/edit", typeof(RouteEditPage));
+        Routing.RegisterRoute("test/keyTest", typeof(KeyEventTest));
         InitializeComponent();
     }
 

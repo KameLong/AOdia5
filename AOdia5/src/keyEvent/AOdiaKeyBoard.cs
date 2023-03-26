@@ -15,29 +15,74 @@ namespace AOdia5
     /*
      * AOdiaで使用するキーイベントを管理します
      */
-    public class AOdiaKeyBoard
+    public static class AOdiaKeyBoard
     {
-        public KeyboardHook kbh;
-        public AOdiaKeyBoard()
+        private static KeyboardHook? kbh=null;
+
+        private static bool windowIsActive = false;
+        private static bool isCtrlPressed = false;
+
+        public static Page mainPage;
+
+        public static void Init(Window window, Page page)
         {
-//            kbh = new KeyboardHook();
-//            kbh.KeyboardPressed += OnKeyPress;
+            window.Created += (s, e) =>
+            {
+                windowIsActive = true;
+#if WINDOWS
+                if (kbh == null)
+                {
+                    kbh = new KeyboardHook();
+                    kbh.KeyboardPressed += OnKeyPress;
+                }
+#endif
+            };
+            window.Resumed += (s, e) =>
+            {
+                windowIsActive = true;
+#if WINDOWS
+
+                if (kbh == null)
+                {
+                    kbh = new KeyboardHook();
+                    kbh.KeyboardPressed += OnKeyPress;
+                }
+#endif
+            };
+            window.Deactivated += (s, e) =>
+            {
+                windowIsActive = false;
+            };
+
+            window.Stopped += (s, e) =>
+            {
+#if WINDOWS
+                windowIsActive = false;
+                kbh.Dispose();
+                kbh = null;
+#endif
+            };
+            mainPage = page;
         }
-        private void OnKeyPress(object? sender, KeyboardHookEventArgs e)
+        public static void OnKeyPress(int keyCode)
         {
+
+            if (mainPage is MainPage page && page.CurrentPage is AOdiaKeyEvent keyEvent)
+            {
+                keyEvent.OnKeyPress(keyCode);
+            }
+
+        }
+        private static void OnKeyPress(object? sender, KeyboardHookEventArgs e)
+        {
+            if (windowIsActive) { 
+
 
             if (e.KeyPressType == KeyboardHook.KeyPressType.KeyDown)
             {
-                Debug.WriteLine(e.InputEvent.VirtualCode);
-                Debug.WriteLine(e.InputEvent.HardwareScanCode);
-                Debug.WriteLine(e.InputEvent.Flags);
-                Debug.WriteLine(e.InputEvent.AdditionalInformation);
-#if WINDOWS
-                //            Debug.WriteLine(e.InputEvent.Key            );
+                    OnKeyPress(e.InputEvent.VirtualCode);
 
-#endif
-                Debug.WriteLine("");
-
+            }
             }
         }
 
@@ -47,6 +92,6 @@ namespace AOdia5
 
     public interface AOdiaKeyEvent
     {
-
+        public void OnKeyPress(int keyCode);
     }
 }

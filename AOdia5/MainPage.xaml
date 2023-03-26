@@ -44,7 +44,7 @@
         </VerticalStackLayout>
     </Shell.FlyoutHeader>
     <FlyoutItem Title="Station" Route="">
-        <ShellContent Title="Main" ContentTemplate="{DataTemplate local:StationListPage}" />
+        <ShellContent Title="Main" ContentTemplate="{DataTemplate local:KeyEventTest}" />
     </FlyoutItem>
 
 

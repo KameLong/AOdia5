@@ -1,6 +1,8 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using Android.Views;
+using KeyboardHookLite;
 
 namespace AOdia5;
 
@@ -8,4 +10,12 @@ namespace AOdia5;
 public class MainActivity : MauiAppCompatActivity
 {
 
+public override bool DispatchKeyEvent(KeyEvent? e)
+    {
+        System.Diagnostics.Debug.WriteLine(e.KeyCode);
+        AOdiaKeyBoard.OnKeyPress(((int)e.KeyCode));
+
+
+        return base.DispatchKeyEvent(e);
+    }
 }

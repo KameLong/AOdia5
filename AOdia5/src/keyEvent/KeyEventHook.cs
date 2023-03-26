@@ -55,6 +55,8 @@ public class KeyboardHook : IDisposable
         /// <summary>
         /// The VirtualCode converted to typeof(Keys) for higher usability.
         /// </summary>
+        /// 
+#if WINDOWS
         public Key Key
         {
             get
@@ -62,6 +64,7 @@ public class KeyboardHook : IDisposable
                 return KeyInterop.KeyFromVirtualKey(VirtualCode);
             }
         }
+#endif
 
         /// <summary>
         /// A hardware scan code for the key. 

@@ -16,58 +16,16 @@ public partial class App : Microsoft.Maui.Controls.Application
 	}
     protected override Microsoft.Maui.Controls.Window CreateWindow(IActivationState? activationState)
     {
-
-
-//        AOdiaKeyBoard keyEvent = new AOdiaKeyBoard();
-
         Window window = base.CreateWindow(activationState);
-        KeyboardHook kbh=null;
-        window.Created += (s, e) =>
-        {
-            if (kbh == null)
-            {
-                kbh = new KeyboardHook();
-                kbh.KeyboardPressed += OnKeyPress;
-
-            }
-
-        };
+        AOdiaKeyBoard.Init(window,MainPage);
         window.Stopped += (s, e) => 
         {
             Debug.WriteLine("Stopeed");
             DiaFile.staticDia.SaveChanges();
         };
-        window.Resumed += (s, e) =>
-        {
-            if (kbh == null)
-            {
-                kbh = new KeyboardHook();
-                kbh.KeyboardPressed += OnKeyPress;
-
-            }
-
-            Debug.WriteLine("Resumed");
-        };
 
         
         return window;
-    }
-    private void OnKeyPress(object? sender, KeyboardHookEventArgs e)
-    {
-
-        if (e.KeyPressType == KeyboardHook.KeyPressType.KeyDown)
-        {
-            Debug.WriteLine(e.InputEvent.VirtualCode);
-            Debug.WriteLine(e.InputEvent.HardwareScanCode);
-            Debug.WriteLine(e.InputEvent.Flags);
-            Debug.WriteLine(e.InputEvent.AdditionalInformation);
-#if WINDOWS
-            //            Debug.WriteLine(e.InputEvent.Key            );
-
-#endif
-            Debug.WriteLine("");
-
-        }
     }
 
 }
