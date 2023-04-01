@@ -23,7 +23,7 @@ public class KeyEventTest : ContentPage, AOdiaKeyEvent
 		};
 	}
 
-    public void OnKeyPress(int keyCode)
+    public void OnKeyPress(AOdiaKey keyCode)
     {
         label.Text += "\n" + keyCode.ToString();
     }
