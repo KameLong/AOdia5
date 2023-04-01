@@ -1,21 +1,77 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-
-<FlyoutPage
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
     x:Class="AOdia5.MainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:AOdia5.Helpers"
     xmlns:local="clr-namespace:AOdia5">
-    <FlyoutPage.Flyout>
-        <local:MenuPage x:Name="flyoutPage" />
-    </FlyoutPage.Flyout>
-    <FlyoutPage.Detail>
-        <NavigationPage
-            x:Name="nav"
-            Popped="NavigationPage_Popped"
-            Pushed="NavigationPage_Pushed">
-            <x:Arguments>
-                <local:RouteListPage />
-            </x:Arguments>
-        </NavigationPage>
-    </FlyoutPage.Detail>
-</FlyoutPage>
+
+    <Shell.TitleView>
+        <HorizontalStackLayout HorizontalOptions="End">
+            <Button
+                Clicked="Back"
+                FontSize="30"
+                HeightRequest="40"
+                HorizontalOptions="End"
+                IsEnabled="{Binding BackEble}"
+                Text="←"
+                WidthRequest="70" />
+
+            <Button
+                Clicked="Undo"
+                FontFamily="MaterialDesignIcons"
+                FontSize="30"
+                HeightRequest="40"
+                HorizontalOptions="End"
+                IsEnabled="{Binding UndoEble}"
+                Text="{x:Static helpers:IconFont.Undo}"
+                WidthRequest="70" />
+            <Button
+                Clicked="Redo"
+                FontFamily="MaterialDesignIcons"
+                FontSize="30"
+                HeightRequest="40"
+                HorizontalOptions="End"
+                IsEnabled="{Binding RedoEble}"
+                Text="{x:Static helpers:IconFont.Redo}"
+                WidthRequest="70" />
+        </HorizontalStackLayout>
+    </Shell.TitleView>
+
+    <Shell.FlyoutHeader>
+        <VerticalStackLayout>
+            <Button Margin="10,10,10,10" Text="Test" />
+        </VerticalStackLayout>
+    </Shell.FlyoutHeader>
+    <FlyoutItem Title="Station" Route="">
+        <ShellContent Title="Main" ContentTemplate="{DataTemplate local:KeyEventTest}" />
+    </FlyoutItem>
+
+
+    <MenuItem
+        Command="{Binding MenuItem_Clicked}"
+        CommandParameter="Station"
+        Text="Station" />
+    <MenuItem
+        Command="{Binding MenuItem_Clicked}"
+        CommandParameter="Route"
+        Text="Route" />
+    <MenuItem Clicked="MenuItem_Clicked" Text="Route Edit" />
+    <Shell.FlyoutFooterTemplate>
+        <DataTemplate>
+            <StackLayout>
+                <Label
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    Text="Xaminals"
+                    TextColor="GhostWhite" />
+                <Label
+                    HorizontalOptions="Center"
+                    Text="t"
+                    TextColor="GhostWhite" />
+            </StackLayout>
+        </DataTemplate>
+    </Shell.FlyoutFooterTemplate>
+</Shell>
+
+

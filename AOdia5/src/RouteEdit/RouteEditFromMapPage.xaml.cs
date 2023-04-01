@@ -178,7 +178,7 @@ public class RouteEditFromMapPageModel : INotifyPropertyChanged
                 //æ“ª’Ç‰Á
                 if(route.Paths.Count > 0)
                 {
-                    editPath = route.AddPathTop(station);
+                    editPath = route.AddStationTop(station);
                 }
                 else
                 {

@@ -20,10 +20,49 @@ using (var client = new WebClient())
 
 
 
+RoutePathTest();
 
 
 
 
+void RoutePathTest()
+{
+    DiaFile diaFile = DiaFile.staticDia;
+    Route route = diaFile.routes.Include(r=>r.Paths).First(r => r.dbName == "阪急京都本線");
+    int initpathCOunt=route.Paths.Count();
+
+    Path deletePath = route.Paths.OrderBy(p => p.seq).First();
+    route.DeleteStation(deletePath);
+    diaFile.SaveChanges();
+    route.InsertStation(deletePath);
+    diaFile.SaveChanges();
+
+    int lastpathCOunt = route.Paths.Count();
+    if(lastpathCOunt != initpathCOunt)
+    {
+        Console.WriteLine("え？");
+    }
+
+    deletePath = route.Paths.First(p => p.seq == 3);
+    route.DeleteStation(deletePath);
+    diaFile.SaveChanges();
+    route.InsertStation(deletePath);
+    diaFile.SaveChanges();
+    lastpathCOunt = route.Paths.Count();
+    if (lastpathCOunt != initpathCOunt)
+    {
+        Console.WriteLine("え？");
+    }
+    while (route.Paths.Count() > 0)
+    {
+        route.DeleteEndStation();
+        diaFile.SaveChanges();
+    }
+
+
+
+    diaFile.SaveChanges();
+}
 
 void LoadStationCSV(DiaFile db)
 {
@@ -93,4 +132,4 @@ bool AddStationTest()
 
         return true;
 }
-AddStationTest();
+//AddStationTest();

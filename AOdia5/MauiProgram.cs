@@ -13,47 +13,33 @@ public interface RecyclePage
 }
 public static class MyExtensions
 {
-    public static void PushPage(this INavigation nav,Func<Page> func)
+    public static void Goto(this Shell shell,string newURL,string? oldURL=null)
     {
-        UndoCommand undoCommand = new UndoCommand();
-        undoCommand.Invoke = () =>
+        if(oldURL == null)
         {
-            nav.PushAsync(func());
-        };
-        undoCommand.Redo = () =>
-        {
-            nav.PushAsync(func());
-        };
-        undoCommand.Undo = () =>
-        {
-            nav.PopAsync();
-        };
-        UndoStack.Instance.Push(undoCommand);
-
-    }
-    public  static async void PopPage(this INavigation nav)
-    {
-
-        var page=await nav.PopAsync();
-        if(page is RecyclePage recyclePage)
-        {
-            UndoCommand undoCommand = new UndoCommand();
-            undoCommand.Invoke = () =>
-            {
-            };
-            undoCommand.Redo = () =>
-            {
-                nav.PopAsync();
-            };
-            undoCommand.Undo = () =>
-            {
-                var a = recyclePage.Creater()();
-                nav.PushAsync(a);
-            };
-            UndoStack.Instance.Push(undoCommand);
+            oldURL = UndoStack.Instance.RecentUrl();
 
         }
 
+
+        UndoCommand undoCommand = new UndoCommand();
+        undoCommand.comment = $"{oldURL}→{newURL}";
+        undoCommand.Invoke = () =>
+        {
+            UndoStack.Instance.PushURL(newURL);
+            shell.GoToAsync(newURL);
+        };
+        undoCommand.Redo = () =>
+        {
+            UndoStack.Instance.PushURL(newURL);
+            shell.GoToAsync(newURL);
+        };
+        undoCommand.Undo = () =>
+        {
+            UndoStack.Instance.PushURL(oldURL);
+            shell.GoToAsync(oldURL);
+        };
+        UndoStack.Instance.Push(undoCommand);
 
     }
 }
@@ -85,3 +71,9 @@ public static class MauiProgram
 		return builder.Build();
 	}
 }
+
+
+
+
+
+
