@@ -2,7 +2,7 @@ using System.Reflection.Metadata;
 
 namespace AOdia5;
 
-public class KeyEventTest : ContentPage, AOdiaKeyEvent
+public class KeyEventTest : ContentPage, KeyEventListener
 {
     private Label label;
 	public KeyEventTest()
@@ -23,7 +23,7 @@ public class KeyEventTest : ContentPage, AOdiaKeyEvent
 		};
 	}
 
-    public void OnKeyPress(AOdiaKey keyCode)
+    public void OnKeyPress(AOdiaKey keyCode,ModifierKey modifier)
     {
         label.Text += "\n" + keyCode.ToString();
     }

@@ -18,7 +18,9 @@ public partial class App : Microsoft.Maui.Controls.Application
     {
         Debug.WriteLine("CreateWindow");
         Window window = base.CreateWindow(activationState);
+
         AOdiaKeyBoard.Init(window,MainPage);
+
         window.Stopped += (s, e) => 
         {
             Debug.WriteLine("Stopeed");

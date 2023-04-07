@@ -49,9 +49,9 @@ public partial class App : MauiWinUIApplication
             case KeyboardHook.KeyPressType.KeyUp:
                 return AOdiaKeyPressType.Up;
             case KeyboardHook.KeyPressType.SysKeyDown:
-//                return AOdiaKeyPressType.Down;
+                return AOdiaKeyPressType.Down;
             case KeyboardHook.KeyPressType.SysKeyUp:
-            //                return AOdiaKeyPressType.Up;
+                            return AOdiaKeyPressType.Up;
             default:
                 return (AOdiaKeyPressType)5;
 

@@ -9,15 +9,18 @@
     <Shell.TitleView>
         <HorizontalStackLayout HorizontalOptions="End">
             <Button
+                Padding="10,5,10,5"
                 Clicked="Back"
+                FontFamily="MaterialDesignIcons"
                 FontSize="30"
                 HeightRequest="40"
                 HorizontalOptions="End"
                 IsEnabled="{Binding BackEble}"
-                Text="←"
+                Text="{x:Static helpers:IconFont.ArrowLeft}"
                 WidthRequest="70" />
 
             <Button
+                Padding="10,5,10,5"
                 Clicked="Undo"
                 FontFamily="MaterialDesignIcons"
                 FontSize="30"
@@ -27,6 +30,7 @@
                 Text="{x:Static helpers:IconFont.Undo}"
                 WidthRequest="70" />
             <Button
+                Padding="10,5,10,5"
                 Clicked="Redo"
                 FontFamily="MaterialDesignIcons"
                 FontSize="30"
@@ -56,6 +60,10 @@
         Command="{Binding MenuItem_Clicked}"
         CommandParameter="Route"
         Text="Route" />
+    <MenuItem
+        Command="{Binding MenuItem_Clicked}"
+        CommandParameter="test/keyTest"
+        Text="KeyTest" />
     <MenuItem Clicked="MenuItem_Clicked" Text="Route Edit" />
     <Shell.FlyoutFooterTemplate>
         <DataTemplate>

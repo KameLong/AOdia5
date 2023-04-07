@@ -19,8 +19,7 @@ namespace AOdia5
     {
 
         private static bool windowIsActive = false;
-        private static bool isCtrlPressed = false;
-        private static bool isShiftPressed = false;
+        private static ModifierKey modifierKey = new ModifierKey();
 
         public static Page mainPage;
 
@@ -56,12 +55,17 @@ namespace AOdia5
             {
                 if (key == AOdiaKey.LeftShift)
                 {
-                    isShiftPressed = true;
+                    modifierKey.ShiftPressed = true;
                     return;
                 }
                 if (key == AOdiaKey.LeftCtrl)
                 {
-                    isCtrlPressed = true;
+                    modifierKey.CtrlPressed = true;
+                    return;
+                }
+                if (key == AOdiaKey.LeftAlt)
+                {
+                    modifierKey.AltPressed = true;
                     return;
                 }
             }
@@ -69,12 +73,17 @@ namespace AOdia5
             {
                 if (key == AOdiaKey.LeftShift)
                 {
-                    isShiftPressed = false;
+                    modifierKey.ShiftPressed = false;
                     return;
                 }
                 if (key == AOdiaKey.LeftCtrl)
                 {
-                    isCtrlPressed = false;
+                    modifierKey.CtrlPressed = false;
+                    return;
+                }
+                if (key == AOdiaKey.LeftAlt)
+                {
+                    modifierKey.AltPressed = false;
                     return;
                 }
 
@@ -83,9 +92,9 @@ namespace AOdia5
 
             if (pressType == AOdiaKeyPressType.Down)
             {
-                if (mainPage is MainPage page && page.CurrentPage is AOdiaKeyEvent keyEvent)
+                if (mainPage is MainPage page && page.CurrentPage is KeyEventListener keyEvent)
                 {
-                    keyEvent.OnKeyPress(key);
+                    keyEvent.OnKeyPress(key,modifierKey);
                 }
 
             }
@@ -101,9 +110,9 @@ namespace AOdia5
     }
 
 
-    public interface AOdiaKeyEvent
+    public interface KeyEventListener
     {
-        public void OnKeyPress(AOdiaKey keyCode);
+        public void OnKeyPress(AOdiaKey keyCode,ModifierKey modifierKey);
     }
 
 
@@ -295,7 +304,7 @@ namespace AOdia5
         OemBackTab = 162,
         Attn = 163,
         DbeNoRoman = 163,
-        CrSel = 164,
+        CrSeaal = 164,
         DbeEnterWordRegisterMode = 164,
         DbeEnterImeConfigureMode = 165,
         ExSel = 165,
@@ -317,5 +326,12 @@ namespace AOdia5
         Down = 0,
         Up = 1,
 
+    }
+
+    public class ModifierKey
+    {
+        public bool ShiftPressed = false;
+        public bool CtrlPressed = false;
+        public bool AltPressed = false;
     }
 }

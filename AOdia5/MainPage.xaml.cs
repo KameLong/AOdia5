@@ -67,12 +67,17 @@ public partial class MainPage : Shell
 
     }
 
+    public void Back()
+    {
+        string oldUrl = UndoStack.Instance.PopUrl();
+        string url = UndoStack.Instance.PopUrl(); ;
+
+        Shell.Current.Goto(url, oldUrl);
+    }
+
     private void Back(object sender, EventArgs e)
     {
-        string oldUrl=UndoStack.Instance.PopUrl();
-        string url = UndoStack.Instance.PopUrl(); ;
-        
-        Shell.Current.Goto(url,oldUrl);
+        Back();
     }
 }
 class MainPageModel:INotifyPropertyChanged
@@ -84,6 +89,11 @@ class MainPageModel:INotifyPropertyChanged
         execute: (object URL) =>
         {
             Shell.Current.Goto(URL.ToString() );
+            if (Device.Idiom == TargetIdiom.Phone)
+            {
+
+                Shell.Current.FlyoutIsPresented = false;
+            }
         },
         canExecute: (object URL) =>
         {

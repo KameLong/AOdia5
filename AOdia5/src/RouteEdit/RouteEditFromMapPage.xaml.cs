@@ -65,7 +65,7 @@ public partial class RouteEditFromMapPage : ContentPage
 
             var p = new Polyline
             {
-                StrokeColor = Color.FromRgba( route.color.Value.R, route.color.Value.G, route.color.Value.B, route.color.Value.A),
+                StrokeColor = Color.FromRgba( route.color.R, route.color.G, route.color.B, route.color.A),
                 StrokeWidth = 6,
                 ZIndex = 1
             };
@@ -90,7 +90,7 @@ public partial class RouteEditFromMapPage : ContentPage
 
         var p = new Polyline
         {
-            StrokeColor = Color.FromRgba(route.color.Value.R, route.color.Value.G, route.color.Value.B, route.color.Value.A),
+            StrokeColor = Color.FromRgba(route.color.R, route.color.G, route.color.B, route.color.A),
             StrokeWidth = 6,
             ZIndex = 1
         };

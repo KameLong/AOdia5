@@ -15,7 +15,7 @@ namespace AOdiaData
         {
             var res=new Route();
             DiaFile.staticDia.routes.Add(res);
-            res.color.Value = Color.Black;
+            res.color = Color.Black;
             return res;
         }
 
@@ -23,17 +23,13 @@ namespace AOdiaData
         [Required]
         public long RouteId { get; set; }
 
-        [NotMapped]
-        public ReactiveProperty<string> Name { get; } = new ReactiveProperty<string>("");
         [Column("name")]
-        public string dbName { get {
-                return Name.Value;
-            } set { Name.Value = value; } }
+        public string Name { get; set; } ="";
 
         [NotMapped]
-        public ReactiveProperty<Color> color { get;  }=new ReactiveProperty<Color>();
+        public Color color  = Color.Black;
         [Column("color")]
-        public string dbColor { get { return ColorTranslator.ToHtml(color.Value); } set { color.Value = ColorTranslator.FromHtml(value); } }
+        public string colorStr { get { return ColorTranslator.ToHtml(color); } set { color = ColorTranslator.FromHtml(value); } }
 
         public virtual ICollection<Path> Paths { get; set; }= new Collection<Path>();
 

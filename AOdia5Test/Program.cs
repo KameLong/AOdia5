@@ -28,7 +28,7 @@ RoutePathTest();
 void RoutePathTest()
 {
     DiaFile diaFile = DiaFile.staticDia;
-    Route route = diaFile.routes.Include(r=>r.Paths).First(r => r.dbName == "阪急京都本線");
+    Route route = diaFile.routes.Include(r=>r.Paths).First(r => r.Name == "阪急京都本線");
     int initpathCOunt=route.Paths.Count();
 
     Path deletePath = route.Paths.OrderBy(p => p.seq).First();
@@ -77,8 +77,8 @@ void LoadStationCSV(DiaFile db)
     {
         var lines = line.Split(',');
         Route route = new Route();
-        route.Name.Value = lines[2];
-        route.color.Value = colors[route.RouteId % colors.Count()];
+        route.Name = lines[2];
+        route.color = colors[route.RouteId % colors.Count()];
         routes.Add(int.Parse(lines[0]), route);
         db.routes.Add(route);
     }
@@ -119,7 +119,7 @@ void LoadStationCSV(DiaFile db)
 
 bool AddStationTest()
 {
-    var route = DiaFile.staticDia.routes.Include(r=>r.Paths).Where(r => r.dbName == "阪急京都本線").First();
+    var route = DiaFile.staticDia.routes.Include(r=>r.Paths).Where(r => r.Name == "阪急京都本線").First();
     var newStation = Station.CreateNewStation();
     newStation.Name.Value = "test";
     newStation.Lat.Value = 35;

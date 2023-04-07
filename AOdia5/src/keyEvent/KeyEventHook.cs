@@ -100,6 +100,7 @@ public class KeyboardHook : IDisposable
             KeyboardHookEventArgs eventArgs = new KeyboardHookEventArgs(e, (KeyPressType)wParamType);
 
             EventHandler<KeyboardHookEventArgs> handler = KeyboardPressed;
+
             handler?.Invoke(this, eventArgs);
 
             // Printing out the wParam to see what type of message we are receiving

@@ -18,6 +18,9 @@ namespace AOdiaData
                 
                 if (_dia == null)
                 {
+
+
+
                     DateTime now = DateTime.Now;
 
                     _dia = new DiaFile();
@@ -58,6 +61,18 @@ namespace AOdiaData
 
             var path = Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             DbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}{dbName}";
+
+            if (File.Exists(DbPath))
+            {
+                File.Delete(DbPath);
+            }
+            using (var client = new WebClient())
+            {
+                client.DownloadFile("https://kamelong.com/aodia.db", DbPath);
+            }
+
+
+
             SQLitePCL.Batteries_V2.Init();
                 this.Database.EnsureCreated();
 

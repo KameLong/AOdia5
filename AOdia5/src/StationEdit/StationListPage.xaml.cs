@@ -75,7 +75,7 @@ public class VMStation
             var str = "";
             foreach(var p in path1)
             {
-                str += " " + p.route.dbName;
+                str += " " + p.route.Name;
             }
 
             return str;

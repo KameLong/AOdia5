@@ -11,38 +11,57 @@
         <BackButtonBehavior IsVisible="False" />
     </Shell.BackButtonBehavior>
 
-    <!--<ScrollView>-->
-    <!--<VerticalStackLayout>-->
-    <!--<aodia:KLButton
-                Margin="10,10,10,10"
-                HorizontalOptions="Center"
-                Style="{StaticResource OutLineButtonStyle}"
-                Tapped="AddNewRoute"
-                Text="{x:Static l18n:L18N.NEW_ROUTE}" />-->
-    <CollectionView Margin="20,5,20,5" ItemsSource="{Binding routes}">
-        <CollectionView.ItemTemplate>
-            <DataTemplate>
-                <HorizontalStackLayout Margin="0,10,0,0">
-                    <Label Text="{Binding name}" WidthRequest="150">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer CommandParameter="{Binding}" Tapped="EditRoute" />
-                        </Label.GestureRecognizers>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <SearchBar
+            Grid.Row="0"
+            Margin="20,5,20,5"
+            Placeholder="Search"
+            Text="{Binding SearchText}"
+            TextChanged="SearchBar_TextChanged" />
+        <CollectionView
+            x:Name="routeList"
+            Grid.Row="1"
+            Margin="20,5,20,5"
+            ItemsSource="{Binding searchedRoutes}"
+            SelectionMode="Multiple">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <HorizontalStackLayout Margin="10,10,10,10">
+                        <Label
+                            Margin="0,0,20,0"
+                            FontFamily="MaterialDesignIcons"
+                            FontSize="30"
+                            Text="{x:Static helpers:IconFont.Pencil}"
+                            TextColor="SlateGray"
+                            VerticalTextAlignment="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer CommandParameter="{Binding}" Tapped="EditRoute" />
+                            </Label.GestureRecognizers>
+                        </Label>
 
-                    </Label>
-                    <Label
-                        FontFamily="MaterialDesignIcons"
-                        FontSize="30"
-                        Text="{x:Static helpers:IconFont.TrashCan}"
-                        TextColor="SlateGray"
-                        VerticalTextAlignment="Center">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer CommandParameter="{Binding}" Tapped="DeleteRoute" />
-                        </Label.GestureRecognizers>
-                    </Label>
-                </HorizontalStackLayout>
-            </DataTemplate>
-        </CollectionView.ItemTemplate>
-    </CollectionView>
+                        <Label Text="{Binding name}" WidthRequest="200" />
+                        <Label
+                            Margin="20,0,20,0"
+                            FontFamily="MaterialDesignIcons"
+                            FontSize="30"
+                            Text="{x:Static helpers:IconFont.TrashCan}"
+                            TextColor="SlateGray"
+                            VerticalTextAlignment="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer CommandParameter="{Binding}" Tapped="DeleteRoute" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </HorizontalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </Grid>
+
 
     <!--</VerticalStackLayout>-->
     <!--</ScrollView>-->
