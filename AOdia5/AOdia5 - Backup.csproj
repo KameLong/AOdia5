@@ -37,14 +37,12 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android|AnyCPU'">
 	  <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
-	  <RunAOTCompilation>False</RunAOTCompilation>
-	  <AndroidEnableProfiledAot>False</AndroidEnableProfiledAot>
-	  <EnableLLVM>False</EnableLLVM>
+	  <RunAOTCompilation>True</RunAOTCompilation>
+	  <AndroidEnableProfiledAot>True</AndroidEnableProfiledAot>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android|AnyCPU'">
 	  <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
-	  <EnableLLVM>False</EnableLLVM>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -66,8 +64,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Maui" Version="5.0.0" />
-		<PackageReference Include="Mapsui.Maui" Version="4.0.0-beta.9" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="4.0.0" />
+		<PackageReference Include="Mapsui.Maui" Version="4.0.0-beta.8" />
 		<PackageReference Include="Microsoft.Data.Sqlite.Core" Version="7.0.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.3">
 		  <PrivateAssets>all</PrivateAssets>
@@ -106,9 +104,6 @@
 	  <Compile Update="src\StationEdit\StationListPage.xaml.cs">
 	    <DependentUpon>StationListPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="src\StationSelector\StationSelectorView.xaml.cs">
-	    <DependentUpon>StationSelectorView.xaml</DependentUpon>
-	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -137,12 +132,6 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="src\StationEdit\StationListPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="src\StationSelector\StationSelectorView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="src\Test\StationSelectorPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

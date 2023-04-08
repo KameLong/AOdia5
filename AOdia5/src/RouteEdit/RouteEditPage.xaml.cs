@@ -75,56 +75,37 @@ public partial class RouteEditPage : ContentPage, KeyEventListener
     {
         VM.onLoad();
     }
-    private async void AddStation(object sender, EventArgs e)
-    {
-        if (sender is Button button && button.BindingContext is Path path)
-        {
-            //station‚ÌŒã‚É—ñŽÔ‚ð’Ç‰Á‚·‚é   
-            string action = await DisplayActionSheet("", "Cancel", null, L18N.ADD_STATION_FROM_LIST, L18N.ADD_STATION_FROM_MAP);
-            if (action == L18N.ADD_STATION_FROM_LIST)
-            {
+    //private async void AddStation(object sender, EventArgs e)
+    //{
+    //    if (sender is Button button && button.BindingContext is Path path)
+    //    {
+    //        //station‚ÌŒã‚É—ñŽÔ‚ð’Ç‰Á‚·‚é   
+    //        string action = await DisplayActionSheet("", "Cancel", null, L18N.ADD_STATION_FROM_LIST, L18N.ADD_STATION_FROM_MAP);
+    //        if (action == L18N.ADD_STATION_FROM_LIST)
+    //        {
 
-            }
-            if (action == L18N.ADD_STATION_FROM_MAP)
-            {
-                RouteEditFromMapPageModel vm = new RouteEditFromMapPageModel(DiaFile.staticDia.routes.ToList(), DiaFile.staticDia.stations.ToList(), VM.route, path);
-                await Navigation.PushAsync(new RouteEditFromMapPage(vm));
-            }
-        }
-        else if (sender is Button)
-        {
-            //Å‰‚Ì‰w‚ð’Ç‰Á‚·‚é
-            string action = await DisplayActionSheet("", "Cancel", null, L18N.ADD_STATION_FROM_LIST, L18N.ADD_STATION_FROM_MAP);
-            if (action == L18N.ADD_STATION_FROM_LIST)
-            {
+    //        }
+    //        if (action == L18N.ADD_STATION_FROM_MAP)
+    //        {
+    //            RouteEditFromMapPageModel vm = new RouteEditFromMapPageModel(DiaFile.staticDia.routes.ToList(), DiaFile.staticDia.stations.ToList(), VM.route, path);
+    //            await Navigation.PushAsync(new RouteEditFromMapPage(vm));
+    //        }
+    //    }
+    //    else if (sender is Button)
+    //    {
+    //        //Å‰‚Ì‰w‚ð’Ç‰Á‚·‚é
+    //        string action = await DisplayActionSheet("", "Cancel", null, L18N.ADD_STATION_FROM_LIST, L18N.ADD_STATION_FROM_MAP);
+    //        if (action == L18N.ADD_STATION_FROM_LIST)
+    //        {
 
-            }
-            if (action == L18N.ADD_STATION_FROM_MAP)
-            {
-                RouteEditFromMapPageModel vm = new RouteEditFromMapPageModel(DiaFile.staticDia.routes.ToList(), DiaFile.staticDia.stations.ToList(), VM.route, null);
-                await Navigation.PushAsync(new RouteEditFromMapPage(vm));
-            }
-        }
-    }
-    private async void Button_Clicked(object sender, EventArgs e)
-    {
-        string action = await DisplayActionSheet(L18N.ADD_STATION_MODAL_TITLE, "Cancel", null, L18N.ADD_STATION_FROM_LIST, L18N.ADD_STATION_FROM_MAP);
-        if (action == L18N.ADD_STATION_FROM_LIST)
-        {
-
-        }
-        if (action == L18N.ADD_STATION_FROM_MAP)
-        {
-            RouteEditFromMapPageModel vm = new RouteEditFromMapPageModel(DiaFile.staticDia.routes.ToList(), DiaFile.staticDia.stations.ToList(), VM.route, null);
-            vm.lastStation = VM.route.Paths.OrderBy(p => p.seq).Last().endStation;
-            await Navigation.PushAsync(new RouteEditFromMapPage(vm));
-        }
-    }
-
-
-
-
-
+    //        }
+    //        if (action == L18N.ADD_STATION_FROM_MAP)
+    //        {
+    //            RouteEditFromMapPageModel vm = new RouteEditFromMapPageModel(DiaFile.staticDia.routes.ToList(), DiaFile.staticDia.stations.ToList(), VM.route, null);
+    //            await Navigation.PushAsync(new RouteEditFromMapPage(vm));
+    //        }
+    //    }
+    //}
 
 
     private async void DeleteStation(object sender, EventArgs e)
@@ -172,6 +153,20 @@ public partial class RouteEditPage : ContentPage, KeyEventListener
         return true;
     }
 
+    private async void AddStation(object sender, TappedEventArgs e)
+    {
+        string action = await DisplayActionSheet(L18N.ADD_STATION_MODAL_TITLE, "Cancel", null, L18N.ADD_STATION_FROM_LIST, L18N.ADD_STATION_FROM_MAP);
+        if (action == L18N.ADD_STATION_FROM_LIST)
+        {
+
+        }
+        if (action == L18N.ADD_STATION_FROM_MAP)
+        {
+            RouteEditFromMapPageModel vm = new RouteEditFromMapPageModel(DiaFile.staticDia.routes.ToList(), DiaFile.staticDia.stations.ToList(), VM.route, null);
+            vm.lastStation = VM.route.Paths.OrderBy(p => p.seq).Last().endStation;
+            await Navigation.PushAsync(new RouteEditFromMapPage(vm));
+        }
+    }
 }
 
 public class RouteEditPageModel : Bindable
@@ -221,7 +216,12 @@ public class RouteEditPageModel : Bindable
     }
 
 
-
+    public List<VMStation> Stations { get {
+            var result = route.Paths.OrderBy(r => r.seq).Select(r => new VMStation(r.startStation)).ToList();
+            result.Add(new VMStation(route.Paths.OrderBy(r => r.seq).Last().endStation));
+            return result;
+        }
+    }
 
     public ObservableCollection<Path> Paths { get { return _route.Paths.OrderBy(p => p.seq).ToObservableCollection(); } }
     public Station? endStation { get { if (Paths.Count > 0) { return Paths.Last().endStation; } else { return null; } } }
@@ -424,3 +424,7 @@ public class RouteEditPageModel : Bindable
 
 }
 
+public class VMRouteStation
+{
+    public string Name { get;  }
+}

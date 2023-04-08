@@ -31,7 +31,7 @@ namespace AOdia5
           => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         public Station? editStation { get; set; }
-        public StationListViewModel? stationListViewModel { get; set; }
+        public StationSelectorViewModel? stationListViewModel { get; set; }
 
     }
 }

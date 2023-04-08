@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="AOdia5.StationSelectorView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AOdia5"
+    xmlns:helpers="clr-namespace:AOdia5.Helpers">
+
+
+    <Grid
+        AbsoluteLayout.LayoutBounds="0,0,1,1"
+        AbsoluteLayout.LayoutFlags="All"
+        BackgroundColor="#F8F8F8"
+        ZIndex="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <SearchBar
+            Grid.Row="0"
+            Margin="20,5,20,5"
+            Placeholder="Search"
+            Text="{Binding searchText}"
+            TextChanged="SearchBar_TextChanged" />
+
+        <HorizontalStackLayout Grid.Row="1">
+            <Label
+                HorizontalTextAlignment="Center"
+                Text="Name"
+                WidthRequest="220" />
+            <OnIdiom x:TypeArguments="View">
+                <OnIdiom.Desktop>
+
+                    <Label
+                        HorizontalTextAlignment="Center"
+                        Text="Lat"
+                        WidthRequest="120" />
+                </OnIdiom.Desktop>
+            </OnIdiom>
+            <OnIdiom x:TypeArguments="View">
+                <OnIdiom.Desktop>
+
+                    <Label
+                        HorizontalTextAlignment="Center"
+                        Text="Lon"
+                        WidthRequest="120" />
+                </OnIdiom.Desktop>
+            </OnIdiom>
+
+        </HorizontalStackLayout>
+        <CollectionView
+            Grid.Row="2"
+            Margin="20,0,20,0"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            ItemsSource="{Binding Stations}"
+            SelectionChanged="CollectionView_SelectionChanged"
+            SelectionMode="Single"
+            VerticalOptions="FillAndExpand">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <HorizontalStackLayout Padding="10,5,10,5">
+                        <HorizontalStackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnStationClicked" />
+                        </HorizontalStackLayout.GestureRecognizers>
+                        <Label Text="{Binding name}" WidthRequest="220" />
+                        <OnIdiom x:TypeArguments="View">
+                            <OnIdiom.Desktop>
+                                <Label
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding lat}"
+                                    VerticalTextAlignment="Center"
+                                    WidthRequest="120" />
+                            </OnIdiom.Desktop>
+                        </OnIdiom>
+                        <OnIdiom x:TypeArguments="View">
+                            <OnIdiom.Desktop>
+                                <Label
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding lon}"
+                                    VerticalTextAlignment="Center"
+                                    WidthRequest="120" />
+                            </OnIdiom.Desktop>
+                        </OnIdiom>
+                        <OnIdiom x:TypeArguments="View">
+                            <OnIdiom.Desktop>
+                                <Label
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding routes}"
+                                    VerticalTextAlignment="Center"
+                                    WidthRequest="300" />
+                            </OnIdiom.Desktop>
+                        </OnIdiom>
+
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroupList>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="LightBlue" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Normal" />
+                                </VisualStateGroup>
+                            </VisualStateGroupList>
+                        </VisualStateManager.VisualStateGroups>
+                    </HorizontalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+    <!--<Border
+            Padding="8"
+            AbsoluteLayout.LayoutBounds=".95,.95,80,80"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            BackgroundColor="#38C"
+            HeightRequest="60"
+            HorizontalOptions="Center"
+            StrokeShape="RoundRectangle 30,30,30,30"
+            WidthRequest="60"
+            ZIndex="100">
+            <Label
+                FontFamily="MaterialDesignIcons"
+                FontSize="40"
+                Text="{x:Static helpers:IconFont.Plus}">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnClickAddStation" />
+                </Label.GestureRecognizers>
+            </Label>
+        </Border>-->
+</ContentView>

@@ -1,4 +1,5 @@
-﻿using AOdiaData;
+﻿using AOdia5.src.Test;
+using AOdiaData;
 using KeyboardHookLite;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -12,7 +13,7 @@ public partial class App : Microsoft.Maui.Controls.Application
     public App()
 	{
         InitializeComponent();
-        MainPage = new MainPage();
+        MainPage = new StationSelectorPage();
 	}
     protected override Microsoft.Maui.Controls.Window CreateWindow(IActivationState? activationState)
     {
