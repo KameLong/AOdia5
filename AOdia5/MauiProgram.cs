@@ -2,8 +2,6 @@
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using SkiaSharp.Views.Maui.Controls.Hosting;
-using Syncfusion.Maui.Core.Hosting;
-using System.Runtime.CompilerServices;
 
 namespace AOdia5;
 
@@ -15,7 +13,11 @@ public static class MyExtensions
 {
     public static void Goto(this Shell shell,string newURL,string? oldURL=null)
     {
-        if(oldURL == null)
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            // Code to run on the main thread
+
+        if (oldURL == null)
         {
             oldURL = UndoStack.Instance.RecentUrl();
 
@@ -24,22 +26,26 @@ public static class MyExtensions
 
         UndoCommand undoCommand = new UndoCommand();
         undoCommand.comment = $"{oldURL}→{newURL}";
-        undoCommand.Invoke = () =>
+        undoCommand.Invoke = async() =>
         {
             UndoStack.Instance.PushURL(newURL);
-            shell.GoToAsync(newURL);
+            Page oldPage=shell.CurrentPage;
+            await shell.GoToAsync(newURL, false);
         };
-        undoCommand.Redo = () =>
+        undoCommand.Redo = async() =>
         {
             UndoStack.Instance.PushURL(newURL);
-            shell.GoToAsync(newURL);
+            await shell.Navigation.PopAsync(false);
+            await shell.GoToAsync(newURL, false);
         };
-        undoCommand.Undo = () =>
+        undoCommand.Undo = async() =>
         {
             UndoStack.Instance.PushURL(oldURL);
-            shell.GoToAsync(oldURL);
+            await shell.Navigation.PopAsync(false);
+            await shell.GoToAsync(oldURL, false);
         };
         UndoStack.Instance.Push(undoCommand);
+        });
 
     }
 }
@@ -54,7 +60,6 @@ public static class MauiProgram
            .UseSkiaSharp(true)
            .UseMauiApp<App>()
            .UseMauiCommunityToolkit()
-           .ConfigureSyncfusionCore()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

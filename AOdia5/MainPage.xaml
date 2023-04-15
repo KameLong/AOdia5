@@ -1,85 +1,50 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<Shell
+<ContentPage
     x:Class="AOdia5.MainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:helpers="clr-namespace:AOdia5.Helpers"
     xmlns:local="clr-namespace:AOdia5">
 
-    <Shell.TitleView>
-        <HorizontalStackLayout HorizontalOptions="End">
-            <Button
-                Padding="10,5,10,5"
-                Clicked="Back"
-                FontFamily="MaterialDesignIcons"
-                FontSize="30"
-                HeightRequest="40"
-                HorizontalOptions="End"
-                IsEnabled="{Binding BackEble}"
-                Text="{x:Static helpers:IconFont.ArrowLeft}"
-                WidthRequest="70" />
+    <ScrollView>
+        <VerticalStackLayout
+            Spacing="25"
+            Padding="30,0"
+            VerticalOptions="Center">
+
+            <Image
+                Source="dotnet_bot.png"
+                SemanticProperties.Description="Cute dot net bot waving hi to you!"
+                HeightRequest="200"
+                HorizontalOptions="Center" />
+
+            <Label
+                Text="Hello, World!"
+                SemanticProperties.HeadingLevel="Level1"
+                FontSize="32"
+                HorizontalOptions="Center" />
+
+            <Label
+                Text="Welcome to .NET Multi-platform App UI"
+                SemanticProperties.HeadingLevel="Level2"
+                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
+                FontSize="18"
+                HorizontalOptions="Center" />
 
             <Button
-                Padding="10,5,10,5"
-                Clicked="Undo"
-                FontFamily="MaterialDesignIcons"
-                FontSize="30"
-                HeightRequest="40"
-                HorizontalOptions="End"
-                IsEnabled="{Binding UndoEble}"
-                Text="{x:Static helpers:IconFont.Undo}"
-                WidthRequest="70" />
+                x:Name="CounterBtn"
+                Text="Click me"
+                SemanticProperties.Hint="Counts the number of times you click"
+                HorizontalOptions="Center" />
             <Button
-                Padding="10,5,10,5"
-                Clicked="Redo"
-                FontFamily="MaterialDesignIcons"
-                FontSize="30"
-                HeightRequest="40"
-                HorizontalOptions="End"
-                IsEnabled="{Binding RedoEble}"
-                Text="{x:Static helpers:IconFont.Redo}"
-                WidthRequest="70" />
-        </HorizontalStackLayout>
-    </Shell.TitleView>
+                Text="Route"
+                HorizontalOptions="Center" />
+            <Button
+                Text="Station"
+                HorizontalOptions="Center" />
 
-    <Shell.FlyoutHeader>
-        <VerticalStackLayout>
-            <Button Margin="10,10,10,10" Text="Test" />
         </VerticalStackLayout>
-    </Shell.FlyoutHeader>
-    <FlyoutItem Title="Station" Route="">
-        <ShellContent Title="Main" ContentTemplate="{DataTemplate local:KeyEventTest}" />
-    </FlyoutItem>
-
-
-    <MenuItem
-        Command="{Binding MenuItem_Clicked}"
-        CommandParameter="Station"
-        Text="Station" />
-    <MenuItem
-        Command="{Binding MenuItem_Clicked}"
-        CommandParameter="Route"
-        Text="Route" />
-    <MenuItem
-        Command="{Binding MenuItem_Clicked}"
-        CommandParameter="test/keyTest"
-        Text="KeyTest" />
-    <MenuItem Clicked="MenuItem_Clicked" Text="Route Edit" />
-    <Shell.FlyoutFooterTemplate>
-        <DataTemplate>
-            <StackLayout>
-                <Label
-                    FontAttributes="Bold"
-                    HorizontalOptions="Center"
-                    Text="Xaminals"
-                    TextColor="GhostWhite" />
-                <Label
-                    HorizontalOptions="Center"
-                    Text="t"
-                    TextColor="GhostWhite" />
-            </StackLayout>
-        </DataTemplate>
-    </Shell.FlyoutFooterTemplate>
-</Shell>
+    </ScrollView>
+</ContentPage>
 
 

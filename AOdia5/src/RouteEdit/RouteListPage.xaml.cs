@@ -11,22 +11,12 @@ namespace AOdia5;
 
 public partial class RouteListPage : ContentPage,KeyEventListener
 {
-	private RouteListPageModel VM { get { return BindingContext as RouteListPageModel; }set { BindingContext = value; } }
-	public RouteListPage(RouteListPageModel vm):this()
-	{
-		VM = vm;
-	}
 	public RouteListPage()
 	{
-		VM= new RouteListPageModel();
-		InitializeComponent();
-
-
-
-
-
-
+        this.BindingContext = this;
+        InitializeComponent();
     }
+
 
     /*
      * ListView‚Å‘I‘ð‚µ‚½˜Hü‚Ì•ÒW‚É‘JˆÚ‚·‚é
@@ -35,10 +25,9 @@ public partial class RouteListPage : ContentPage,KeyEventListener
     {
         if (e.Parameter is VMRoute route)
         {
-            Shell.Current.Goto($"Route/edit?routeID={route.routeID}");
+            Shell.Current.Goto($"//routeEdit?routeID={route.routeID}");
         }
     }
-
     /*
      * V˜Hü‚ð’Ç‰Á‚·‚é
      * RouteEdit‚ÉˆÚ“®‚·‚é
@@ -50,14 +39,13 @@ public partial class RouteListPage : ContentPage,KeyEventListener
         {
             return;
         }
-        Route route=VM.AddNewRoute(routeName);
-        Shell.Current.Goto($"Route/edit?routeID={route.RouteId}");
+        Route route = AddNewRoute(routeName);
+        Shell.Current.Goto($"//routeEdit?routeID={route.RouteId}");
     }
-
     private void DeleteRoute(object sender, TappedEventArgs e)
     {
         if(e.Parameter is VMRoute route){
-            VM.DeleteRoute(route);
+            DeleteRoute(route);
         }
     }
      
@@ -70,7 +58,7 @@ public partial class RouteListPage : ContentPage,KeyEventListener
             {
                 if (routeList.SelectedItem is VMRoute route)
                 {
-                    Shell.Current.Goto($"Route/edit?routeID={route.routeID}");
+                    Shell.Current.Goto($"//routeEdit?routeID={route.routeID}");
                 }
             }
         }
@@ -82,13 +70,11 @@ public partial class RouteListPage : ContentPage,KeyEventListener
                 if (routeList.SelectedItem is VMRoute route)
                 {
                     Debug.WriteLine($"Delete:{route.name}");
-                    VM.DeleteRoute(route);
+                    DeleteRoute(route);
                     routeList.SelectedItem = null;
                 }
             }
         }
-        if(keyCode == AOdiaKey.Enter) { }
-
         if (modifierKey.AltPressed && keyCode == AOdiaKey.Left)
         {
             Debug.WriteLine("–ß‚é");
@@ -102,41 +88,20 @@ public partial class RouteListPage : ContentPage,KeyEventListener
 
     private void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
     {
-        VM.SearchText = e.NewTextValue;
-        VM.OnPropertyChanged(nameof(VM.searchedRoutes));
+        SearchText = e.NewTextValue;
+        OnPropertyChanged(nameof(searchedRoutes));
     }
-}
 
 
-public class VMRoute
-{
-    public Route route;
-    public VMRoute(Route route) {
-        this.route = route;
-    }
-    public string name { get { return route.Name; } }
-    public long routeID { get { return route.RouteId; } }
-}
-public class RouteListPageModel : Bindable
-{
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-    public  void OnPropertyChanged([CallerMemberName] string propertyName = "")
-      => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-    public List<VMRoute> routes;
     public string SearchText { get; set; } = "";
-    public List<VMRoute> searchedRoutes { get {
-            return routes.Where(r => r.name.Contains(SearchText)).ToList();
-        } }
-
-
-
-
-    public RouteListPageModel()
+    public IEnumerable<VMRoute> searchedRoutes
     {
-        routes=DiaFile.staticDia.routes.OrderBy(r => r.Name).Select(r => new VMRoute(r)).ToList();
+        get
+        {
+            return DiaFile.staticDia.routes.Where(r => r.Name.Contains(SearchText)).OrderBy(r => r.Name).Select(r => new VMRoute(r));
+        }
     }
+
     public Route AddNewRoute(string routeName)
     {
         var route = Route.CreateNewRoute();
@@ -171,25 +136,35 @@ public class RouteListPageModel : Bindable
         {
             DiaFile.staticDia.routes.Remove(route.route);
             DiaFile.staticDia.SaveChanges();
-            OnPropertyChanged(nameof(routes));
+//            OnPropertyChanged(nameof(routes));
         };
 
         deleteRouteCmd.Undo = () =>
         {
             DiaFile.staticDia.routes.Add(route.route);
             DiaFile.staticDia.SaveChanges();
-            OnPropertyChanged(nameof(routes));
+//            OnPropertyChanged(nameof(routes));
         };
 
         deleteRouteCmd.Redo = () =>
         {
             DiaFile.staticDia.routes.Remove(route.route);
             DiaFile.staticDia.SaveChanges();
-            OnPropertyChanged(nameof(routes));
+//            OnPropertyChanged(nameof(routes));
         };
         UndoStack.Instance.Push(deleteRouteCmd);
 
     }
 
+}
 
+
+public class VMRoute
+{
+    public Route route;
+    public VMRoute(Route route) {
+        this.route = route;
+    }
+    public string name { get { return route.Name; } }
+    public long routeID { get { return route.RouteId; } }
 }

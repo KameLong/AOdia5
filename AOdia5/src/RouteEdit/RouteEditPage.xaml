@@ -4,7 +4,6 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:AOdia5"
-    xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
     x:Name="page"
     Title="RouteEditPage">
     <Shell.BackButtonBehavior>
@@ -12,22 +11,11 @@
     </Shell.BackButtonBehavior>
     <ScrollView>
         <VerticalStackLayout>
-            <inputLayout:SfTextInputLayout
-                Margin="30,5,30,0"
-                ContainerType="Outlined"
-                Hint="Route name">
-                <controls:KameLongEntry
-                    x:Name="nameEdit"
-                    IsSpellCheckEnabled="false"
-                    Text="{Binding routeName}" />
-            </inputLayout:SfTextInputLayout>
-            <inputLayout:SfTextInputLayout
-                Margin="30,0,30,0"
-                ContainerType="Outlined"
-                FlexLayout.Grow="1"
-                Hint="Route color">
-                <controls:KameLongEntry x:Name="colorEdit" Text="{Binding routeColorStr}" />
-            </inputLayout:SfTextInputLayout>
+            <controls:KameLongEntry
+                x:Name="nameEdit"
+                IsSpellCheckEnabled="false"
+                Text="{Binding routeName}" />
+            <controls:KameLongEntry x:Name="colorEdit" Text="{Binding routeColorStr}" />
             <Rectangle
                 BackgroundColor="{Binding routeColor}"
                 HeightRequest="20"
@@ -68,7 +56,7 @@
                 SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <VerticalStackLayout  WidthRequest="300">
+                        <VerticalStackLayout WidthRequest="300">
                             <Line
                                 HorizontalOptions="Start"
                                 Stroke="Black"
@@ -124,9 +112,8 @@
                                 <Ellipse
                                     AbsoluteLayout.LayoutBounds="0,0,1,1"
                                     AbsoluteLayout.LayoutFlags="All"
-                                    Fill="LightGray"
                                     Stroke="mediumpurple"
-                                    StrokeThickness="4" />
+                                    StrokeThickness="2" />
                                 <Line
                                     Stroke="mediumpurple"
                                     StrokeThickness="2"

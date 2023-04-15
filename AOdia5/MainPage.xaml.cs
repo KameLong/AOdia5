@@ -16,45 +16,18 @@ public interface Bindable : INotifyPropertyChanged
     public void OnPropertyChanged([CallerMemberName] string propertyName = "");
 
 }
-public partial class MainPage : Shell
+public partial class MainPage : ContentPage
 {
     public static INavigation navigation;
 
     public MainPage()
 	{
-
-        if (Device.Idiom == TargetIdiom.Phone)
-        {
-            FlyoutBehavior = FlyoutBehavior.Flyout;
-        }
-        else
-        {
-            FlyoutBehavior = FlyoutBehavior.Locked;
-        }
-
-
         BindingContext = new MainPageModel();
-        DiaFile.staticDia.OnSavedAction = () =>
-        {
-            if (Current.CurrentPage.BindingContext is Bindable notify)
-            {
-                notify.OnPropertyChanged("");
-            }
-        };
-        Routing.RegisterRoute("Station", typeof(StationListPage));
-        Routing.RegisterRoute("Route", typeof(RouteListPage));
-        Routing.RegisterRoute("Route/edit", typeof(RouteEditPage));
-        Routing.RegisterRoute("test/keyTest", typeof(KeyEventTest));
         InitializeComponent();
     }
 
 
 
-    private async void MenuItem_Clicked(object sender, EventArgs e)
-    {
-
-
-    }
 
     private void Undo(object sender, EventArgs e)
     {

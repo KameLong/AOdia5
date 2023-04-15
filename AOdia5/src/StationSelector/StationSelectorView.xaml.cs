@@ -1,4 +1,5 @@
 using AOdiaData;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -11,62 +12,22 @@ namespace AOdia5;
 public class OnStationSelectedEventArgs:EventArgs
 {
     public Station station;
+    public OnStationSelectedEventArgs(Station station)
+    {
+        this.station = station;
+    }
 
 }
-public partial class StationSelectorView : ContentView
+public partial class StationSelectorView : ContentView, INotifyPropertyChanged
 {
-    public delegate void OnSelected(OnStationSelectedEventArgs args);
-    public OnSelected onSelected;
+    public event EventHandler OnStationSelected;
 
-    private StationSelectorViewModel VM { get { return (StationSelectorViewModel)BindingContext; } }
-
-	public StationSelectorView()
-	{
-		this.BindingContext = new StationSelectorViewModel();
-		InitializeComponent();
-	}
-    private void SelectedStation(object sender, SelectedItemChangedEventArgs e)
-    {
-        ListView listView = (ListView)sender;
-        if (onSelected != null)
-        {
-            var args = new OnStationSelectedEventArgs();
-            args.station = (Station)listView.SelectedItem;
-            onSelected(args);
-        }
-    }
-
-    private void OnStationClicked(object sender, TappedEventArgs e)
-    {
-        if (sender is HorizontalStackLayout layout && layout.BindingContext is VMStation station)
-        {
-            Debug.WriteLine(station.name);
-        }
-    }
-
-    private void CollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        if (sender is HorizontalStackLayout layout && layout.BindingContext is VMStation station)
-        {
-            Debug.WriteLine(station.name);
-        }
-    }
-
-    private void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        VM.searchText = e.NewTextValue;
-        VM.OnPropertyChanged(nameof(VM.Stations));
-    }
-}
-public class StationSelectorViewModel : INotifyPropertyChanged
-{
-    public string searchText = "";
     public event PropertyChangedEventHandler? PropertyChanged;
     public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
       => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-    //Modelのインスタンスを保持するプロパティ
-    private readonly ObservableCollection<Station> _stations;
+
+    public string searchText = "";
     public List<VMStation> Stations
     {
         get
@@ -76,43 +37,35 @@ public class StationSelectorViewModel : INotifyPropertyChanged
         }
     }
 
-    public StationSelectorViewModel()
-    {
-        _stations = new ObservableCollection<Station>(DiaFile.staticDia.stations);
-        _stations.CollectionChanged += OnPropertyChanged;
-    }
-    internal Station AddNewStation()
-    {
-        Station station = new Station();
-        station.Name.Value = "New Station";
-        station.Lat.Value = 35;
-        station.Lon.Value = 135;
 
-        _stations.Add(station);
-        return station;
-    }
-    internal void RemoveStation(Station station)
-    {
-        _stations.Remove(station);
+
+    public StationSelectorView()
+	{
+		InitializeComponent();
+        this.BindingContext = this;
     }
 
-    private void OnPropertyChanged(object? sender, NotifyCollectionChangedEventArgs e)
+
+    private void OnStationClicked(object sender, TappedEventArgs e)
     {
-        Notify("Stations");
-    }
-    protected void Notify(string propName)
-    {
-        if (this.PropertyChanged != null)
+        if (sender is HorizontalStackLayout layout && layout.BindingContext is VMStation station)
         {
-            PropertyChanged(this, new PropertyChangedEventArgs(propName));
+                var args = new OnStationSelectedEventArgs(station.station);
+                OnStationSelected?.Invoke(this, args);
         }
     }
 
+
+    private void SearchBarTextChanged(object sender, TextChangedEventArgs e)
+    {
+        searchText = e.NewTextValue;
+        OnPropertyChanged(nameof(Stations));
+    }
 }
 
 public class VMStation
 {
-    private Station station;
+    public Station station;
     public VMStation(Station station)
     {
         this.station = station;

@@ -15,27 +15,16 @@ namespace AOdia5;
 
 public partial class StationListPage : ContentPage
 {
-    private StationSelectorViewModel VM { get { return (StationSelectorViewModel)BindingContext; } }
     public StationListPage()
 	{
-        
         InitializeComponent();
-        BindingContext = new StationSelectorViewModel();
     }
 
-    private void SelectedStation(object sender, SelectedItemChangedEventArgs e)
-    {
-        // リストビューで選択されたアイテムを取得する。
-        ListView listView = (ListView)sender;
-        Station station = (Station)listView.SelectedItem;
-        EditStationViewModel vm = new EditStationViewModel { editStation = station, stationListViewModel = VM };
-        this.ShowPopup(new EditStationModal(vm,Navigation));
-    }
     private void OnClickAddStation(object sender, TappedEventArgs e)
     {
-        Station station=VM.AddNewStation();
-        EditStationViewModel vm= new EditStationViewModel { editStation = station, stationListViewModel = VM };
-        this.ShowPopup(new EditStationModal(vm,Navigation));
+        //Station station=VM.AddNewStation();
+        //EditStationViewModel vm= new EditStationViewModel { editStation = station, stationListViewModel = VM };
+        //this.ShowPopup(new EditStationModal(vm,Navigation));
     }
 
     private void OnStationClicked(object sender, TappedEventArgs e)
@@ -52,6 +41,16 @@ public partial class StationListPage : ContentPage
         {
             Debug.WriteLine(station.name);
         }
+    }
+
+    private void OnStationSelected(object sender, EventArgs e)
+    {
+        if(e is OnStationSelectedEventArgs args)
+        {
+            Debug.WriteLine(args.station.Name);
+//            Shell.Current.Goto($"station/edit?stationID={args.station.StationId}");
+        }
+
     }
 }
 

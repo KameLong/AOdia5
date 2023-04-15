@@ -13,9 +13,9 @@ public partial class App : Microsoft.Maui.Controls.Application
     public App()
 	{
         InitializeComponent();
-        MainPage = new StationSelectorPage();
-	}
-    protected override Microsoft.Maui.Controls.Window CreateWindow(IActivationState? activationState)
+        MainPage = new AppShell();
+    }
+    protected override Window CreateWindow(IActivationState? activationState)
     {
         Debug.WriteLine("CreateWindow");
         Window window = base.CreateWindow(activationState);
@@ -25,13 +25,10 @@ public partial class App : Microsoft.Maui.Controls.Application
         window.Stopped += (s, e) => 
         {
             Debug.WriteLine("Stopeed");
-            DiaFile.staticDia.SaveChanges();
+            //DiaFile.staticDia.SaveChanges();
         };
-
-        
         return window;
     }
-
 }
 
 

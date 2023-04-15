@@ -92,10 +92,6 @@ namespace AOdia5
 
             if (pressType == AOdiaKeyPressType.Down)
             {
-                if (mainPage is MainPage page && page.CurrentPage is KeyEventListener keyEvent)
-                {
-                    keyEvent.OnKeyPress(key,modifierKey);
-                }
 
             }
 
