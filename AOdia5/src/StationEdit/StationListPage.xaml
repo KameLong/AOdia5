@@ -16,7 +16,6 @@
         <Grid
             AbsoluteLayout.LayoutBounds="0,0,1,1"
             AbsoluteLayout.LayoutFlags="All"
-            BackgroundColor="#F8F8F8"
             ZIndex="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />

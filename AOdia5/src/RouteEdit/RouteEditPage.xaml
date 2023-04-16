@@ -5,165 +5,160 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:AOdia5"
     x:Name="page"
-    Title="RouteEditPage">
+    Title="RouteEdit"
+    Background="#F8F8F8">
     <Shell.BackButtonBehavior>
         <BackButtonBehavior IsVisible="False" />
     </Shell.BackButtonBehavior>
-    <ScrollView>
-        <VerticalStackLayout>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid
+            Margin="10,10,10,10"
+            MaximumWidthRequest="400"
+            Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label
+                Grid.Column="0"
+                Text="Name (route)"
+                VerticalTextAlignment="Center" />
             <controls:KameLongEntry
                 x:Name="nameEdit"
+                Grid.Column="1"
                 IsSpellCheckEnabled="false"
                 Text="{Binding routeName}" />
-            <controls:KameLongEntry x:Name="colorEdit" Text="{Binding routeColorStr}" />
+
+
+        </Grid>
+        <Grid
+            Margin="10,10,10,10"
+            MaximumWidthRequest="400"
+            Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="50" />
+            </Grid.ColumnDefinitions>
+            <Label
+                Grid.Column="0"
+                Text="Color (route)"
+                VerticalTextAlignment="Center" />
+            <controls:KameLongEntry
+                x:Name="colorEdit"
+                Grid.Column="1"
+                Text="{Binding routeColorStr}" />
             <Rectangle
+                Grid.Column="2"
                 BackgroundColor="{Binding routeColor}"
                 HeightRequest="20"
                 WidthRequest="40" />
 
-            <VerticalStackLayout WidthRequest="300">
-                <AbsoluteLayout
-                    Margin="10,0,0,0"
-                    HeightRequest="30"
-                    HorizontalOptions="Start"
-                    WidthRequest="30">
-                    <Ellipse
-                        AbsoluteLayout.LayoutBounds="0,0,1,1"
-                        AbsoluteLayout.LayoutFlags="All"
-                        Fill="White"
-                        Stroke="mediumpurple"
-                        StrokeThickness="4" />
-                    <Line
-                        Stroke="mediumpurple"
-                        StrokeThickness="2"
-                        X1="15"
-                        X2="15"
-                        Y1="5"
-                        Y2="25" />
-                    <Line
-                        Stroke="mediumpurple"
-                        StrokeThickness="2"
-                        X1="5"
-                        X2="25"
-                        Y1="15"
-                        Y2="15" />
-                </AbsoluteLayout>
+        </Grid>
 
-            </VerticalStackLayout>
-            <CollectionView
-                Margin="20,0,20,5"
-                ItemsSource="{Binding Stations}"
-                SelectionMode="None">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <VerticalStackLayout WidthRequest="300">
-                            <Line
-                                HorizontalOptions="Start"
-                                Stroke="Black"
-                                StrokeThickness="2"
-                                X1="25"
-                                X2="25"
-                                Y1="0"
-                                Y2="15" />
 
-                            <HorizontalStackLayout>
-                                <AbsoluteLayout HeightRequest="50" WidthRequest="50">
-                                    <Rectangle
-                                        AbsoluteLayout.LayoutBounds="0,0,1,1"
-                                        AbsoluteLayout.LayoutFlags="All"
-                                        Fill="White"
-                                        Stroke="Gray"
-                                        StrokeThickness="4" />
-                                    <Label
-                                        AbsoluteLayout.LayoutBounds="0,0,1,1"
-                                        AbsoluteLayout.LayoutFlags="All"
-                                        FontSize="20"
-                                        HorizontalOptions="Center"
-                                        Text="10"
-                                        VerticalOptions="Center" />
 
-                                </AbsoluteLayout>
-                                <Label
-                                    Margin="10,0,0,0"
-                                    FontSize="20"
-                                    Text="{Binding name}"
-                                    VerticalOptions="Center" />
+        <CollectionView
+            x:Name="stationCollectionView"
+            Grid.Row="2"
+            Grid.ColumnSpan="2"
+            Margin="20,0,20,5"
+            ItemsSource="{Binding Stations}"
+            SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <VerticalStackLayout WidthRequest="300">
+                        <Line
+                            HorizontalOptions="Start"
+                            IsVisible="{Binding isNotNull}"
+                            Stroke="Black"
+                            StrokeThickness="2"
+                            X1="25"
+                            X2="25"
+                            Y1="0"
+                            Y2="15" />
 
-                            </HorizontalStackLayout>
-                            <Line
-                                HorizontalOptions="Start"
-                                Stroke="Black"
-                                StrokeThickness="2"
-                                WidthRequest="30"
-                                X1="25"
-                                X2="25"
-                                Y1="0"
-                                Y2="15" />
-
+                        <HorizontalStackLayout>
                             <AbsoluteLayout
-                                Margin="10,0,0,0"
-                                HeightRequest="30"
-                                HorizontalOptions="Start"
-                                WidthRequest="30">
-                                <AbsoluteLayout.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="AddStation" />
-                                </AbsoluteLayout.GestureRecognizers>
-
-                                <Ellipse
+                                HeightRequest="50"
+                                IsVisible="{Binding isNotNull}"
+                                WidthRequest="50">
+                                <Rectangle
                                     AbsoluteLayout.LayoutBounds="0,0,1,1"
                                     AbsoluteLayout.LayoutFlags="All"
-                                    Stroke="mediumpurple"
-                                    StrokeThickness="2" />
-                                <Line
-                                    Stroke="mediumpurple"
-                                    StrokeThickness="2"
-                                    X1="15"
-                                    X2="15"
-                                    Y1="5"
-                                    Y2="25" />
-                                <Line
-                                    Stroke="mediumpurple"
-                                    StrokeThickness="2"
-                                    X1="5"
-                                    X2="25"
-                                    Y1="15"
-                                    Y2="15" />
+                                    Fill="White"
+                                    Stroke="Gray"
+                                    StrokeThickness="4" />
+                                <Label
+                                    AbsoluteLayout.LayoutBounds="0,0,1,1"
+                                    AbsoluteLayout.LayoutFlags="All"
+                                    FontSize="20"
+                                    HorizontalOptions="Center"
+                                    Text="10"
+                                    VerticalOptions="Center" />
+
                             </AbsoluteLayout>
-                        </VerticalStackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
+                            <Label
+                                Margin="10,0,0,0"
+                                FontSize="20"
+                                IsVisible="{Binding isNotNull}"
+                                Text="{Binding name}"
+                                VerticalOptions="Center" />
 
-            </CollectionView>
+                        </HorizontalStackLayout>
+                        <Line
+                            HorizontalOptions="Start"
+                            IsVisible="{Binding isNotNull}"
+                            Stroke="Black"
+                            StrokeThickness="2"
+                            WidthRequest="30"
+                            X1="25"
+                            X2="25"
+                            Y1="0"
+                            Y2="15" />
 
-            <!--<CollectionView
-                x:Name="stationList"
-                Margin="20,5,20,5"
-                ItemsSource="{Binding Paths}"
-                SelectionMode="None">
+                        <AbsoluteLayout
+                            Margin="10,0,0,0"
+                            HeightRequest="30"
+                            HorizontalOptions="Start"
+                            WidthRequest="30">
+                            <AbsoluteLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="AddStation" />
+                            </AbsoluteLayout.GestureRecognizers>
 
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <VerticalStackLayout WidthRequest="200">
-                            <HorizontalStackLayout Margin="0,10,0,0">
+                            <Ellipse
+                                AbsoluteLayout.LayoutBounds="0,0,1,1"
+                                AbsoluteLayout.LayoutFlags="All"
+                                Stroke="mediumpurple"
+                                StrokeThickness="2" />
+                            <Line
+                                Stroke="mediumpurple"
+                                StrokeThickness="2"
+                                X1="15"
+                                X2="15"
+                                Y1="5"
+                                Y2="25" />
+                            <Line
+                                Stroke="mediumpurple"
+                                StrokeThickness="2"
+                                X1="5"
+                                X2="25"
+                                Y1="15"
+                                Y2="15" />
+                        </AbsoluteLayout>
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
 
-                                <Label Text="{Binding startStation.Name}" WidthRequest="150" />
-                                <Button
-                                    Clicked="DeleteStation"
-                                    Text="🚮"
-                                    WidthRequest="50" />
-                            </HorizontalStackLayout>
-                            <Button
-                                Clicked="AddStation"
-                                HorizontalOptions="Center"
-                                Text="+" />
-                        </VerticalStackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>-->
+        </CollectionView>
 
 
 
+    </Grid>
 
-        </VerticalStackLayout>
-    </ScrollView>
 </ContentPage>

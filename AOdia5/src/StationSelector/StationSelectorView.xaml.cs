@@ -28,14 +28,24 @@ public partial class StationSelectorView : ContentView, INotifyPropertyChanged
 
 
     public string searchText = "";
+    public List<VMStation> _stations = new List<VMStation>();
     public List<VMStation> Stations
     {
         get
         {
+                _stations=DiaFile.staticDia.stations.Where(s => s.DbName.Contains(searchText)).OrderBy(s => s.DbName).Select(s => new VMStation(s)).ToList();
+            return _stations;
             var stationNameContained = DiaFile.staticDia.stations.Where(s => s.DbName.Contains(searchText)).OrderBy(s => s.DbName).Select(s => new VMStation(s));
             return stationNameContained.ToList();
         }
     }
+    private bool LoadMoreStation()
+    {
+        return true;
+        _stations.AddRange(DiaFile.staticDia.stations.Where(s => s.DbName.Contains(searchText)).OrderBy(s => s.DbName).Skip(_stations.Count).Take(30).Select(s => new VMStation(s)));
+        OnPropertyChanged(nameof(this.Stations));
+    }
+
 
 
 
@@ -61,7 +71,13 @@ public partial class StationSelectorView : ContentView, INotifyPropertyChanged
         searchText = e.NewTextValue;
         OnPropertyChanged(nameof(Stations));
     }
+
+    private void OnRemainingItemsThresholdReached(object sender, EventArgs e)
+    {
+        bool hasMoreItems = LoadMoreStation();
+    }
 }
+
 
 public class VMStation
 {
@@ -70,10 +86,11 @@ public class VMStation
     {
         this.station = station;
     }
+
     public String name { get { return station.DbName; } }
     public String lat { get { return station.DbLat.ToString("F4"); } }
     public String lon { get { return station.DbLon.ToString("F4"); } }
-    public String routes
+    public List<string> routes2
     {
         get
         {
@@ -82,13 +99,8 @@ public class VMStation
                 p.startStationID == station.StationId && p.seq == 0
                 ).ToList();
             path1.AddRange(path2);
-            var str = "";
-            foreach (var p in path1)
-            {
-                str += " " + p.route.Name;
-            }
 
-            return str;
+            return path1.Select(p=>p.route.Name).ToList();
         }
     }
 }

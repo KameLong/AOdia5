@@ -62,6 +62,7 @@ namespace AOdiaData
             var path = Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             DbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}{dbName}";
 
+            /*
             if (File.Exists(DbPath))
             {
                 File.Delete(DbPath);
@@ -70,6 +71,7 @@ namespace AOdiaData
             {
                 client.DownloadFile("https://kamelong.com/aodia.db", DbPath);
             }
+            */
 
 
 

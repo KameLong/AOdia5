@@ -8,40 +8,33 @@
 
     <ScrollView>
         <VerticalStackLayout
-            Spacing="25"
             Padding="30,0"
+            Spacing="25"
             VerticalOptions="Center">
 
-            <Image
-                Source="dotnet_bot.png"
-                SemanticProperties.Description="Cute dot net bot waving hi to you!"
-                HeightRequest="200"
-                HorizontalOptions="Center" />
-
             <Label
-                Text="Hello, World!"
-                SemanticProperties.HeadingLevel="Level1"
                 FontSize="32"
-                HorizontalOptions="Center" />
-
+                HorizontalOptions="Center"
+                SemanticProperties.HeadingLevel="Level1"
+                Text="路線の作成方法" />
             <Label
-                Text="Welcome to .NET Multi-platform App UI"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
-                FontSize="18"
-                HorizontalOptions="Center" />
+                FontSize="32"
+                HorizontalOptions="Center"
+                SemanticProperties.HeadingLevel="Level1"
+                Text="①駅を追加します" />
+            <Label
+                FontSize="32"
+                HorizontalOptions="Center"
+                SemanticProperties.HeadingLevel="Level1"
+                Text="②路線を作成します" />
+            <Label
+                FontSize="32"
+                HorizontalOptions="Center"
+                SemanticProperties.HeadingLevel="Level1"
+                Text="③路線に駅を追加します" />
 
-            <Button
-                x:Name="CounterBtn"
-                Text="Click me"
-                SemanticProperties.Hint="Counts the number of times you click"
-                HorizontalOptions="Center" />
-            <Button
-                Text="Route"
-                HorizontalOptions="Center" />
-            <Button
-                Text="Station"
-                HorizontalOptions="Center" />
+            <Button HorizontalOptions="Center" Text="Route" />
+            <Button HorizontalOptions="Center" Text="Station" />
 
         </VerticalStackLayout>
     </ScrollView>

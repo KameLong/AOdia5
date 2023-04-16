@@ -3,6 +3,7 @@ using AOdiaData;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Core.Extensions;
+using CommunityToolkit.Maui.Views;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -72,7 +73,6 @@ public partial class RouteEditPage : ContentPage, KeyEventListener
     }
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
-//        VM.onLoad();
     }
     private async void DeleteStation(object sender, EventArgs e)
     {
@@ -115,22 +115,91 @@ public partial class RouteEditPage : ContentPage, KeyEventListener
         }
     }
 
-
     private async void AddStation(object sender, TappedEventArgs e)
     {
-        string action = await DisplayActionSheet(L18N.ADD_STATION_MODAL_TITLE, "Cancel", null, L18N.ADD_STATION_FROM_LIST, L18N.ADD_STATION_FROM_MAP);
-        if (action == L18N.ADD_STATION_FROM_LIST)
+        if(sender is View view && view.BindingContext is VMRouteStation station && stationCollectionView.ItemsSource is List<VMRouteStation> stations)
         {
-            var modalPage = new ModalPage(this);
+            int stationIndex=stations.IndexOf(station);
+            
+            string action = await DisplayActionSheet(L18N.ADD_STATION_MODAL_TITLE, "Cancel", null, L18N.ADD_STATION_FROM_LIST, L18N.ADD_STATION_FROM_MAP);
+            Action<Station> onStationSelected = (Station station) =>
+            {
+                UndoCommand addStationCommand = new UndoCommand();
+                addStationCommand.Invoke = () =>
+                {
+                    if (stationIndex == 0)
+                    {
+                        route.AddStationTop(station);
+                    }
+                    else if (stationIndex-1 < route.Paths.Count())
+                    {
+                        route.AddStation(route.Paths.Where(p => p.seq == stationIndex - 1).First(), station);
+                    }
+                    else
+                    {
+                        route.AddStationEnd(station);
+                    }
+                    OnPropertyChanged(nameof(this.Stations));
+                };
+                addStationCommand.Undo = () =>
+                {
+                    if(stationIndex<route.Paths.Count())
+                    {
+                        route.DeleteStation(route.Paths.Where(p => p.seq == stationIndex).First());
+                    }
+                    else
+                    {
+                        route.DeleteEndStation();
+                    }
+                    OnPropertyChanged(nameof(this.Stations));
 
-            await Navigation.PushModalAsync(modalPage);
+                };
+                addStationCommand.Redo = () =>
+                {
+                    if (stationIndex == 0)
+                    {
+                        route.AddStationTop(station);
+                    }
+
+                    else if (stationIndex-1 < route.Paths.Count())
+                    {
+                        route.AddStation(route.Paths.Where(p => p.seq == stationIndex - 1).First(), station);
+                    }
+                    else
+                    {
+                        route.AddStationEnd(station);
+                    }
+                    OnPropertyChanged(nameof(this.Stations));
+
+
+                };
+                UndoStack.Instance.Push(addStationCommand);
+            };
+
+            if (action == L18N.ADD_STATION_FROM_LIST)
+            {
+                if (DeviceInfo.Idiom == DeviceIdiom.Phone)
+                {
+                    var modal = new StationSelectModal(onStationSelected);
+                    await this.Navigation.PushModalAsync(modal);
+                }
+                else
+                {
+                    var modal = new StationSelectPopup(this, onStationSelected);
+                    this.ShowPopup(modal);
+
+                }
+
+            }
+            if (action == L18N.ADD_STATION_FROM_MAP)
+            {
+                RouteEditFromMapPageModel vm = new RouteEditFromMapPageModel(DiaFile.staticDia.routes.ToList(), DiaFile.staticDia.stations.ToList(), route, null);
+                vm.lastStation = route.Paths.OrderBy(p => p.seq).Last().endStation;
+                await Navigation.PushAsync(new RouteEditFromMapPage(vm));
+            }
+
         }
-        if (action == L18N.ADD_STATION_FROM_MAP)
-        {
-            RouteEditFromMapPageModel vm = new RouteEditFromMapPageModel(DiaFile.staticDia.routes.ToList(), DiaFile.staticDia.stations.ToList(), route, null);
-            vm.lastStation = route.Paths.OrderBy(p => p.seq).Last().endStation;
-            await Navigation.PushAsync(new RouteEditFromMapPage(vm));
-        }
+
     }
 
 
@@ -235,14 +304,15 @@ public partial class RouteEditPage : ContentPage, KeyEventListener
     }
 
 
-    public List<VMStation> Stations
+    public List<VMRouteStation> Stations
     {
         get
         {
-            var result = route.Paths.OrderBy(r => r.seq).Select(r => new VMStation(r.startStation)).ToList();
+            var result = route.Paths.OrderBy(r => r.seq).Select(r => new VMRouteStation(r.startStation)).ToList();
             if(result.Count > 0) { 
-            result.Add(new VMStation(route.Paths.OrderBy(r => r.seq).Last().endStation));
+            result.Add(new VMRouteStation(route.Paths.OrderBy(r => r.seq).Last().endStation));
             }
+            result.Insert(0,new VMRouteStation(null));
             return result;
         }
     }
@@ -304,97 +374,31 @@ public partial class RouteEditPage : ContentPage, KeyEventListener
 
 }
 
-//public class RouteEditPageModel : Bindable
-//{
-//    public event PropertyChangedEventHandler? PropertyChanged;
-//    public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
-//        => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-//    ///*
-//    //    * path‚ÌstartStation‚ðíœ‚µ‚Ü‚·B
-//    //    */
-//    //public void DeleteStation(Path path)
-//    //{
-//    //    UndoCommand deleteStationCommand = new UndoCommand();
-//    //    deleteStationCommand.comment = $"DeletePath({path.pathID})";
-//    //    deleteStationCommand.Invoke = () =>
-//    //    {
-//    //        _route.DeleteStation(path);
-//    //        DiaFile.staticDia.SaveChanges();
-//    //    };
 
-//    //    deleteStationCommand.Undo = () =>
-//    //    {
-//    //        _route.InsertStation(path);
-//    //        DiaFile.staticDia.SaveChanges();
-//    //    };
 
-//    //    deleteStationCommand.Redo = () =>
-//    //    {
-//    //        _route.DeleteStation(path);
-//    //        DiaFile.staticDia.SaveChanges();
-//    //    };
-//    //    UndoStack.Instance.Push(deleteStationCommand);
-
-//    //}
-//    ///*
-//    // * path‚ÌstartStation‚ðíœ‚µ‚Ü‚·B
-//    // */
-//    //public void DeleteEndStation()
-//    //{
-//    //    if(_route.Paths.Count == 1)
-//    //    {
-//    //        DeleteStation(_route.Paths.First());
-//    //        return;
-//    //    }
-
-//    //    UndoCommand deleteEndStationCommand = new UndoCommand();
-//    //    Station deleteStation = _route.Paths.OrderBy(p => p.seq).Last().endStation;
-//    //    deleteEndStationCommand.comment = $"DeleteEndPath";
-//    //    deleteEndStationCommand.Invoke = () =>
-//    //    {
-//    //        _route.DeleteEndStation();
-//    //        DiaFile.staticDia.SaveChanges();
-//    //    };
-
-//    //    deleteEndStationCommand.Undo = () =>
-//    //    {
-//    //        _route.AddStationEnd(deleteStation);
-//    //        DiaFile.staticDia.SaveChanges();
-//    //    };
-
-//    //    deleteEndStationCommand.Redo = () =>
-//    //    {
-//    //        _route.DeleteEndStation();
-//    //        DiaFile.staticDia.SaveChanges();
-//    //    };
-//    //    UndoStack.Instance.Push(deleteEndStationCommand);
-
-//    //}
-//}
-
-public class VMRouteStation
+public class StationSelectPopup : Popup
 {
-    public string Name { get;  }
-}
+    Action<Station>? onStationSelected;
 
-public class ModalPage : ContentPage
-{
-    public ModalPage(RouteEditPage page)
+    public StationSelectPopup(Page page,Action<Station> onStationSelected)
     {
+        this.onStationSelected = onStationSelected;
         var main = new StationSelectorView();
         this.Content = main;
+        this.Size = new Size(page.Width-100, page.Height - 100);
+        this.Color = Color.FromRgb(240, 240, 240);
+
         main.OnStationSelected += Main_OnStationSelected;
     }
 
     private async void Main_OnStationSelected(object? sender, EventArgs e)
     {
-        if(e is OnStationSelectedEventArgs args)
+        if (e is OnStationSelectedEventArgs args && this.onStationSelected != null)
         {
-
-
-            await Navigation.PopModalAsync();
-
+            this.Close();
+            this.onStationSelected(args.station);
+            this.onStationSelected = null;
         }
     }
 
@@ -402,3 +406,73 @@ public class ModalPage : ContentPage
     {
     }
 }
+public class StationSelectModal : ContentPage
+{
+    Action<Station> onStationSelected;
+    public StationSelectModal(Action<Station> onStationSelected)
+    {
+        this.onStationSelected = onStationSelected;
+        var main = new StationSelectorView();
+        this.Content = main;
+
+        main.OnStationSelected += OnStationSelected;
+    }
+
+    private void OnStationSelected(object? sender, EventArgs e)
+    {
+        if (e is OnStationSelectedEventArgs args)
+        {
+
+            onStationSelected(args.station);
+            this.Navigation.PopModalAsync();
+        }
+    }
+
+    private async void CloseButton_Clicked(object sender, EventArgs e)
+    {
+    }
+
+}
+
+public class VMRouteStation
+{
+    public Station? station;
+    public VMRouteStation(Station? station)
+    {
+        this.station = station;
+    }
+    public bool isNotNull
+    {
+        get
+        {
+            return station != null ;
+        }
+    }
+
+    public String name { get { return station?.DbName ?? ""; } }
+    public String lat { get { return station?.DbLat.ToString("F4") ?? ""; } }
+    public String lon { get { return station?.DbLon.ToString("F4") ?? ""; } }
+    public String routes
+    {
+        get
+        {
+            if (station == null)
+            {
+                return "";
+            }
+            var path1 = DiaFile.staticDia.paths.Where(p => p.endStationID == station.StationId).ToList();
+            var path2 = DiaFile.staticDia.paths.Where(p =>
+                p.startStationID == station.StationId && p.seq == 0
+                ).ToList();
+            path1.AddRange(path2);
+            var str = "";
+            foreach (var p in path1)
+            {
+                str += " " + p.route.Name;
+            }
+
+            return str;
+        }
+    }
+}
+

@@ -11,7 +11,6 @@
     <Grid
         AbsoluteLayout.LayoutBounds="0,0,1,1"
         AbsoluteLayout.LayoutFlags="All"
-        BackgroundColor="#F8F8F8"
         ZIndex="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -74,11 +73,13 @@
             Margin="20,0,20,0"
             AbsoluteLayout.LayoutBounds="0,0,1,1"
             ItemsSource="{Binding Stations}"
-            SelectionMode="Single"
-            VerticalOptions="FillAndExpand">
+            RemainingItemsThreshold="5"
+            RemainingItemsThresholdReached="OnRemainingItemsThresholdReached"
+            SelectionMode="Single">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <HorizontalStackLayout Padding="10,5,10,5">
+                    <controls:SimpleStationView />
+                    <!--<HorizontalStackLayout Padding="10,5,10,5">
                         <HorizontalStackLayout.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnStationClicked" />
                         </HorizontalStackLayout.GestureRecognizers>
@@ -101,7 +102,8 @@
                                     WidthRequest="120" />
                             </OnIdiom.Desktop>
                         </OnIdiom>
-                        <!--<OnIdiom x:TypeArguments="View">
+                    -->
+                    <!--<OnIdiom x:TypeArguments="View">
                             <OnIdiom.Desktop>
                                 <Label
                                     HorizontalTextAlignment="Start"
@@ -110,6 +112,7 @@
                                     WidthRequest="300" />
                             </OnIdiom.Desktop>
                         </OnIdiom>-->
+                    <!--
 
 
                         <VisualStateManager.VisualStateGroups>
@@ -124,7 +127,7 @@
                                 </VisualStateGroup>
                             </VisualStateGroupList>
                         </VisualStateManager.VisualStateGroups>
-                    </HorizontalStackLayout>
+                    </HorizontalStackLayout>-->
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

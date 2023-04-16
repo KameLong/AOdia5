@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="AOdia5.SimpleStationView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:aodia5="clr-namespace:AOdia5"
+    x:DataType="aodia5:VMStation">
+
+    <VerticalStackLayout>
+        <VerticalStackLayout
+            x:Name="forPhone"
+            Margin="10,10,10,10"
+            HorizontalOptions="Fill"
+            IsVisible="True">
+            <Label
+                FontAttributes="Bold"
+                FontSize="Medium"
+                LineBreakMode="NoWrap"
+                Text="{Binding name}" />
+            <Label Margin="20,10,20,0" HorizontalOptions="End">
+                <Label.Text>
+                    <MultiBinding StringFormat="({0} , {1})">
+                        <Binding Path="lat" />
+                        <Binding Path="lon" />
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+            <CollectionView Margin="50,0,0,0" ItemsSource="{Binding routes2}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label
+                            Margin="0,0,0,0"
+                            LineBreakMode="NoWrap"
+                            Text="{Binding}" />
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+            <BoxView HeightRequest="1" Color="#CCC" />
+
+        </VerticalStackLayout>
+        <VerticalStackLayout x:Name="forPC" IsVisible="False">
+            <Grid Margin="5,5,5,5" HorizontalOptions="Fill">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="150" />
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Column="0"
+                    FontAttributes="Bold"
+                    LineBreakMode="NoWrap"
+                    Text="{Binding name}"
+                    VerticalOptions="Center" />
+                <Label
+                    Grid.Column="2"
+                    Margin="0,0,0,0"
+                    LineBreakMode="NoWrap"
+                    VerticalOptions="Center">
+                    <Label.Text>
+                        <MultiBinding StringFormat="({0} , {1})">
+                            <Binding Path="lat" />
+                            <Binding Path="lon" />
+                        </MultiBinding>
+                    </Label.Text>
+                </Label>
+                <CollectionView
+                    Grid.Column="1"
+                    Margin="0,0,0,0"
+                    ItemsSource="{Binding routes2}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Label
+                                Margin="0,0,0,0"
+                                LineBreakMode="NoWrap"
+                                Text="{Binding}" />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+            </Grid>
+            <BoxView HeightRequest="1" Color="#CCC" />
+
+        </VerticalStackLayout>
+    </VerticalStackLayout>
+</ContentView>
